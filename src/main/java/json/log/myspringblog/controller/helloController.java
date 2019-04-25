@@ -2,6 +2,7 @@ package json.log.myspringblog.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author jsonlog
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class helloController {
-    @GetMapping("/hello")
-    public String index(){
-        return "hello"; //当浏览器输入/index时，会返回 /static/home.html的页面
+    @GetMapping("/static/{url}")
+    public String hello(@PathVariable String url){
+        System.out.println(url+"-----------------");
+        return url;
     }
 }
