@@ -10,7 +10,7 @@ import java.util.Date;
 
 @SpringBootApplication
 @MapperScan("json.log.myspringblog.mapper")
-public class MyspringblogApplication{//  implements CommandLineRunner {
+public class MyspringblogApplication {//  implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(MyspringblogApplication.class, args);

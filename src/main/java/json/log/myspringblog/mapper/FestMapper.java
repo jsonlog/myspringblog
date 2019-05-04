@@ -9,6 +9,7 @@ import java.util.List;
  * @author jsonlog
  * @date 2019-04-30
  */
+
 public interface FestMapper {
 
     List<Fest> getAll();
