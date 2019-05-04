@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+       Copyright 2015-2019 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="json.log.myspringblog.mapper.FestMapper">
+    <select id="selectFestByTiming" resultType="Fest">
+        select timing, cal from fest where timing = #{timing}
+    </select>
+
+
+    <resultMap id="BaseResultMap" type="json.log.myspringblog.domain.Fest" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="cal" property="cal" jdbcType="DATE" />
+        <result column="timing" property="timing" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, cal, timing
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM fest
+    </select>
+
+    <select id="getOne" parameterType="java.lang.Long" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM fest
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="json.log.myspringblog.domain.Fest" >
+       INSERT INTO
+       		fest
+       		(cal,timing)
+       	VALUES
+       		(#{cal}, #{timing})
+    </insert>
+
+    <update id="update" parameterType="json.log.myspringblog.domain.Fest" >
+        UPDATE
+        fest
+        SET
+        <if test="cal != null">cal = #{cal},</if>
+        timing = #{timing}
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+       DELETE FROM
+       		 fest
+       WHERE
+       		 id =#{id}
+    </delete>
+
+
+</mapper>

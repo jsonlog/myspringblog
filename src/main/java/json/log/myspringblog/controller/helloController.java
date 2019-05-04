@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 public class helloController {
-    @GetMapping("/static/{url}")
+    @GetMapping("/blog/{url}")
     public String hello(@PathVariable String url){
         System.out.println(url+"-----------------");
         return url;
