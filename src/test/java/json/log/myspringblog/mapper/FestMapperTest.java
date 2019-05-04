@@ -2,15 +2,11 @@ package json.log.myspringblog.mapper;
 
 import org.junit.Assert;
 import org.junit.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
-//import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
-//import json.log.myspringblog.mapper.FestMapper;
 import json.log.myspringblog.domain.Fest;
 
 import java.text.SimpleDateFormat;
@@ -25,8 +21,6 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@ExtendWith(SpringExtension.class)
-//@MybatisTest
 public class FestMapperTest {
 
     @Autowired
@@ -35,13 +29,13 @@ public class FestMapperTest {
     @Test
     public void testInsert() throws Exception {
 //        Calendar calendar=Calendar.getInstance();
-        SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd");
 //        String nowString=smft.format(calendar.getTime());
+        SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd");
         festMapper.insert(new Fest(smft.parse("2019-04-01"), "rest"));
         festMapper.insert(new Fest(smft.parse("2019-04-12"), "birth"));
+        System.out.println(festMapper.getAll().size());
 
 //        Assert.assertEquals(2, festMapper.getAll().size());
-        System.out.println(festMapper.getAll().size());
     }
 
     @Test
