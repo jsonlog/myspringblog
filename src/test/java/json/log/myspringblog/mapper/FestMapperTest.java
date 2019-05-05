@@ -26,23 +26,31 @@ public class FestMapperTest {
     @Autowired
     private FestMapper festMapper;
 
+    SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd");
+
     @Test
     public void testInsert() throws Exception {
 //        Calendar calendar=Calendar.getInstance();
 //        String nowString=smft.format(calendar.getTime());
-        SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(smft.parse("2019-04-12"));
         festMapper.insert(new Fest(smft.parse("2019-04-01"), "rest"));
-        festMapper.insert(new Fest(smft.parse("2019-04-12"), "birth"));
+        festMapper.insert(new Fest(smft.parse("2019-04-12"), "work"));
         System.out.println(festMapper.getAll().size());
-
-//        Assert.assertEquals(2, festMapper.getAll().size());
     }
 
     @Test
     public void testQuery() throws Exception {
         List<Fest> Fests = festMapper.getAll();
+        festToString(Fests);
+        Fests = festMapper.selectFestByTiming("rest");
+        festToString(Fests);
+        Fests = festMapper.selectFestByCal(smft.parse("2019-04-12"));
+        festToString(Fests);
+    }
+
+    public void festToString(List<Fest> Fests){
         if(Fests==null || Fests.size()==0){
-            System.out.println("is null");
+            System.out.println("fest is null");
         }else{
             System.out.println(Fests.toString());
         }
@@ -51,11 +59,18 @@ public class FestMapperTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Fest fest = festMapper.getOne(1l);
+        Fest fest = festMapper.getOne(2l);
         System.out.println(fest.toString());
         fest.setTiming("testwork");
         festMapper.update(fest);
-        Assert.assertTrue((festMapper.getOne(1l).getTiming().contains("test")));
+        Assert.assertTrue((festMapper.getOne(2l).getTiming().contains("test")));
     }
 
+    @Test
+    public void testDelete() throws Exception {
+        Fest fest = festMapper.getOne(1l);
+        System.out.println(fest.getCal().toString());
+        festMapper.delete(1l);
+        Assert.assertTrue(festMapper.getOne(1l) == null);
+    }
 }

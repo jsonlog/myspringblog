@@ -50,7 +50,7 @@ public class Fest implements Serializable {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return "timing " + this.timing + ", cal " + this.cal + "id " + id;
+        return "Fest [id=" + this.id + ", cal=" + this.cal + ", timing=" + timing + "]";
     }
 
 }

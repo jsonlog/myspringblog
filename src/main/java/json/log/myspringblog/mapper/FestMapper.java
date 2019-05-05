@@ -22,6 +22,12 @@ public interface FestMapper {
 
     void delete(Long id);
 
-    Fest selectFestByTiming(Date timing);
+    List<Fest> selectFestByTiming(String timing);
+
+    List<Fest> selectFestByCal(Date cal);
+
+    List<Fest> selectFestByMonth(Date cal);
+
+    void truncate();//TODO
 
 }
