@@ -524,14 +524,18 @@
       if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
           rest = rest.replace("节","节休");
 
-      addRemindFestival(Y,y,M,m,d,rest.replace("temp",""));
-      if(addAutoFestivalFlag == false) return;
+      rest = rest.replace("temp","");
+      addRemindFestival(Y,y,M,m,d,rest);
       if(rest.indexOf("春节") != -1 || rest.indexOf("国庆节") != -1) return;
-      if(rest.indexOf("节") != -1) addFestival(Y,y,Y,m,d,rest,w);
+      if(addAutoFestivalFlag == false) return;
+      if(rest.indexOf("休") != -1) addFestival(Y,y,Y,m,d,rest,w);
     }
     function addRobFestival(Y,y,M,m,d,rest,w) {
+        rest = rest.replace("休","");
         if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
-            addFestival(Y,y,M,m,d,rest.replace("休",""),w);
+            addRemindFestival(Y,y,M,m,d,rest);
+        if(addAutoFestivalFlag == false) return;
+        if(rest.indexOf("抢") != -1) addFestival(Y,y,Y,m,d,rest,w);
     }
     function addFestival(Y,y,M,m,d,rest,w) {
         var date = new Date(y + "/" + m + "/" + d);
