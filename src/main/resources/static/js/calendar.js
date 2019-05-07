@@ -292,7 +292,7 @@
             setconfigDay(options, datetable.count, setWeek(options));
         }
         setconfigDayM(Y, M);
-        addAutoFestival(Y, M,datetable.days,options);
+        addFestival(Y, M,datetable.days,options);
         setconfigDay(options, datetable.count, configDayM);
         $("#SY").val(Y);
         $("#SM").val(M);
@@ -389,7 +389,7 @@
         calendar.gregorianFestival[4+"-"+qingming] = "清明节";//TODO
         // alert(qingming+""+calendar.gregorianFestival[4+"-"+qingming]);
     }
-    function addAutoFestival(Y,M,days,options){
+    function addFestival(Y,M,days,options){
         addAutoFestivalFlag = true;
         serverReceived = false;
         calendar.gregorianFestival = gregorianFestivalGlobal;
@@ -526,18 +526,17 @@
 
       rest = rest.replace("temp","");
       addRemindFestival(Y,y,M,m,d,rest);
-      if(rest.indexOf("春节") != -1 || rest.indexOf("国庆节") != -1) return;
-      if(addAutoFestivalFlag == false) return;
-      if(rest.indexOf("休") != -1) addFestival(Y,y,Y,m,d,rest,w);
+      if(rest.indexOf("休") != -1) addAutoFestival(Y,y,Y,m,d,rest,w);
     }
     function addRobFestival(Y,y,M,m,d,rest,w) {
         rest = rest.replace("休","");
         if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
             addRemindFestival(Y,y,M,m,d,rest);
-        if(addAutoFestivalFlag == false) return;
-        if(rest.indexOf("抢") != -1) addFestival(Y,y,Y,m,d,rest,w);
+        if(rest.indexOf("抢") != -1) addAutoFestival(Y,y,Y,m,d,rest,w);
     }
-    function addFestival(Y,y,M,m,d,rest,w) {
+    function addAutoFestival(Y,y,M,m,d,rest,w) {
+        if(addAutoFestivalFlag == false) return;
+        if(rest.indexOf("春节") != -1 || rest.indexOf("国庆节") != -1) return;
         var date = new Date(y + "/" + m + "/" + d);
         var pre = new Date(y + "/" + m + "/" + d);
         pre.setDate(pre.getDate() - 1);
