@@ -18,9 +18,9 @@ $(function() {
          */
         week: false, // 是否开启单双休
         rest: true, //x
-        day : false, //b
+        day : true, //b
         fest : true, //j
-        bypass : false,
+        bypass : true,
         week_walue: "2019/6/8", // 双休对应的周六
         isclick: true,
         // configDay: {

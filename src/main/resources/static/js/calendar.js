@@ -367,7 +367,7 @@
             var m = date.getMonth()+1;
             var d = date.getDate();
             var w = date.getDay();
-            var xiu = "休";
+            var xiu = "temp";
             var lunar = calendar.calendarConvert(y, m, d);
 
             if(M == 5 && w == 0 && d >=8 && d <=14){
@@ -385,7 +385,7 @@
             addFestival(Y,y,M,m,d,xiu+calendar.gregorianFestival[m+"-"+d],w); //all
             addFestival(Y,y,M,m,d,xiu+calendar.lunarFestival[lunar[2] + "-" + lunar[3]],w); //all
 
-            xiu = "抢";
+            var xiu = "抢";
             var nextt = new Date(y + "/" + m + "/" + d);
             nextt.setDate(nextt.getDate() + 29);
             var rest = "";
@@ -396,7 +396,7 @@
             nextt.setDate(nextt.getDate() + 29);
             lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth()+1, nextt.getDate());
             rest = xiu+calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
-            // if(rest.indexOf("春节") == -1)//排除春节当天抢票
+            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1)
             addFestival(Y,y,M,m,d,rest,nextt.getDay());
 
             if(addAutoFestivalFlag) {
@@ -475,7 +475,7 @@
             if((v.split("节")).length > 2){
               alert("两个节假日重叠,请手动核实"+v);
             }
-          alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
+          // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
           }
         }
     }
@@ -487,11 +487,15 @@
       // if(rest.indexOf("节") == -1 || rest.indexOf("历") != -1 || rest.indexOf("~") != -1) return;
       // alert(y+""+m+""+d+""+rest);
         // TODO
-      if(rest.indexOf("抢") == -1) addRemindFestival(Y,y,M,m,d,rest);
-      if(rest.indexOf("~") != -1 ) return;
+      rest =rest.replace("temp",""); //for null problem
+      if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("抢") == -1) rest = rest.replace("节","节休");
+      addRemindFestival(Y,y,M,m,d,rest);
+
+      if(!addAutoFestivalFlag) return;
+      if(rest.indexOf("历") != -1) return;
+      if(rest.indexOf("~") != -1) return;
       if(rest.indexOf("节") == -1) return;
       if(rest.indexOf("春节") != -1 || rest.indexOf("国庆节") != -1) return;
-        if(!addAutoFestivalFlag) return;
       var date = new Date(y + "/" + m + "/" + d);
       var pre = new Date(y + "/" + m + "/" + d);
       pre.setDate(pre.getDate() - 1);
