@@ -20,22 +20,22 @@ public class FestController {
     @Autowired //java.lang.NullPointerException
     private FestMapper festMapper;
 
-    @RequestMapping(path="/fest", method = RequestMethod.POST)
-    public List<Fest> getFest(HttpServletRequest request){
-        System.out.println("test");
-        String dateString = request.getParameter("date");
-        SimpleDateFormat sdf = new SimpleDateFormat();//"yyyy-MM-dd");//, <span style="color: #FF0000;"> Locale.US</span>);
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        try{
-            date = sdf.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        System.out.println(date);
-        return festMapper.selectFestByMonth(date);
-    }
-    @RequestMapping("ajax")
+//    @RequestMapping(path="/fest", method = RequestMethod.POST)
+//    public List<Fest> getFest(HttpServletRequest request){
+//        System.out.println("test");
+//        String dateString = request.getParameter("date");
+//        SimpleDateFormat sdf = new SimpleDateFormat();//"yyyy-MM-dd");//, <span style="color: #FF0000;"> Locale.US</span>);
+//        Calendar calendar = Calendar.getInstance();
+//        Date date = calendar.getTime();
+//        try{
+//            date = sdf.parse(dateString);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(date);
+//        return festMapper.selectFestByMonth(date);
+//    }
+    @RequestMapping("fest")
     @ResponseBody
     public List<Fest> ajax(@RequestParam("date") Date date){
         return festMapper.selectFestByMonth(date);

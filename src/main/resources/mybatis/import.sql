@@ -22,7 +22,7 @@ create table fest (id int primary key auto_increment, timing varchar(64), cal DA
 
 insert into fest (timing, cal) values ('work', '2018-12-29');
 insert into fest (timing, cal) values ('rest', '2018-12-30');
-insert into fest (timing, cal) values ('rest', '2019-12-31');
+insert into fest (timing, cal) values ('rest', '2018-12-31');
 insert into fest (timing, cal) values ('rest', '2019-01-01');
 insert into fest (timing, cal) values ('work', '2019-02-02');
 insert into fest (timing, cal) values ('work', '2019-02-03');

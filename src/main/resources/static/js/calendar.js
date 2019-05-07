@@ -276,7 +276,7 @@
             setconfigDay(options, datetable.count, setWeek(options));
         }
         setconfigDayM(Y, M);
-        setFestivalRemind(Y, M,datetable.days,options);
+        addAutoFestival(Y, M,datetable.days,options);
         setconfigDay(options, datetable.count, configDayM);
         $("#SY").val(Y);
         $("#SM").val(M);
@@ -287,7 +287,7 @@
         if (configDay["Y" + Y] && configDay["Y" + Y]["M" + M]) configDayM = $.extend(true, {}, configDay["Y" + Y]["M" + M]);
         else configDayM = {};
     }
-    function getfest(Y, M) {
+    function baregetfest(Y, M) {
         var date = new Date(Y + "/" + M + "/" + 1);
         alert(date);
         $.post(
@@ -301,14 +301,14 @@
             "json"
         )
     }
-    function baregetfest(Y,M)
+    function getfest(Y,M)
     {
         // String json = [{user_id:"123",user_name:"json"},{user_id:"456",user_name:"json2"}];
         var date = new Date(Y + "/" + M + "/" + 1);
         alert(date);
         $.ajax(
             {
-                url:"../ajax",
+                url:"../fest",
                 data:{"date":date},
                 type:"get",
                 dataType:"json",
@@ -321,8 +321,8 @@
                 }
             });
     }
-    function setFestivalRemind(Y,M,days,options){
-        baregetfest(Y,M);
+    function addAutoFestival(Y,M,days,options){
+        getfest(Y,M);
         var coefficient = [ 5.15, 5.37, 5.59, 4.82, 5.02, 5.26, 5.48, 4.70, 4.92, 5.135, 5.36, 4.60, 4.81, 5.04, 5.26 ];
         var cd = parseInt(Y / 100 - 17);
         var mod = parseInt(Y % 100);
