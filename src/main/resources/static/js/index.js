@@ -16,7 +16,7 @@ $(function() {
          * JSON格式：Y加年-M加月-D加日
          * 0表示休假 1表示加吧
          */
-        week: false, // 是否开启单双休
+        week: true, // 是否开启单双休
         rest: true, //x
         day : true, //b
         fest : true, //j

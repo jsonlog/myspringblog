@@ -256,7 +256,7 @@
     /* 本月信息 */
     var configDayM = {};
     var isclick = false;
-    var addAutoFestivalFlag = false;
+    var addAutoFestivalFlag = true;
     /*************************主程序******************************/
     $.fn.calendar = function (options) {
         var e = this;
@@ -374,13 +374,13 @@
               for(var j=8;j<=14;j++){
                 delete calendar.gregorianFestival[m+"-"+j];
               }
-              calendar.gregorianFestival[m+"-"+d] +="历母亲节";
+              calendar.gregorianFestival[m+"-"+d] +="历母亲节~";
             }
             if(M == 6 && w == 0 && d >=15 && d <=21){
               for(var j=15;j<=21;j++){
                 delete calendar.gregorianFestival[m+"-"+j];
               }
-              calendar.gregorianFestival[m+"-"+d] +="历父亲节";
+              calendar.gregorianFestival[m+"-"+d] +="历父亲节~";
             }
             addFestival(Y,y,M,m,d,xiu+calendar.gregorianFestival[m+"-"+d],w); //all
             addFestival(Y,y,M,m,d,xiu+calendar.lunarFestival[lunar[2] + "-" + lunar[3]],w); //all
@@ -455,8 +455,8 @@
                     }
                 }
                 nextt = new Date(y + "/" + m + "/" + d);
-                nextt.setDate(nextt.getDate() + 29 + 8);
-                for (var k = 0; k < 15; k++) {//24(0) 25(1) 26(2) 27(3) 28(4) 29(5) ---  6(12) 7 8
+                nextt.setDate(nextt.getDate() + 29 + 8); //比除夕放假前29天提前6天开抢
+                for (var k = 0; k < 15; k++) {//24(0) 25(1) 26(2) 27(3) 28(4) 29(5) ---7初一---  6(12) 7 8
                     nextt.setDate(nextt.getDate() - 1);
                     if (k > 5 && k < 12) continue;
                     lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
@@ -470,12 +470,12 @@
     }
     function addRemindFestival(Y,y,M,m,d,v){
         if(Y.toString() == y.toString() && M.toString() == m.toString()){
-          if(v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1){//
+          if(v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1){//for undefine
             configDayM["D"+d] += v;
             if((v.split("节")).length > 2){
-              alert("两个节假日重叠,请手动核实"+v);
+              alert("两个节假日重叠,请手动核实"+v);//TODO
             }
-          // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
+            // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
           }
         }
     }
