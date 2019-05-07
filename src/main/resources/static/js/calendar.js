@@ -322,8 +322,7 @@
             "json"
         )
     }
-    function getfest(Y,M)
-    {
+    function getfest(Y,M) {
         var date = new Date(Y + "/" + M + "/" + 1);
         // alert(date);
         $.ajax(
@@ -358,7 +357,6 @@
                         // delete calendar.gregorianFestival;
                         calendar.gregorianFestival = {};
                         calendar.gregorianFestival = servergregorianFestival;
-                        console.log(calendar.gregorianFestival);
                     }
                     // for(var key in servergregorianFestival){
                     //     console.log("属性：" + key + ",值："+ jsonData[key]);
@@ -438,6 +436,7 @@
             if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && !serverReceived)
             addFestival(Y,y,M,m,d,rest,nextt.getDay());
 
+            console.log(calendar.gregorianFestival);
             if(addAutoFestivalFlag) {
                 //国庆start
                 var flag = ((m == 9) && (d == 29) && (w == 6)) ||//1
