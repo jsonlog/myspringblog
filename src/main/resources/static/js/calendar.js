@@ -336,37 +336,39 @@
                 {
                     // alert(JSON.stringify(data));
                     // alert(JSON.parse(data));
-                    var servergregorianFestival = new Map();
+                    var servergregorianFestival = {};
+                    var festflag = false;
                     if(data != null) {
                         for (var i = 0; i < data.length; i++) {
                             var date = data[i].cal.toString();
                             var y = date.substring(0, 4);
                             var m = date.substr(5, 2);
                             var d = date.substr(8, 2);
-                            // alert(y+"!"+m+"!"+d);
                             if (Y.toString() == y.toString()) {
-                                servergregorianFestival.set(m + "-" + d, data[i].timing);
+                                // alert(y+"!"+m+"!"+d);
+                                festflag = true;
+                                servergregorianFestival[m + "-" + d] =  data[i].timing;
                             }
                         }
                     }
-                    alert(servergregorianFestival.toLocaleString());
-                    if(servergregorianFestival.length > 0) {
+                    console.log(servergregorianFestival);
+                    if(festflag) {
                         addAutoFestivalFlag = false;
                         serverReceived = true;
                         // delete calendar.gregorianFestival;
                         calendar.gregorianFestival = {};
                         calendar.gregorianFestival = servergregorianFestival;
+                        console.log(calendar.gregorianFestival);
                     }
-                    console.log(servergregorianFestival);
-                    for(var key in servergregorianFestival){
-                        console.log("属性：" + key + ",值："+ jsonData[key]);
-                    }
-                    servergregorianFestival.forEach(function (item) {
-                        console.log(item.toString());
-                    });
-                    servergregorianFestival.forEach(function (value, key, map) {
+                    // for(var key in servergregorianFestival){
+                    //     console.log("属性：" + key + ",值："+ jsonData[key]);
+                    // }
+                    // servergregorianFestival.forEach(function (item) {
+                    //     console.log(item.toString());
+                    // });
+                    // servergregorianFestival.forEach(function (value, key, map) {
                         // alert(key+value);
-                    });
+                    // });
                 },
                 error: function() {
                     alert("error");
