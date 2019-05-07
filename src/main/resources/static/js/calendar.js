@@ -49,7 +49,7 @@
     //     "9-9": "重阳节~",
     //     "12-8": "腊八~",
     //     "12-24": "小年~" // 有的是23小年 有的算24小年
-    // },        
+    // },
 
         /**
         * 农历1900-2100的闰大小信息表
@@ -284,8 +284,8 @@
     /*************************主程序******************************/
 
     function createTable(options, e) {
-        serverReceived = false;
         addAutoFestivalFlag = true;
+        serverReceived = false;
         var Y = options.date.getFullYear();
         var M = options.date.getMonth() + 1;
         /* 拷贝configDay对应本月的设置信息 */
@@ -357,13 +357,13 @@
                         }
                     }
                     console.log(servergregorianFestival);
-                    if(festflag) {
+                    if(festflag == true) {
                         addAutoFestivalFlag = false;
                         serverReceived = true;
                         // delete calendar.gregorianFestival;
                         calendar.gregorianFestival = {};
                         calendar.gregorianFestival = servergregorianFestival;
-                        // alert("addAutoFestivalFlag"+addAutoFestivalFlag+"servergregorianFestival"+calendar.gregorianFestival)
+                        alert("addAutoFestivalFlag"+addAutoFestivalFlag+"servergregorianFestival"+calendar.gregorianFestival)
                     }
                     // for(var key in servergregorianFestival){
                     //     console.log("属性：" + key + ",值："+ jsonData[key]);
@@ -398,8 +398,8 @@
         // alert(qingming+""+calendar.gregorianFestival[4+"-"+qingming]);
     }
     function addAutoFestival(Y,M,days,options){
-        addAutoFestivalFlag = true;
-        serverReceived = false;
+        // addAutoFestivalFlag = true;
+        // serverReceived = false;
         getfest(Y,M);
 
         var date = new Date(Y + "/" + M + "/" + 1);
@@ -426,7 +426,7 @@
               calendar.gregorianFestival[m+"-"+d] +="历父亲节~";
             }
             addFestival(Y,y,M,m,d,xiu+calendar.gregorianFestival[m+"-"+d],w); //all
-            if(!serverReceived)
+            if(serverReceived == false)
             addFestival(Y,y,M,m,d,xiu+calendar.lunarFestival[lunar[2] + "-" + lunar[3]],w); //all
 
             var xiu = "抢";
@@ -440,12 +440,12 @@
             nextt.setDate(nextt.getDate() + 29);
             lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth()+1, nextt.getDate());
             rest = xiu+calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
-            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") != -1 && !serverReceived)
+            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") != -1 && serverReceived == false)
                 addFestival(Y,y,M,m,d,rest.replace("休","").replace("班",""),nextt.getDay());
 
             // console.log(calendar.gregorianFestival);
-            // alert("addAutoFestivalFlag"+addAutoFestivalFlag+"serverReceived"+serverReceived)
-            if(addAutoFestivalFlag && false) {
+            if(addAutoFestivalFlag == true ) {
+                alert("addAutoFestivalFlag"+addAutoFestivalFlag)
                 //国庆start
                 var flag = ((m == 9) && (d == 29) && (w == 6)) ||//1
                     ((m == 9) && (d == 30) && (w == 0)) ||
@@ -461,7 +461,7 @@
                     ((m == 10) && (d == 9) && (w == 0)) ||
                     ((m == 9) && (d == 30) && (w == 6)) ||//0
                     ((m == 10) && (d == 8) && (w == 0));
-                if (flag) {
+                if (flag == true) {
                     addRemindFestival(Y, y, M, m, d, "班国庆节");
                 }
                 xiu = "休";
@@ -538,7 +538,7 @@
       if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("抢") == -1) rest = rest.replace("节","节休");
       addRemindFestival(Y,y,M,m,d,rest);
 
-      if(true || !addAutoFestivalFlag) return;
+      if(addAutoFestivalFlag == false || true) return;
       if(rest.indexOf("历") != -1) return;
       if(rest.indexOf("~") != -1) return;
       if(rest.indexOf("节") == -1) return;
