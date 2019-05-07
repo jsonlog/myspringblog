@@ -308,9 +308,6 @@
         // alert(JSON.stringify(configDayM));
         //{"D1":"休","D7":"班","D5":"抢"}
     }
-    /*
-    [{"id":18,"timing":"rest","cal":"2019-05-01T00:00:00.000+0000"},{"id":19,"timing":"rest","cal":"2019-05-02T00:00:00.000+0000"}]
-     */
     function baregetfest(Y, M) {
         var date = new Date(Y + "/" + M + "/" + 1);
         $.post(
@@ -337,15 +334,34 @@
                 success:function(data)
                 {
                     // alert(JSON.stringify(data));
+                    // alert(JSON.parse(data));
+                    var servergregorianFestival = new Map();
+                    if(data != null) addAutoFestivalFlag = false;
+                    alert(data[0].cal);
+                    alert(data[0].cal.getMonth())
+                    var date = new Date(Y + "/" + M + "/" + 1);
+                    for(var i=0;i<data.length;i++){
+                        // alert(data[i].cal+data[i].timing);
+                        date = data[i].getDate();
+                        var y = date.getFullYear();//yuandan
+                        var m = date.getMonth()+1;
+                        var d = date.getDate();
+                        if(Y.toString() == y.toString())
+                        servergregorianFestival.set(m+"-"+d,data[i].timing);
+                        alert(servergregorianFestival[m+"-"+d])
+                    }
+                    // alert(servergregorianFestival.toString());
+
                 },
                 error: function() {
                     alert("error");
                 }
             });
     }
-    function addAutoFestival(Y,M,days,options){
-        getfest(Y,M);
-        // if(true) addAutoFestivalFlag = false;
+    /*
+    [{"id":18,"timing":"rest","cal":"2019-05-01T00:00:00.000+0000"},{"id":19,"timing":"rest","cal":"2019-05-02T00:00:00.000+0000"}]
+     */
+    function addqingming() {
         var coefficient = [ 5.15, 5.37, 5.59, 4.82, 5.02, 5.26, 5.48, 4.70, 4.92, 5.135, 5.36, 4.60, 4.81, 5.04, 5.26 ];
         var cd = parseInt(Y / 100 - 17);
         var mod = parseInt(Y % 100);
@@ -358,6 +374,9 @@
         // calendar.gregorianFestival["4-4"] = "4-4";
         calendar.gregorianFestival[4+"-"+qingming] = "清明节";//TODO
         // alert(qingming+""+calendar.gregorianFestival[4+"-"+qingming]);
+    }
+    function addAutoFestival(Y,M,days,options){
+        getfest(Y,M);
 
         var date = new Date(Y + "/" + M + "/" + 1);
         date.setDate(date.getDate() - 4);
@@ -456,7 +475,7 @@
                 }
                 nextt = new Date(y + "/" + m + "/" + d);
                 nextt.setDate(nextt.getDate() + 29 + 8); //比除夕放假前29天提前6天开抢
-                for (var k = 0; k < 15; k++) {//24(0) 25(1) 26(2) 27(3) 28(4) 29(5) ---7初一---  6(12) 7 8
+                for (var k = 0; k < 15; k++) {//24(0) 25(1) 26(2) 27(3) 28(4) 29(5) ---初一(7)---  6(12) 7 8
                     nextt.setDate(nextt.getDate() - 1);
                     if (k > 5 && k < 12) continue;
                     lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());

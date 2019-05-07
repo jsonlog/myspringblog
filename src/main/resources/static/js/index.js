@@ -16,7 +16,7 @@ $(function() {
          * JSON格式：Y加年-M加月-D加日
          * 0表示休假 1表示加吧
          */
-        week: true, // 是否开启单双休
+        week: false, // 是否开启单双休 TODO 没空间,暂时只能关闭其它开关 有我没它,有它没我 反正我不单休~_~
         rest: true, //x
         day : true, //b
         fest : true, //j
