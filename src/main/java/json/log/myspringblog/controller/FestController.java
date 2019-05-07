@@ -35,7 +35,7 @@ public class FestController {
         System.out.println(date);
         return festMapper.selectFestByMonth(date);
     }
-    @RequestMapping(value = "/ajax", method = RequestMethod.GET)
+    @RequestMapping("ajax")
     @ResponseBody
     public List<Fest> ajax(@RequestParam("date") Date date){
         return festMapper.selectFestByMonth(date);
@@ -51,7 +51,7 @@ public class FestController {
 //        return map;
 //    }
 
-//    @RequestMapping(path="/fest", method = RequestMethod.POST)
+//    @RequestMapping(value="/fest", method = RequestMethod.POST)
 //    @ResponseBody
 //    public String index(@RequestBody Fest fest){
 //        System.out.println(fest);

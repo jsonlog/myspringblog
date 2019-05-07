@@ -303,6 +303,7 @@
     }
     function baregetfest(Y,M)
     {
+        // String json = [{user_id:"123",user_name:"json"},{user_id:"456",user_name:"json2"}];
         var date = new Date(Y + "/" + M + "/" + 1);
         alert(date);
         $.ajax(
@@ -313,7 +314,7 @@
                 dataType:"json",
                 success:function(data)
                 {
-                    alert(data.name);
+                    alert(JSON.stringify(data));
                 },
                 error: function() {
                     alert("error");
