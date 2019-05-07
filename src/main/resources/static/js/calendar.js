@@ -1,51 +1,55 @@
 (function () {
     var calendar = {
-    /**
-    * 公历节日
-    */
     gregorianFestival: {
-      // 5.8-14  6.15-21
-        "3-23": "test国历",
-
-        "2-14": "情人节~",
-        "4-1": "愚人节~",
-        "4-6": "米粉节&荣耀~",
-        "6-14": "618家电~",
-        "8-18": "苏宁818~",
-        "9-12": "魅友节~",
-        "11-1": "万圣节~",
-        "11-11": "双11~",
-        "12-12": "双12~",
-        "12-24": "平安夜~苹果",
-        "12-25": "圣诞节~",
-
-        "1-1": "元旦节",//TODO
-        "3-8": "妇女节~",
-        "3-12": "植树节~",
-        "5-1": "劳动节",
-        "5-4": "青年节~",
-        "6-1": "儿童节~",
-        "7-1": "建党节~",
-        "8-1": "建军节~",
-        "9-10": "教师节~",
-        "10-1": "国庆节"
+    },
+    lunarFestival: {
     },
     /**
-    * 农历节日
-    */
-    lunarFestival: {
-        "2-20": "test农历",
-
-        "1-1": "春节",
-        "1-7": "七样~",
-        "1-15": "元宵节~",
-        "5-5": "端午节",
-        "7-7": "七夕~",
-        "8-15": "中秋节",
-        "9-9": "重阳节~",
-        "12-8": "腊八~",
-        "12-24": "小年~" // 有的是23小年 有的算24小年
-    },
+     * 公历节日
+     */
+    // gregorianFestival: {
+    //     // 5.8-14  6.15-21
+    //     "3-23": "test国历",
+    //
+    //     "2-14": "情人节~",
+    //     "4-1": "愚人节~",
+    //     "4-6": "米粉节&荣耀~",
+    //     "6-14": "618家电~",
+    //     "8-18": "苏宁818~",
+    //     "9-12": "魅友节~",
+    //     "11-1": "万圣节~",
+    //     "11-11": "双11~",
+    //     "12-12": "双12~",
+    //     "12-24": "平安夜~苹果",
+    //     "12-25": "圣诞节~",
+    //
+    //     "1-1": "元旦节",//TODO
+    //     "3-8": "妇女节~",
+    //     "3-12": "植树节~",
+    //     "5-1": "劳动节",
+    //     "5-4": "青年节~",
+    //     "6-1": "儿童节~",
+    //     "7-1": "建党节~",
+    //     "8-1": "建军节~",
+    //     "9-10": "教师节~",
+    //     "10-1": "国庆节"
+    // },
+    // /**
+    //  * 农历节日
+    //  */
+    // lunarFestival: {
+    //     "2-20": "test农历",
+    //
+    //     "1-1": "春节",
+    //     "1-7": "七样~",
+    //     "1-15": "元宵节~",
+    //     "5-5": "端午节",
+    //     "7-7": "七夕~",
+    //     "8-15": "中秋节",
+    //     "9-9": "重阳节~",
+    //     "12-8": "腊八~",
+    //     "12-24": "小年~" // 有的是23小年 有的算24小年
+    // },        
 
         /**
         * 农历1900-2100的闰大小信息表
@@ -280,6 +284,8 @@
     /*************************主程序******************************/
 
     function createTable(options, e) {
+        serverReceived = false;
+        addAutoFestivalFlag = true;
         var Y = options.date.getFullYear();
         var M = options.date.getMonth() + 1;
         /* 拷贝configDay对应本月的设置信息 */
@@ -341,12 +347,12 @@
                         for (var i = 0; i < data.length; i++) {
                             var date = data[i].cal.toString();
                             var y = date.substring(0, 4);
-                            var m = date.substr(5, 2);
-                            var d = date.substr(8, 2);
+                            var m = ~~date.substr(5, 2);
+                            var d = ~~date.substr(8, 2);
                             if (Y.toString() == y.toString()) {
                                 // alert(y+"!"+m+"!"+d);
                                 festflag = true;
-                                servergregorianFestival[m + "-" + d] =  data[i].timing;
+                                servergregorianFestival[m + "-" + d] =  data[i].timing;//important
                             }
                         }
                     }
@@ -357,6 +363,7 @@
                         // delete calendar.gregorianFestival;
                         calendar.gregorianFestival = {};
                         calendar.gregorianFestival = servergregorianFestival;
+                        // alert("addAutoFestivalFlag"+addAutoFestivalFlag+"servergregorianFestival"+calendar.gregorianFestival)
                     }
                     // for(var key in servergregorianFestival){
                     //     console.log("属性：" + key + ",值："+ jsonData[key]);
@@ -396,7 +403,7 @@
         getfest(Y,M);
 
         var date = new Date(Y + "/" + M + "/" + 1);
-        date.setDate(date.getDate() - 4);
+            date.setDate(date.getDate() - 4);
         for(var D=1;D < (days+7);D++){
             date.setDate(date.getDate()+1);
             var y = date.getFullYear();
@@ -427,17 +434,18 @@
             nextt.setDate(nextt.getDate() + 29);
             var rest = "";
             rest = xiu+calendar.gregorianFestival[nextt.getMonth()+1+"-"+nextt.getDate()];
-            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1)
-            addFestival(Y,y,M,m,d,rest,nextt.getDay());//抢
+            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") != -1)
+                addFestival(Y,y,M,m,d,rest.replace("休","").replace("班",""),nextt.getDay());//抢
             nextt = new Date(y + "/" + m + "/" + d);
             nextt.setDate(nextt.getDate() + 29);
             lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth()+1, nextt.getDate());
             rest = xiu+calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
-            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && !serverReceived)
-            addFestival(Y,y,M,m,d,rest,nextt.getDay());
+            if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") != -1 && !serverReceived)
+                addFestival(Y,y,M,m,d,rest.replace("休","").replace("班",""),nextt.getDay());
 
-            console.log(calendar.gregorianFestival);
-            if(addAutoFestivalFlag) {
+            // console.log(calendar.gregorianFestival);
+            // alert("addAutoFestivalFlag"+addAutoFestivalFlag+"serverReceived"+serverReceived)
+            if(addAutoFestivalFlag && false) {
                 //国庆start
                 var flag = ((m == 9) && (d == 29) && (w == 6)) ||//1
                     ((m == 9) && (d == 30) && (w == 0)) ||
@@ -513,9 +521,10 @@
             if((v.split("节")).length > 2){
               alert("两个节假日重叠,请手动核实"+v);//TODO
             }
-            // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
           }
+            // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
         }
+        console.log("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
     }
     function addFestival(Y,y,M,m,d,rest,w){
       // if(rest.indexOf("~") != -1 && rest.indexOf("抢") == -1)
@@ -526,10 +535,10 @@
       // alert(y+""+m+""+d+""+rest);
         // TODO
       rest =rest.replace("temp",""); //for null problem
-      if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("抢") == -1 && !serverReceived) rest = rest.replace("节","节休");
+      if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("抢") == -1) rest = rest.replace("节","节休");
       addRemindFestival(Y,y,M,m,d,rest);
 
-      if(!addAutoFestivalFlag) return;
+      if(true || !addAutoFestivalFlag) return;
       if(rest.indexOf("历") != -1) return;
       if(rest.indexOf("~") != -1) return;
       if(rest.indexOf("节") == -1) return;
