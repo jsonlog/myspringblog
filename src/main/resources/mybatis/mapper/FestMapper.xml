@@ -25,7 +25,7 @@
     </select>
 
     <select id="selectFestByMonth" resultType="Fest">
-        select id, cal, timing from fest where cal > #{cal}
+        select id, cal, timing from fest where cal >= #{cal}
     </select>
 
     <select id="selectFestByTiming" resultType="Fest">

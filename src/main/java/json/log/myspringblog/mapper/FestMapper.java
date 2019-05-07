@@ -16,11 +16,11 @@ public interface FestMapper {
 
     Fest getOne(Long id);
 
+    void delete(Long id);
+
     void insert(Fest fest);
 
     void update(Fest fest);
-
-    void delete(Long id);
 
     List<Fest> selectFestByTiming(String timing);
 

@@ -10,5 +10,6 @@ public class MyspringblogApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MyspringblogApplication.class, args);
+        System.out.println("MyspringblogApplication");
     }
 }

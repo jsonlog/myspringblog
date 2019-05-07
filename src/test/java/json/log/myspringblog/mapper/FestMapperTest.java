@@ -29,12 +29,20 @@ public class FestMapperTest {
     SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
+    public void testDelete() throws Exception {
+        Fest fest = festMapper.getOne(1l);
+        System.out.println(fest.getCal().toString());
+        festMapper.delete(1l);
+        Assert.assertTrue(festMapper.getOne(1l) == null);
+    }
+
+    @Test
     public void testInsert() throws Exception {
 //        Calendar calendar=Calendar.getInstance();
 //        String nowString=smft.format(calendar.getTime());
         System.out.println(smft.parse("2019-04-12"));
-        festMapper.insert(new Fest(smft.parse("2019-04-01"), "rest"));
-        festMapper.insert(new Fest(smft.parse("2019-04-12"), "work"));
+        festMapper.insert(new Fest(smft.parse("2019-05-03"), "test"));
+//        festMapper.insert(new Fest(smft.parse("2019-04-12"), "work"));
         System.out.println(festMapper.getAll().size());
     }
 
@@ -48,6 +56,12 @@ public class FestMapperTest {
         festToString(Fests);
     }
 
+    @Test
+    public void testQueryMonth() throws Exception {
+        List<Fest> Fests = festMapper.selectFestByMonth(smft.parse("2020-05-01"));
+        festToString(Fests);
+    }
+
     public void festToString(List<Fest> Fests){
         if(Fests==null || Fests.size()==0){
             System.out.println("fest is null");
@@ -56,7 +70,6 @@ public class FestMapperTest {
         }
     }
 
-
     @Test
     public void testUpdate() throws Exception {
         Fest fest = festMapper.getOne(2l);
@@ -64,13 +77,5 @@ public class FestMapperTest {
         fest.setTiming("testwork");
         festMapper.update(fest);
         Assert.assertTrue((festMapper.getOne(2l).getTiming().contains("test")));
-    }
-
-    @Test
-    public void testDelete() throws Exception {
-        Fest fest = festMapper.getOne(1l);
-        System.out.println(fest.getCal().toString());
-        festMapper.delete(1l);
-        Assert.assertTrue(festMapper.getOne(1l) == null);
     }
 }

@@ -287,7 +287,41 @@
         if (configDay["Y" + Y] && configDay["Y" + Y]["M" + M]) configDayM = $.extend(true, {}, configDay["Y" + Y]["M" + M]);
         else configDayM = {};
     }
+    function getfest(Y, M) {
+        var date = new Date(Y + "/" + M + "/" + 1);
+        alert(date);
+        $.post(
+            "fest",
+            {"date":date},
+            function(response){
+                // if(response.success){
+                    alert(response.message);
+                // }
+            },
+            "json"
+        )
+    }
+    function baregetfest(Y,M)
+    {
+        var date = new Date(Y + "/" + M + "/" + 1);
+        alert(date);
+        $.ajax(
+            {
+                url:"../ajax",
+                data:{"date":date},
+                type:"get",
+                dataType:"json",
+                success:function(data)
+                {
+                    alert(data.name);
+                },
+                error: function() {
+                    alert("error");
+                }
+            });
+    }
     function setFestivalRemind(Y,M,days,options){
+        baregetfest(Y,M);
         var coefficient = [ 5.15, 5.37, 5.59, 4.82, 5.02, 5.26, 5.48, 4.70, 4.92, 5.135, 5.36, 4.60, 4.81, 5.04, 5.26 ];
         var cd = parseInt(Y / 100 - 17);
         var mod = parseInt(Y % 100);
