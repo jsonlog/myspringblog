@@ -14,7 +14,12 @@
        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
        See the License for the specific language governing permissions and
        limitations under the License.
-
+    &lt;       <
+    &gt;       >
+    &lt;&gt;   <>
+    &amp;      &
+    &apos;      '
+    &quot;      "
 -->
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -25,8 +30,10 @@
     </select>
 
     <select id="selectFestByMonth" resultType="Fest">
-        select id, cal, timing from fest where cal >= #{cal}
+        select id, cal , timing from fest where cal between #{cal} and DATE_SUB(#{cal}, INTERVAL -365 DAY)
     </select>
+<!-- select id, cal , timing from fest where cal between #{cal} and DATE_SUB(CURDATE(), INTERVAL -364 DAY)-->
+<!--    &#45;&#45;         select id, cal , timing from fest where cal >= #{cal}-->
 
     <select id="selectFestByTiming" resultType="Fest">
         select cal,timing from fest where timing = #{timing}

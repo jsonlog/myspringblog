@@ -58,7 +58,7 @@ public class FestMapperTest {
 
     @Test
     public void testQueryMonth() throws Exception {
-        List<Fest> Fests = festMapper.selectFestByMonth(smft.parse("2020-05-01"));
+        List<Fest> Fests = festMapper.selectFestByMonth(smft.parse("2018-01-01"));
         festToString(Fests);
     }
 

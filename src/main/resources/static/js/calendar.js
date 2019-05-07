@@ -340,11 +340,12 @@
                             var y = date.substring(0, 4);
                             var m = ~~date.substr(5, 2);
                             var d = ~~date.substr(8, 2);
-                            if (Y.toString() == y.toString()) {//TODO 返回一年,支持多年
+                            // if (Y.toString() == y.toString()) {//TODO 返回一年,支持多年
                                 // alert(y+"!"+m+"!"+d);
-                                festflag = true;
                                 servergregorianFestival[m + "-" + d] =  data[i].timing;//important
-                            }
+                            // if(m == M || m+1 == M)
+                                festflag = true;
+                            // }
                         }
                     }
                     console.log(servergregorianFestival);

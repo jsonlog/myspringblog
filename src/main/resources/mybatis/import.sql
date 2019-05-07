@@ -20,6 +20,44 @@ drop table if exists fest;
 
 create table fest (id int primary key auto_increment, timing varchar(64), cal DATE);
 
+
+insert into fest (timing, cal) values ('元旦节休', '2017-12-30');
+insert into fest (timing, cal) values ('元旦节休', '2017-12-31');
+insert into fest (timing, cal) values ('元旦节休', '2018-01-01');
+insert into fest (timing, cal) values ('春节班', '2018-02-11');
+insert into fest (timing, cal) values ('春节休', '2018-02-15');
+insert into fest (timing, cal) values ('春节休', '2018-02-16');
+insert into fest (timing, cal) values ('春节休', '2018-02-17');
+insert into fest (timing, cal) values ('春节休', '2018-02-18');
+insert into fest (timing, cal) values ('春节休', '2018-02-19');
+insert into fest (timing, cal) values ('春节休', '2018-02-20');
+insert into fest (timing, cal) values ('春节休', '2018-02-21');
+insert into fest (timing, cal) values ('春节班', '2018-02-24');
+insert into fest (timing, cal) values ('清明节休', '2018-04-05');
+insert into fest (timing, cal) values ('清明节休', '2018-04-06');
+insert into fest (timing, cal) values ('清明节休', '2018-04-07');
+insert into fest (timing, cal) values ('清明节班', '2018-04-08');
+insert into fest (timing, cal) values ('劳动节班', '2018-04-28');
+insert into fest (timing, cal) values ('劳动节休', '2018-04-29');
+insert into fest (timing, cal) values ('劳动节休', '2018-04-30');
+insert into fest (timing, cal) values ('劳动节休', '2018-05-01');
+insert into fest (timing, cal) values ('端午节休', '2018-06-16');
+insert into fest (timing, cal) values ('端午节休', '2018-06-17');
+insert into fest (timing, cal) values ('端午节休', '2018-06-18');
+insert into fest (timing, cal) values ('中秋节休', '2018-09-22');
+insert into fest (timing, cal) values ('中秋节休', '2018-09-23');
+insert into fest (timing, cal) values ('中秋节休', '2018-09-24');
+insert into fest (timing, cal) values ('国庆节班', '2018-09-29');
+insert into fest (timing, cal) values ('国庆节班', '2018-09-30');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-01');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-02');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-03');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-04');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-05');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-06');
+insert into fest (timing, cal) values ('国庆节休', '2018-10-07');
+
+
 insert into fest (timing, cal) values ('元旦节班', '2018-12-29');
 insert into fest (timing, cal) values ('元旦节休', '2018-12-30');
 insert into fest (timing, cal) values ('元旦节休', '2018-12-31');
@@ -57,3 +95,4 @@ insert into fest (timing, cal) values ('国庆节休', '2019-10-05');
 insert into fest (timing, cal) values ('国庆节休', '2019-10-06');
 insert into fest (timing, cal) values ('国庆节休', '2019-10-07');
 insert into fest (timing, cal) values ('国庆节班', '2019-10-12');
+insert into fest (timing, cal) values ('元旦节休', '2020-01-01');
