@@ -267,6 +267,9 @@
     var isclick = false;
     var addAutoFestivalFlag = true;
     var serverReceived = false;
+    var untilYear = 2049;
+    var untilMonth = 12;
+    var untilDay = 31;
     /*************************主程序******************************/
     $.fn.calendar = function (options) {
         var e = this;
@@ -1043,18 +1046,33 @@
     // }
     // function ($) {
     $.fn.extend({
-        "titleOver": function (e,leftDays) {
+        "titleOver": function (e,date) {
             // this[0].myTitle = this[0].title;
             // this[0].title = "";
+            var ClickDays= date.getDate();
+            var until = new Date(untilYear + "/" + untilMonth + "/" + untilDay);
+            var time = until.getTime() - date.getTime();
+            var year = until.getFullYear() - date.getFullYear(); //366
+            var day = parseInt(time / (1000 * 60 * 60 * 24));
+            var hour = parseInt(day*24);
+            var week = parseInt(day/7);
+            var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
             //创建div元素
-            var tooltip = "<div id='tooltip' style='border:1px solid #000000;width:auto;position:absolute;'>" + leftDays + "</div>"
+            var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
+                + year + "次生日<br>"
+                + month + "月<br>"
+                + week + "周<br>"
+                + day + "天<br>"
+                + hour + "小时<br>"
+                + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
+                + "</div>"
             $("body").append(tooltip);
-            $("#tooltip").css({"top": (e.pageY + y) + "px", "left": (e.pageX + x) + "px"}).show('fast');
+            $("#tooltip"+ClickDays).css({"top": (e.pageY + y) + "px", "left": (e.pageX + x) + "px"}).show('fast');
         }, "titleOut": function () {
             // this[0].title = this[0].myTitle;
-            $("#tooltip").remove();
+            $("#tooltip"+ClickDays).remove();
         }, "titleMove": function (e) {
-            $("#tooltip").css({"top": (e.pageY + y) + "px", "left": (e.pageX + x) + "px"});
+            $("#tooltip"+ClickDays).css({"top": (e.pageY + y) + "px", "left": (e.pageX + x) + "px"});
         }
     });
     //默认鼠标坐标
@@ -1079,7 +1097,8 @@
             $(".days").css("background", "").css("border", "1px solid #f1ebe4");
             $(this).css("background", "rgb(255, 248, 230);").css("border", "1px solid rgb(220, 20, 60)");
             ClickDays = $(this).attr("id").split("days")[1];
-            $("#calendar").titleOver(e,ClickDays);//mouseover
+            var date = new Date(Y + "/" + M + "/" + ClickDays);
+            $("#calendar").titleOver(e,date);//mouseover
             rightArea(Y, M);
         }).mouseout(function () {
             $("#calendar").titleOut();

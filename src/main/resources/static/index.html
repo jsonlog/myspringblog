@@ -8,8 +8,42 @@
     <link href="/css/calendar.css" rel="stylesheet" />
     <title></title>
 </head>
-
-<body>
+<body onload="start();">
+<!--<body>-->
+    <div id="timeDiv"></div>
+    <script type="text/javascript">
+        var untilYear = 2049;
+        var untilMonth = 12;
+        var untilDay = 31;
+        function displayTime(){
+    //1.获取div元素
+            var timeDiv=document.getElementById("timeDiv");
+    //2.获取系统当前时间
+            var date=new Date();
+            var ClickDays= date.getDate();
+            var until = new Date(untilYear + "/" + untilMonth + "/" + untilDay);
+            var time = until.getTime() - date.getTime();
+            var year = until.getFullYear() - date.getFullYear(); //366
+            var day = parseInt(time / (1000 * 60 * 60 * 24));
+            var hour = parseInt(day*24);
+            var week = parseInt(day/7);
+            var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
+            var strNowTime=date.toString();
+    //3.将系统时间设置到div元素中
+            timeDiv.innerHTML=strNowTime+"<br>"
+                + year + "次生日<br>"
+                + month + "月<br>"
+                + week + "周<br>"
+                + day + "天<br>"
+                + hour + "小时<br>"
+                + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
+            ;
+        }
+        //每隔1秒调用一次displayTime函数
+        function start(){
+            window.setInterval("displayTime()",1000)//单位是毫秒
+        }
+    </script>
     <iframe width="1200" scrolling="no" height="120" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=19&icon=1&temp=1&num=5&site=19"></iframe>
     <form id="form1" runat="server">
         <div id="calendar">
