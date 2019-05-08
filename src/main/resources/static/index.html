@@ -10,7 +10,6 @@
 </head>
 <body onload="start();">
 <!--<body>-->
-    <div id="timeDiv"></div>
     <script type="text/javascript">
         var untilYear = 2049;
         var untilMonth = 12;
@@ -25,17 +24,21 @@
             var time = until.getTime() - date.getTime();
             var year = until.getFullYear() - date.getFullYear(); //366
             var day = parseInt(time / (1000 * 60 * 60 * 24));
-            var hour = parseInt(day*24);
+            var hour = parseInt(time/(1000*60*60));
+            var minute = parseInt(time/(1000*60));
+            var second = parseInt(time/1000);
             var week = parseInt(day/7);
             var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
             var strNowTime=date.toString();
     //3.将系统时间设置到div元素中
             timeDiv.innerHTML=strNowTime+"<br>"
-                + year + "次生日<br>"
+                + year + "生日<br>"
                 + month + "月<br>"
                 + week + "周<br>"
                 + day + "天<br>"
-                + hour + "小时<br>"
+                + hour + "时<br>"
+                + minute + "分<br>"
+                + second + "秒<br>"
                 + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
             ;
         }
@@ -60,6 +63,7 @@
     <a href="https://jsonlog.github.io/tims">tims</a>
     <a href="https://jsonlog.github.io/timd">timd</a>
   </div>
+<div id="timeDiv"></div>
 </body>
 
 </html>

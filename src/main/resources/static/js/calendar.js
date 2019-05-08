@@ -1,6 +1,6 @@
 (function () {
     var gregorianFestivalGlobal = {
-        // 5.8-14  6.15-21
+        // 5.8-14  6.15-21 節
         "3-23": "js国历",
 
         "2-14": "情人节~",
@@ -270,6 +270,9 @@
     var untilYear = 2049;
     var untilMonth = 12;
     var untilDay = 31;
+    //默认鼠标坐标
+    var mousex = 10;
+    var mousey = 20;
     /*************************主程序******************************/
     $.fn.calendar = function (options) {
         var e = this;
@@ -361,13 +364,17 @@
                             // if (Y.toString() == y.toString()) {//TODO 返回一年,支持多年
                             // alert(y+"!"+m+"!"+d);
                             if (servergregorianFestival[m + "-" + d]) {
-                                if (servergregorianFestival[m + "-" + d].indexOf("节休") != -1 || servergregorianFestival[m + "-" + d].indexOf("节班") != -1)
-                                    servergregorianFestival[m + "-" + d] += data[i].timing;
-                                else
+                                if(servergregorianFestival[m + "-" + d].indexOf("~") != -1) {
+                                    addRemindFestival(Y, y, M, m, d, servergregorianFestival[m + "-" + d]);
                                     servergregorianFestival[m + "-" + d] = data[i].timing + servergregorianFestival[m + "-" + d];
-                                ;
-                            } else
-                                servergregorianFestival[m + "-" + d] = data[i].timing;//important
+                                }
+                                else {
+                                    addRemindFestival(Y, y, M, m, d, data[i].timing);
+                                    servergregorianFestival[m + "-" + d] += data[i].timing;
+                                }
+                                servergregorianFestival[m + "-" + d] = servergregorianFestival[m + "-" + d].replace("节~","").replace("~","");
+                            } else servergregorianFestival[m + "-" + d] = data[i].timing;
+
                             // if(m == M || m+1 == M)
                             festflag = true;
                             // }
@@ -1067,12 +1074,12 @@
                 + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
                 + "</div>"
             $("body").append(tooltip);
-            $("#tooltip"+ClickDays).css({"top": (e.pageY + y) + "px", "left": (e.pageX + x) + "px"}).show('fast');
+            $("#tooltip"+ClickDays).css({"top": (e.pageY + mousey) + "px", "left": (e.pageX + mousex) + "px"}).show('fast');
         }, "titleOut": function () {
             // this[0].title = this[0].myTitle;
             $("#tooltip"+ClickDays).remove();
         }, "titleMove": function (e) {
-            $("#tooltip"+ClickDays).css({"top": (e.pageY + y) + "px", "left": (e.pageX + x) + "px"});
+            $("#tooltip"+ClickDays).css({"top": (e.pageY + mousey) + "px", "left": (e.pageX + mousex) + "px"});
         }
     });
     //默认鼠标坐标
@@ -1088,8 +1095,8 @@
             reDraw(options, e);
         });
         // 点击日期事件
-        // $(".days").click(function () {
-        $(".days").mouseenter(function () {
+        $(".days").click(function () {
+        }).mouseenter(function () {
             // var toggle = "<div  id='div_ClickDays"+"' data-container='body' data-toggle='popover' data-placement='top'";
             // toggle+= " data-content=\""+"4748888888482owrnslrjbnl"+"\" >";
             // $("#div_ClickDays").show();
