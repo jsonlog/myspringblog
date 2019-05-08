@@ -286,78 +286,109 @@
 <!--     });-->
 <!--  });-->
 <!--</script>-->
-<input type="text" name="fixfolder" value ="js">
-<input type="button" value ="搜索" onclick="searchFiles()">
-<table >
-  <tr>
-    <td id = "textarea">
-    </td>
-  </tr>
-</table>
-<script>
-  function postArticle(){
-    //获取当前网址，如： //http:localhost:8080/myspringblog/index
-    var curWwwPath=window.document.location.href;
-    //获取主机地址之后的目录，如： /myspringblog/index
-    var pathName=window.document.location.pathname;
-    //21
-    var pos=curWwwPath.indexOf(pathName);
-    //获取主机地址，如： http://localhost:8083
-    var localhostPath=curWwwPath.substring(0,pos);
-    //获取带"/"的项目名，如：+/myspringblog
-    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
-    console.log(curWwwPath+"+++"+pathName+"+++"+pos+"+++"+localhostPath+"+++"+projectName);
-    return(localhostPaht+projectName);
-  }
-  function searchFiles(){
-    var tbsource = window.document.location.href.replace("index","blog");//本地文件夹路径
-    var hdfiles = "";
-    var objFSO =new ActiveXObject('Scripting.FileSystemObject');
-    if(!objFSO.FolderExists(tbsource))
-    {
-      alert("<"+tbsource+">该文件夹路径不存在，或者路径不能含文件名！");
-      objFSO = null;
-//return;
-    }
-    var objFolder = objFSO.GetFolder(tbsource);
-    var colFiles = new Enumerator(objFolder.Files);
-//var re_inf1 = /\.jpg$/; 验证文件夹文件是否jpg文件
-//var re_inf1 = /\[.](jpg|gif|bmg)$/;
-    var re_inf1 =/\.(gif|jpg|jpeg|bmp)$/i;
-    for (; !colFiles.atEnd(); colFiles.moveNext()) //读取文件夹下文件
-    {
-      var objFile = colFiles.item();
-      console.log(objFile.Name);
-      // if(re_inf1.test(objFile.Name.toLowerCase()))
-      //
-      // {
-      //
-      //   hdfiles = hdfiles+"<img src='1/"+objFile.Name+"'>";
-      //
-      // }
+<!--<input type="text" name="fixfolder" value ="js">-->
+<!--<input type="button" value ="搜索" onclick="searchFiles()">-->
+<!--<table >-->
+<!--  <tr>-->
+<!--    <td id = "textarea">-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--</table>-->
+<!--<script>-->
+<!--  function postArticle(){-->
+<!--    //获取当前网址，如： //http:localhost:8080/myspringblog/index-->
+<!--    var curWwwPath=window.document.location.href;-->
+<!--    //获取主机地址之后的目录，如： /myspringblog/index-->
+<!--    var pathName=window.document.location.pathname;-->
+<!--    //21-->
+<!--    var pos=curWwwPath.indexOf(pathName);-->
+<!--    //获取主机地址，如： http://localhost:8083-->
+<!--    var localhostPath=curWwwPath.substring(0,pos);-->
+<!--    //获取带"/"的项目名，如：+/myspringblog-->
+<!--    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);-->
+<!--    console.log(curWwwPath+"+++"+pathName+"+++"+pos+"+++"+localhostPath+"+++"+projectName);-->
+<!--    return(localhostPaht+projectName);-->
+<!--  }-->
+<!--  function searchFiles(){-->
+<!--    var curWwwPath=window.document.location.href;-->
+<!--    var tbsource = curWwwPath.replace("/index/","/index")+"blog";-->
+<!--    var hdfiles = "";-->
+<!--    alert(tbsource);-->
+<!--    var objFSO =new ActiveXObject('Scripting.FileSystemObject');-->
+<!--    if(!objFSO.FolderExists(tbsource))-->
+<!--    {-->
+<!--      alert("<"+tbsource+">该文件夹路径不存在，或者路径不能含文件名！");-->
+<!--      objFSO = null;-->
+<!--//return;-->
+<!--    }-->
+<!--    var objFolder = objFSO.GetFolder(tbsource);-->
+<!--    var colFiles = new Enumerator(objFolder.Files);-->
+<!--//var re_inf1 = /\.jpg$/; 验证文件夹文件是否jpg文件-->
+<!--//var re_inf1 = /\[.](jpg|gif|bmg)$/;-->
+<!--    var re_inf1 =/\.(gif|jpg|jpeg|bmp)$/i;-->
+<!--    for (; !colFiles.atEnd(); colFiles.moveNext()) //读取文件夹下文件-->
+<!--    {-->
+<!--      var objFile = colFiles.item();-->
+<!--      console.log(objFile.Name);-->
+<!--      if(re_inf1.test(objFile.Name.toLowerCase()))-->
 
-    }
-    // var fso = new ActiveXObject("Scripting.FileSystemObject");
-    // var f = fso.GetFolder(js);
-    // alert(f);
-    // var fc = new Enumerator(f.files);
-    // var s = "";
-    // for (; !fc.atEnd(); fc.moveNext())
-    // {
-    //   s += fc.item();
-    //   s += "<br/>";
-    // }
-    // fk = new Enumerator(f.SubFolders);
-    // for (; !fk.atEnd(); fk.moveNext())
-    // {
-    //   s += fk.item();
-    //   s += "<br/>";
-    // }
-    //
-    // textarea.innerHTML = s;
-    // alert(textarea.innerHTML);
+<!--      {-->
+
+<!--        hdfiles = hdfiles+"<img src='1/"+objFile.Name+"'>";-->
+
+<!--      }-->
+
+<!--    }-->
+<!--    // var fso = new ActiveXObject("Scripting.FileSystemObject");-->
+<!--    // var f = fso.GetFolder(js);-->
+<!--    // alert(f);-->
+<!--    // var fc = new Enumerator(f.files);-->
+<!--    // var s = "";-->
+<!--    // for (; !fc.atEnd(); fc.moveNext())-->
+<!--    // {-->
+<!--    //   s += fc.item();-->
+<!--    //   s += "<br/>";-->
+<!--    // }-->
+<!--    // fk = new Enumerator(f.SubFolders);-->
+<!--    // for (; !fk.atEnd(); fk.moveNext())-->
+<!--    // {-->
+<!--    //   s += fk.item();-->
+<!--    //   s += "<br/>";-->
+<!--    // }-->
+<!--    //-->
+<!--    // textarea.innerHTML = s;-->
+<!--    // alert(textarea.innerHTML);-->
+<!--  }-->
+<!--  searchFiles.call();-->
+<!--</script>-->
+<script>
+  var blog;
+  githubblog.call();
+  function githubblog() {
+    $.ajax(
+            {
+              url: "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog",
+              // url: "https://api.github.com/users/jsonlog",
+              async: false,//time
+              data: {},
+              type: "get",
+              dataType: "json",
+              success: function (data) {
+                // alert(JSON.stringify(data));
+                // alert(jQuery.parseJSON(data));
+                blog = [];
+                if (data != null) {
+                  for (var i = 0; i < data.length; i++) {
+                    blog.push(data[i].path.toString().replace("src/main/resources/static/blog/",""));
+                  }
+                }
+                alert(blog);
+              },
+              error: function () {
+                alert("error");
+              }
+            });
   }
-  searchFiles.call();
 </script>
 <div id="footer"></div>
 <script>
