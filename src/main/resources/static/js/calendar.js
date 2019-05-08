@@ -1,7 +1,7 @@
 (function () {
     var gregorianFestivalGlobal = {
         // 5.8-14  6.15-21
-        "3-23": "test国历",
+        "3-23": "js国历",
 
         "2-14": "情人节~",
         "4-1": "愚人节~",
@@ -27,7 +27,7 @@
         "10-1": "国庆节"
     };
     var lunarFestivalGlobal = {
-        "2-20": "test农历",
+        "2-20": "js农历",
 
         "1-1": "春节",
         "1-7": "七样~",
@@ -342,6 +342,14 @@
                             var d = ~~date.substr(8, 2);
                             // if (Y.toString() == y.toString()) {//TODO 返回一年,支持多年
                                 // alert(y+"!"+m+"!"+d);
+                            if(servergregorianFestival[m + "-" + d]) {
+                                if(servergregorianFestival[m + "-" + d].indexOf("节休")!=-1 || servergregorianFestival[m + "-" + d].indexOf("节班")!=-1)
+                                servergregorianFestival[m + "-" + d] += data[i].timing;
+                                else
+                                    servergregorianFestival[m + "-" + d] = data[i].timing + servergregorianFestival[m + "-" + d];
+                                ;
+                            }
+                            else
                                 servergregorianFestival[m + "-" + d] =  data[i].timing;//important
                             // if(m == M || m+1 == M)
                                 festflag = true;
@@ -356,7 +364,7 @@
                         calendar.gregorianFestival = {};
                         calendar.lunarFestival = {};
                         calendar.gregorianFestival = servergregorianFestival;
-                        alert("addAutoFestivalFlag"+addAutoFestivalFlag+"servergregorianFestival"+calendar.gregorianFestival)
+                        // alert("addAutoFestivalFlag"+addAutoFestivalFlag+"servergregorianFestival"+calendar.gregorianFestival)
                     }
                     // for(var key in servergregorianFestival){
                     //     console.log("属性：" + key + ",值："+ jsonData[key]);
@@ -513,7 +521,7 @@
         if(Y.toString() == y.toString() && M.toString() == m.toString()){
           if(v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1){//for undefine
             configDayM["D"+d] += v;
-            if((v.split("节")).length > 2){
+            if((v.replace("休节","节休").split("节休")).length > 2){
               alert("两个节假日重叠,请手动核实"+v);//TODO
             }
           }
@@ -523,7 +531,7 @@
     }
     function addRestFestival(Y,y,M,m,d,rest,w){
       if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
-          rest = rest.replace("节","节休");
+          rest = rest.replace("节","休节");
 
       rest = rest.replace("temp","");
       addRemindFestival(Y,y,M,m,d,rest);
@@ -531,9 +539,10 @@
     }
     function addRobFestival(Y,y,M,m,d,rest,w) {
         rest = rest.replace("休","");
-        if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
-            addRemindFestival(Y,y,M,m,d,rest);
-        if(rest.indexOf("抢") != -1) addAutoFestival(Y,y,Y,m,d,rest,w);
+        if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1) {
+            addRemindFestival(Y, y, M, m, d, rest);
+            if (rest.indexOf("抢") != -1) addAutoFestival(Y, y, Y, m, d, rest, w);
+        }
     }
     function addAutoFestival(Y,y,M,m,d,rest,w) {
         if(addAutoFestivalFlag == false) return;
@@ -705,7 +714,9 @@
             // if(this.M == 5 && W == 0 && (i+1) >=8 && (i+1) <=14) temp2 += "母亲节";
             // if(this.M == 6 && W == 0 && (i+1) >=15 && (i+1) <=21) temp2 += "父亲节";
             if(calendar.lunarFestival[lunar[2] + "-" + lunar[3]]) temp2 += calendar.lunarFestival[lunar[2] + "-" + lunar[3]].replace("~","").replace("班","").replace("休","");
-            if(calendar.gregorianFestival[this.M + "-" + (i + 1)]) temp2 += calendar.gregorianFestival[this.M + "-" + (i + 1)].replace("~","").replace("班","").replace("休","");
+            if(calendar.gregorianFestival[this.M + "-" + (i + 1)]) temp2 += calendar.gregorianFestival[this.M + "-" + (i + 1)].replace("~","").replace(/^.*节[休班]/,"").replace("休","");
+
+            console.log(temp2);
             if(solarTerms) temp2 += solarTerms;
             if(temp2) temp = temp2;
             $("#lunar" + (i + 1)).append(temp);
