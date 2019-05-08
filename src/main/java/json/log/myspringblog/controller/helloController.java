@@ -15,4 +15,9 @@ public class helloController {
         System.out.println("helloController-----------------"+url);
         return url;
     }
+    @GetMapping("/myspringblog/blog/{url}")
+    public String blog(@PathVariable String url){
+        System.out.println("helloController-----------------"+url);
+        return "blog/"+url;
+    }
 }
