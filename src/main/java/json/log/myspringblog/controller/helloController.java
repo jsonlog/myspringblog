@@ -20,13 +20,29 @@ public class helloController {
         System.out.println("blog-----------------"+url);
         return "blog/"+url;
     }
+    @GetMapping("/jsonlog/index")
+    public String homeindex(){
+        System.out.println("jsonlog/index-----------------");
+        return index();
+    }
+//    @GetMapping("/myspringblog")
+//    public String myspringblog(){
+//        System.out.println("myspringblog-----------------");
+//        return index();
+//    }
+    @GetMapping("/home")
+    public String home(){
+        System.out.println("home-----------------");
+        return index();
+    }
     @GetMapping("/index")
     public String index(){
         System.out.println("index-----------------");
-        return "jsonlog/index";
+        return "redirect:/";
     }
     @GetMapping("/")
-    public String home(){
-        return index();
+    public String gang(){
+        System.out.println("/-----------------");
+        return "jsonlog/index";
     }
 }
