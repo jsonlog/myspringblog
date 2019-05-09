@@ -1,6 +1,6 @@
 $(document).ready(function () {
 	//banner
-    // $('#banner').easyFader(); //TODO
+    $('#banner').easyFader(); //TODO
 	
     //nav
 	$("#mnavh").click(function(){

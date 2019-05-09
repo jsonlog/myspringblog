@@ -24,15 +24,11 @@
       <ul id="bloglistul">
       </ul>
     </div>
-    <!--bloglist end-->
     <div class="content-wrapper">
-    <iframe id="ifra" name="ifra" width="100%" height="100%" style="display: none" src="./blog/sample.html"></iframe>
   </div>
   </main>
   <div id="aside"></div>
 </div>
-<!--<iframe id="myiframe" src="./blog/sample.html"></iframe>-->
-<!--<script src="js/index.js"></script>-->
 <script>
   $("#header").load("./jsonlog/header.html");
 </script>
@@ -46,7 +42,6 @@
     $.ajax(
             {
               url: "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog",
-              // url: "https://api.github.com/users/jsonlog",
               async: false,//time
               data: {},
               type: "get",
@@ -79,9 +74,9 @@
                   for (var i = 0; i < data.length; i++) {
                     blog.push(data[i].path.toString().replace("src/main/resources/static/","./"));
                   }
+                  blog = ["./blog/sample.html"];
                   githubblogAdd();
                 }
-                // console.log(blog);
               },
               error: function () {
                 alert("error");
@@ -89,31 +84,31 @@
             });
   }
   function githubblogAdd() {
-    var container = document.getElementById('bloglistul');//container
     for(var i = 0,len = blog.length; i < len; i++){
-      // var iframe = document.getElementById('ifra').contentWindow;
-      var frameTitle = blog[i].toString().replace("/","").replace(".","");
+      // if(i.toString() != "3") continue;
       var iframe = document.createElement('iframe');
+      iframe.id = blog[i];
       iframe.src=blog[i];
-      document.body.appendChild(iframe);
-      iframecontentWindow = iframe.contentWindow;
-      var blogtitle = "";
-      iframecontentWindow.onload = function(){
-        blogtitle = this.document.getElementById("blogtitle");
-        oDiv = document.createElement('div');
+      iframe.style = "display: none";
+      var bloghref = blog[i];
+      iframe.onload = function(){
+        doc = this.contentWindow.document;
+        oDiv = parent.document.createElement('div');
         oDiv.innerHTML = "<li> <i class=\"blogpic\"><a href=\"#\"><img src=\"./../images/1.jpg\" alt=\"\"> </a></i>\n" +
                 "          <dl>\n" +
-                "            <dt><a href=\"#\" target=\"_blank\">"+blogtitle+"</a></dt>\n" +
+                "            <dt><a href=\"#\" target=\"_blank\">"+doc.getElementById("blogtitle").innerHTML+"</a></dt>\n" +
                 "            <dd><span class=\"bloginfo\">选择帝国cms，做一个博客系统，很多人都说是大材小用。确实是有那种感觉，因为cms有很多功能表用不上。但是帝国cms的安装包也就才6M，如果你放一张高清的1920的图，都比这安装包大！我就来说一说我为什么要用帝国cms...</span>\n" +
-                "              <p class=\"timeinfo\"><span class=\"lanmu\"><a href=\"#\" target=\"_blank\">个人博客</a></span><span class=\"date\">2018-07-03</span></p>\n" +
-                "              <a class=\"read\" href=\""+blog[i]+"\">阅读更多</a> </dd>\n" +
+                "              <p class=\"timeinfo\"><span class=\"lanmu\"><a href=\"#\" target=\"_blank\">个人博客</a>"+"-"+"</span><span class=\"date\">"+"-"+"</span></p>\n" +
+                "              <a class=\"read\" href=\""+bloghref+"\">阅读更多</a> </dd>\n" +
                 "          </dl>\n" +
                 "        </li>";
-        container.appendChild(oDiv);
+        parent.document.getElementById('bloglistul').appendChild(oDiv);
       };
+      document.body.appendChild(iframe);
     }
-    // console.log($("#wrapper").html());
   }
+  // var frame0 = document.getElementById(blog[0]);
+  // frame0.onload = article();
 </script>
 <div id="footer"></div>
 <script>
