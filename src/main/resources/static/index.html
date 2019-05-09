@@ -9,33 +9,80 @@
 <link href="css/base.css" rel="stylesheet">
 <link href="css/index.css" rel="stylesheet">
 <link href="css/m.css" rel="stylesheet">
-<!--<script>-->
-<!--  var blogfile = function () {-->
-<!--    $.fn.blogfile = [];-->
-<!--  }-->
-<!--</script>-->
 <script src="js/jquery.min.js" ></script>
 <script src="js/hc-sticky.js"></script>
 <script src="js/comm.js"></script>
 <!--[if lt IE 9]>
 <script src="js/modernizr.js"></script>
+<![endif]-->
+</head>
+<!--<body onload="searchFiles();">-->
+<body>
+<div id="header"></div>
 <script>
-  var blog = [];
-  // require('js/index.js');
-  githubblogAdd();
+  $("#header").load("header.html");
+</script>
+<div id="wrapper" class="wrapper">
+  <main id="main">
+
+    <!--bloglist end--> 
+  </main>
+  <div id="aside"></div>
+</div>
+<!--<script src="js/index.js"></script>-->
+<script>
+  // $("#aside").load("aside.html");
+</script><script>
+  var blog;
+  githubblog();
+  function githubblog() {
+    $.ajax(
+            {
+              url: "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog",
+              // url: "https://api.github.com/users/jsonlog",
+              async: false,//time
+              data: {},
+              type: "get",
+              dataType: "json",
+              success: function (data) {
+                console.log(JSON.stringify(data));
+                // var obj = jQuery.parseJSON('{"name":"John"}');
+                /*
+[
+  {
+    "name": "hello.html",
+    "path": "src/main/resources/static/blog/hello.html",
+    "sha": "c417054af17ecdb99e00c8500de43ebc819427e0",
+    "size": 548,
+    "url": "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog/hello.html?ref=master",
+    "html_url": "https://github.com/jsonlog/myspringblog/blob/master/src/main/resources/static/blog/hello.html",
+    "git_url": "https://api.github.com/repos/jsonlog/myspringblog/git/blobs/c417054af17ecdb99e00c8500de43ebc819427e0",
+    "download_url": "https://raw.githubusercontent.com/jsonlog/myspringblog/master/src/main/resources/static/blog/hello.html",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog/hello.html?ref=master",
+      "git": "https://api.github.com/repos/jsonlog/myspringblog/git/blobs/c417054af17ecdb99e00c8500de43ebc819427e0",
+      "html": "https://github.com/jsonlog/myspringblog/blob/master/src/main/resources/static/blog/hello.html"
+    }
+  },
+  ...]
+                 */
+                blog = [];
+                if (data != null) {
+                  for (var i = 0; i < data.length; i++) {
+                    blog.push(data[i].path.toString().replace("src/main/resources/static/",""));
+                  }
+                  githubblogAdd();
+                }
+                // console.log(blog);
+              },
+              error: function () {
+                alert("error");
+              }
+            });
+  }
   function githubblogAdd() {
-    // new_element = document.createElement("script");
-    // new_element.setAttribute("type","text/javascript");
-    // new_element.setAttribute("src", "js/index.js");
-    // document.body.appendChild(new_element);
-    // blog = githubblog();
-    // $(document).ready(function () {
-    //   blog = $(this).githubblog();
-    // });
-    var container = document.getElementById('main');//container
-    blog = document.getElementById('main').innerText;
-    // console.log(blog);
-    alert(blog);
+    var container =document.getElementById('main');//container
     for(var i = 0,len = blog.length; i < len; i++){
       oDiv = document.createElement('div');
       oDiv.innerHTML = "<div class=\"bloglist\">\n" +
@@ -52,27 +99,8 @@
               "    </div>";
       container.appendChild(oDiv);
     }
-    // console.log($("#wrapper").html());
+    console.log($("#wrapper").html());
   }
-</script>
-<![endif]-->
-</head>
-<!--<body onload="searchFiles();">-->
-<body>
-<script src="js/index.js"></script>
-<div id="header"></div>
-<script>
-  $("#header").load("header.html");
-</script>
-<div id="wrapper" class="wrapper">
-  <main id="main">
-
-    <!--bloglist end--> 
-  </main>
-  <div id="aside"></div>
-</div>
-<script>
-  // $("#aside").load("aside.html");
 </script>
 <div id="footer"></div>
 <script>
