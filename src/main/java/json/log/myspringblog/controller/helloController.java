@@ -20,4 +20,13 @@ public class helloController {
         System.out.println("blog-----------------"+url);
         return "blog/"+url;
     }
+    @GetMapping("/index")
+    public String index(){
+        System.out.println("index-----------------");
+        return "jsonlog/index";
+    }
+    @GetMapping("/")
+    public String home(){
+        return index();
+    }
 }
