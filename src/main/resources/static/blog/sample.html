@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/index.css" rel="stylesheet">
+    <link href="../css/m.css" rel="stylesheet">
+    <script src="../js/jquery.min.js" ></script>
+    <script src="../js/hc-sticky.js"></script>
+    <script src="../js/comm.js"></script>
+    <!--[if lt IE 9]>
+    <script src="../js/modernizr.js"></script>
+    <![endif]-->
+</head>
+<!--<body onload="searchFiles();">-->
+<body>
+<div id="header"></div>
+<script>
+    $("#header").load("../header.html");
+</script>
+<div id="wrapper" class="wrapper">
+    <main id="main">
+        <div class="bloglist">
+            <ul id="bloglistul">
+                <li> <i class="blogpic"><a href="#"><img src="images/1.jpg" alt=""> </a></i>
+                    <dl>
+                        <dt><a href="#" target="_blank">个人博客，我为什么要用帝国cms？</a></dt>
+                        <dd><span class="bloginfo">选择帝国cms，做一个博客系统，很多人都说是大材小用。确实是有那种感觉，因为cms有很多功能表用不上。但是帝国cms的安装包也就才6M，如果你放一张高清的1920的图，都比这安装包大！我就来说一说我为什么要用帝国cms...</span>
+                            <p class="timeinfo"><span class="lanmu"><a href="#" target="_blank">个人博客</a></span><span class="date">2018-07-03</span></p>
+                            <a class="read" href="/">阅读更多</a> </dd>
+                    </dl>
+                </li>
+                <li> <i class="blogpic"><a href="#"><img src="images/2.jpg" alt=""> </a></i>
+                    <dl>
+                        <dt><a href="#" target="_blank">第二届 优秀个人博客模板比赛参选活动</a></dt>
+                        <dd><span class="bloginfo">只要你是在校大学生，不管你是新生，还是即将毕业，不管你是前端菜鸟，还是前端大神，只要你会html，这里将会是你展示才能的大平台</span>
+                            <p class="timeinfo"><span class="lanmu"><a href="#" target="_blank">个人博客</a></span><span class="date">2018-07-03</span></p>
+                            <a class="read" href="/">阅读更多</a> </dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <!--bloglist end-->
+    </main>
+    <div id="aside"></div>
+</div>
+<script>
+    $("#aside").load("../aside.html");
+</script>
+<div id="footer"></div>
+<script>
+    $("#footer").load("../footer.html");
+</script>
+<a href="#" class="cd-top">Top</a>
+</body>
+</html>
