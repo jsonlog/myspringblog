@@ -1,0 +1,17 @@
+<!DOCTYPEhtml>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>页面2</title>
+</head>
+
+<body>
+<script language="javascript" type="text/javascript">
+    var loc = location.href;
+    var n1 = loc.length;//地址的总长度
+    var n2 = loc.indexOf("=");//取得=号的位置
+    var id = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
+    alert(id);
+    //document.write(id)
+</script>
+</body>
+</html>

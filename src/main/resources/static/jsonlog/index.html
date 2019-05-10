@@ -96,14 +96,24 @@
         oDiv = parent.document.createElement('div');
         console.log(this.contentWindow.top['_bloglist']);
         var bloglist = this.contentWindow.top['_bloglist']._bloglist;
-        oDiv.innerHTML = "<li> <i class=\"blogpic\"><a href=\"#\"><img src=\"./../images/1.jpg\" alt=\"\"> </a></i>\n" +
-                "          <dl>\n" +
-                "            <dt><a href=\"#\" target=\"_blank\">"+bloglist.blogtitle+"</a></dt>\n" +
-                "            <dd><span class=\"bloginfo\">"+bloglist.blogcontent+"</span>\n" +
-                "              <p class=\"timeinfo\"><span class=\"lanmu\"><a href=\"#\" target=\"_blank\">个人博客</a>"+bloglist.blogtime+"</span><span class=\"date\">"+bloglist.blogtags+"</span></p>\n" +
-                "              <a class=\"read\" href=\""+bloghref+"\">阅读更多</a> </dd>\n" +
-                "          </dl>\n" +
-                "        </li>";
+        // oDiv.innerHTML = "<li> <i class=\"blogpic\"><a href=\"#\"><img src=\"./../images/1.jpg\" alt=\"\"> </a></i>\n" +
+        //         "          <dl>\n" +
+        //         "            <dt><a href=\"#\" target=\"_blank\">"+bloglist.blogtitle+"</a></dt>\n" +
+        //         "            <dd><span class=\"bloginfo\">"+bloglist.blogcontent+"</span>\n" +
+        //         "              <p class=\"timeinfo\"><span class=\"lanmu\"><a href=\"#\" target=\"_blank\">个人博客</a>"+bloglist.blogtime+"</span><span class=\"date\">"+bloglist.blogtags+"</span></p>\n" +
+        //         "              <a class=\"read\" href=\""+bloghref+"\">阅读更多</a> </dd>\n" +
+        //         "          </dl>\n" +
+        //         "        </li>";
+        oDiv.innerHTML = '        <li> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
+                '          <dl>\n' +
+                '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
+                '            <dd>\n' +
+                '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
+                '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span>'+ bloglist.blogtags+'</p>\n' +
+                '                <a class="read" href="'+bloghref+'">阅读更多</a> \n' +
+                '            </dd>\n' +
+                '          </dl>\n' +
+                '        </li>';
         parent.document.getElementById('bloglistul').appendChild(oDiv);
       };
       document.body.appendChild(iframe);
@@ -115,6 +125,23 @@
 <div id="footer"></div>
 <script>
   $("#footer").load("./jsonlog/footer.html");
+</script>
+<script>
+  var loc = location.href;
+  var n1 = loc.length;//地址的总长度
+  var n2 = loc.indexOf("=");//取得=号的位置
+  var id = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
+</script>
+<script>
+  $(function(){
+    /* 单机li进行页面跳转 */
+    $("ul li").click(function(){
+      /*当前标签下的a标签*/
+      var obj = $(this).children("a");
+      /*获取第一个a标签，进行跳转*/
+      window.location.href=$(obj[0]).attr("href");
+    });
+  })
 </script>
 <a href="#" class="cd-top">Top</a>
 </body>
