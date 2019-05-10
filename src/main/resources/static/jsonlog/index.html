@@ -44,6 +44,7 @@
   var blog;
   var blogtagslist = {};
   var bloglists = [];
+  var frameonload = 0;
   githubblog();
   function githubblog() {
     $.ajax(
@@ -74,6 +75,7 @@
       iframe.id = i;
       iframe.src = blog[i];
       iframe.style = "display: none";
+      console.log("i"+i+"href"+iframe.src);
       iframe.onload = function(){
         var doc = this.contentWindow.document;
         var oDiv = parent.document.createElement('div');
@@ -83,15 +85,11 @@
         for(var k = 0;k<blogtag.length;k++){
           if(blogtagslist[blogtag[k]])
             blogtagslist[blogtag[k]] += ","+this.src;
-          else
+          else {
             blogtagslist[blogtag[k]] = this.src;
+          }
         }
-        $.each(blogtag,function (index,k) {
-          if(blogtagslist[k])
-            blogtagslist[k] += ","+this.src;
-          else
-            blogtagslist[k] = this.src;
-        });
+        // console.log(blogtagslist);
         oDiv.innerHTML =
                 '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
                 '          <dl>\n' +
@@ -104,11 +102,15 @@
                 '          </dl>\n' +
                 '        </li>';
         parent.document.getElementById('bloglistul').appendChild(oDiv);
-        if(this.id == blog.length - 1){
+        console.log(this.id+"---"+blog.length);
+        frameonload++;
+        if(frameonload == blog.length){
           var cloud = parent.document.getElementById("tag");
           $.each(blogtagslist,function (index,map) {
             cloud.innerHTML += '<li><a href="./?tag='+index+'">'+index+'</a></li>';
           });
+          // console.log(blogtagslist);
+          // console.log(cloud.innerText);
           if(tag) {
             var ul = parent.document.getElementById("bloglistul");
             var li = ul.getElementsByTagName("li");
