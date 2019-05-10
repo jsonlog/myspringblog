@@ -19,7 +19,7 @@
                         <li class="view"><script src="/e/public/ViewClick/?classid=49&amp;id=884&amp;addclick=1"></script>297人已阅读</li>
                     </ul>
                 </div>
-                <div class="tags" id="blogtags"><a>个人博客</a> &nbsp;<a>帝国cms</a></div>
+                <div class="tags" id="bloghrefs"><a>个人博客</a> &nbsp;<a>帝国cms</a></div>
                 <div class="news_about"><strong>简介</strong>有人会以为我是"高冷型"，no，错了，我是"好好型"的，从合作开始，我们之间的关系也不仅仅只有交易，在我看来，我们会是朋友。有些微信加了很久的网友，哪怕一句话也没说过，只要我们没有互相拉黑，有时间的见证，我们亦是朋友。</div>
                 <div class="news_con" id="blogcontent" value="">制作个人博客，我是这么收费的，<br>
                     <br>
@@ -72,6 +72,22 @@
 <div id="footer"></div>
 <script src="./../js/import.js"></script>
 <script>
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath=window.document.location.href;
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+    var pathName=window.document.location.pathname;
+    //TODO GITHUB
+    var pos=curWwwPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:8083
+    var localhostPath=curWwwPath.substring(0,pos);
+
+    var tags = document.getElementById("bloghrefs");
+    var a=tags.getElementsByTagName("a");
+    var blogtags = "";
+    for(var i=0;i<a.length;i++){
+        a[i].href = localhostPath+"?tag="+a[i].innerHTML;
+        blogtags += ","+a[i].innerHTML;
+    }
     var share={
         data:function(name,value){
             var top=window.top,
@@ -90,8 +106,9 @@
     var bloglist = {
         blogtitle : document.getElementById("blogtitle").innerHTML,
         blogtime : document.getElementById("blogtime").innerHTML,
-        blogtags : document.getElementById("blogtags").innerHTML,
-        blogcontent : document.getElementById("blogcontent").innerHTML
+        bloghrefs : document.getElementById("bloghrefs").innerHTML,
+        blogcontent : document.getElementById("blogcontent").innerHTML,
+        blogtags : blogtags.substr(1)
     }
     share.data('_bloglist',bloglist);
     // alert(JSON.stringify(top['_bloglist']));//_CACHE
@@ -104,30 +121,6 @@
 </script>
 <script>
     $("#footer").load("./../jsonlog/footer.html");
-</script>
-<script>
-    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
-    var curWwwPath=window.document.location.href;
-    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
-    var pathName=window.document.location.pathname;
-    //
-    var pos=curWwwPath.indexOf(pathName);
-    //获取主机地址，如： http://localhost:8083
-    var localhostPath=curWwwPath.substring(0,pos);
-
-    var tags = document.getElementById("blogtags");
-    var a=tags.getElementsByTagName("a");
-    for(var i=0;i<a.length;i++){
-        a[i].href = localhostPath+"?tag="+a[i].innerHTML;
-    }
-    // var childs = tags.childNodes;
-    // for(var i = childs.length - 1; i >= 0; i--) {
-    //     childs[i].at
-    // }
-    // $("#blogtags a").each(function(){
-    //     $(this).attr("src",localhostPath+"?tag=");
-    // });
-
 </script>
 <a href="#" class="cd-top">Top</a>
 </body>

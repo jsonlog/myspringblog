@@ -36,7 +36,14 @@
   $("#aside").load("./jsonlog/aside.html");
 </script>
 <script>
+  var loc = location.href;
+  var n1 = loc.length;//地址的总长度
+  var n2 = loc.indexOf("=");//取得=号的位置
+  if(n2 != -1)
+  var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
   var blog;
+  var blogtagslist = {};
+  var bloglen = -1;
   githubblog();
   function githubblog() {
     $.ajax(
@@ -47,34 +54,12 @@
               type: "get",
               dataType: "json",
               success: function (data) {
-                // console.log(JSON.stringify(data));
-                // var obj = jQuery.parseJSON('{"name":"John"}');
-                /*
-[
-  {
-    "name": "hello.html",
-    "path": "src/main/resources/static/blog/hello.html",
-    "sha": "c417054af17ecdb99e00c8500de43ebc819427e0",
-    "size": 548,
-    "url": "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog/hello.html?ref=master",
-    "html_url": "https://github.com/jsonlog/myspringblog/blob/master/src/main/resources/static/blog/hello.html",
-    "git_url": "https://api.github.com/repos/jsonlog/myspringblog/git/blobs/c417054af17ecdb99e00c8500de43ebc819427e0",
-    "download_url": "https://raw.githubusercontent.com/jsonlog/myspringblog/master/src/main/resources/static/blog/hello.html",
-    "type": "file",
-    "_links": {
-      "self": "https://api.github.com/repos/jsonlog/myspringblog/contents/src/main/resources/static/blog/hello.html?ref=master",
-      "git": "https://api.github.com/repos/jsonlog/myspringblog/git/blobs/c417054af17ecdb99e00c8500de43ebc819427e0",
-      "html": "https://github.com/jsonlog/myspringblog/blob/master/src/main/resources/static/blog/hello.html"
-    }
-  },
-  ...]
-                 */
                 blog = [];
                 if (data != null) {
                   for (var i = 0; i < data.length; i++) {
                     blog.push(data[i].path.toString().replace("src/main/resources/static/","./"));
                   }
-                  blog = ["./blog/sample.html"];
+                  blog = ["./blog/sample.html"];//test
                   githubblogAdd();
                 }
               },
@@ -85,52 +70,57 @@
   }
   function githubblogAdd() {
     for(var i = 0,len = blog.length; i < len; i++){
-      // if(i.toString() != "3") continue;
       var iframe = document.createElement('iframe');
       iframe.id = blog[i];
       iframe.src=blog[i];
       iframe.style = "display: none";
       var bloghref = blog[i];
+      bloglen = i;
       iframe.onload = function(){
         doc = this.contentWindow.document;
         oDiv = parent.document.createElement('div');
         console.log(this.contentWindow.top['_bloglist']);
         var bloglist = this.contentWindow.top['_bloglist']._bloglist;
-        // oDiv.innerHTML = "<li> <i class=\"blogpic\"><a href=\"#\"><img src=\"./../images/1.jpg\" alt=\"\"> </a></i>\n" +
-        //         "          <dl>\n" +
-        //         "            <dt><a href=\"#\" target=\"_blank\">"+bloglist.blogtitle+"</a></dt>\n" +
-        //         "            <dd><span class=\"bloginfo\">"+bloglist.blogcontent+"</span>\n" +
-        //         "              <p class=\"timeinfo\"><span class=\"lanmu\"><a href=\"#\" target=\"_blank\">个人博客</a>"+bloglist.blogtime+"</span><span class=\"date\">"+bloglist.blogtags+"</span></p>\n" +
-        //         "              <a class=\"read\" href=\""+bloghref+"\">阅读更多</a> </dd>\n" +
-        //         "          </dl>\n" +
-        //         "        </li>";
-        oDiv.innerHTML = '        <li> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
+        var blogtags = bloglist.blogtags;
+        oDiv.innerHTML =
+                '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
                 '          <dl>\n' +
                 '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
                 '            <dd>\n' +
                 '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
-                '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span>'+ bloglist.blogtags+'</p>\n' +
+                '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
                 '                <a class="read" href="'+bloghref+'">阅读更多</a> \n' +
                 '            </dd>\n' +
                 '          </dl>\n' +
                 '        </li>';
         parent.document.getElementById('bloglistul').appendChild(oDiv);
+        var blogtag=blogtags.split(',');
+        $.each(blogtag,function (index,i) {
+          if(blogtagslist[i])
+            blogtagslist[i] += ","+bloghref;
+          else
+            blogtagslist[i] = bloghref;
+        });
+        if(bloglen == blog.length - 1 && tag){
+          var ul = parent.document.getElementById("bloglistul");
+          var li=ul.getElementsByTagName("li");
+          for(var i=0;i<li.length;i++){
+            var ids = ","+li[i].id+",";
+            if(ids.indexOf(","+tag+",") != -1){
+              li[i].style.display='';
+            }else{
+              li[i].style.display='none';
+            }
+          }
+        }
       };
       document.body.appendChild(iframe);
     }
   }
-  // var frame0 = document.getElementById(blog[0]);
-  // frame0.onload = article();
 </script>
 <div id="footer"></div>
 <script>
   $("#footer").load("./jsonlog/footer.html");
-</script>
-<script>
-  var loc = location.href;
-  var n1 = loc.length;//地址的总长度
-  var n2 = loc.indexOf("=");//取得=号的位置
-  var id = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
 </script>
 <script>
   $(function(){
