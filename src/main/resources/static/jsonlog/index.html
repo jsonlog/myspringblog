@@ -59,7 +59,7 @@
                   for (var i = 0; i < data.length; i++) {
                     blog.push(data[i].path.toString().replace("src/main/resources/static/","./"));
                   }
-                  blog = ["./blog/sample.html"];//test
+                  // blog = ["./blog/sample.html"];//test
                   githubblogAdd();
                 }
               },
@@ -101,15 +101,21 @@
           else
             blogtagslist[i] = bloghref;
         });
-        if(bloglen == blog.length - 1 && tag){
-          var ul = parent.document.getElementById("bloglistul");
-          var li=ul.getElementsByTagName("li");
-          for(var i=0;i<li.length;i++){
-            var ids = ","+li[i].id+",";
-            if(ids.indexOf(","+tag+",") != -1){
-              li[i].style.display='';
-            }else{
-              li[i].style.display='none';
+        if(bloglen == blog.length - 1){
+          var cloud = parent.document.getElementById("tag");
+          $.each(blogtagslist,function (index,map) {
+            cloud.innerHTML += '<li><a href="./?tag='+index+'">'+index+'</a></li>';
+          });
+          if(tag) {
+            var ul = parent.document.getElementById("bloglistul");
+            var li = ul.getElementsByTagName("li");
+            for (var i = 0; i < li.length; i++) {
+              var ids = "," + li[i].id + ",";
+              if (ids.indexOf("," + tag + ",") != -1) {
+                li[i].style.display = '';
+              } else {
+                li[i].style.display = 'none';
+              }
             }
           }
         }

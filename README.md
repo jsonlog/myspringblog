@@ -1,3 +1,5 @@
 - TODO
+- 时间排序
+- fork on github
 - heroku
 - 评论系统
