@@ -21,7 +21,7 @@
                 </div>
                 <div class="tags" id="blogtags"><a href="/e/tags/?tagname=%B8%F6%C8%CB%B2%A9%BF%CD&amp;tempid=13" target="_blank">个人博客</a> &nbsp; <a href="/e/tags/?tagname=%B5%DB%B9%FAcms&amp;tempid=13" target="_blank">帝国cms</a></div>
                 <div class="news_about"><strong>简介</strong>有人会以为我是"高冷型"，no，错了，我是"好好型"的，从合作开始，我们之间的关系也不仅仅只有交易，在我看来，我们会是朋友。有些微信加了很久的网友，哪怕一句话也没说过，只要我们没有互相拉黑，有时间的见证，我们亦是朋友。</div>
-                <div class="news_con">制作个人博客，我是这么收费的，<br>
+                <div class="news_con" id="blogcontent" value="">制作个人博客，我是这么收费的，<br>
                     <br>
                     1.FTP上传文件，耗时1-4小时，有些服务器快，上传时间短，但有些慢的，可以上传4小时时间。这期间，断线或者出现一个文件失败会卡半天，于是我会将这些文件移到最后，再重新传，直到全部传进去能够安装。<br>
                     <br>
@@ -71,6 +71,31 @@
 </div>
 <div id="footer"></div>
 <script src="./../js/import.js"></script>
+<script>
+    var share={
+        data:function(name,value){
+            var top=window.top,
+                cache=top['_bloglist']||{};
+            top['_bloglist']=cache;
+            return value?cache[name]=value:cache[name];
+        },
+        removeData:function(name){
+            var cache=window.top['_bloglist'];
+            if(cache&&cache[name])
+            {
+                delete cache[name];
+            }
+        }
+    };
+    var bloglist = {
+        blogtitle : document.getElementById("blogtitle").innerHTML,
+        blogtime : document.getElementById("blogtime").innerHTML,
+        blogtags : document.getElementById("blogtags").innerHTML,
+        blogcontent : document.getElementById("blogcontent").innerHTML
+    }
+    share.data('_bloglist',bloglist);
+    // alert(JSON.stringify(top['_bloglist']));//_CACHE
+</script>
 <script>
     $("#header").load("./../jsonlog/header.html");
 </script>
