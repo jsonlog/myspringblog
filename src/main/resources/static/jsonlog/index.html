@@ -43,7 +43,7 @@
   var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
   var blog;
   var blogtagslist = {};
-  var bloglen = -1;
+  var bloglists = [];
   githubblog();
   function githubblog() {
     $.ajax(
@@ -56,8 +56,8 @@
               success: function (data) {
                 blog = [];
                 if (data != null) {
-                  for (var i = 0; i < data.length; i++) {
-                    blog.push(data[i].path.toString().replace("src/main/resources/static/","./"));
+                  for (var j = 0; j < data.length; j++) {
+                    blog.push(data[j].path.toString().replace("src/main/resources/static/","./"));
                   }
                   // blog = ["./blog/sample.html"];//test
                   githubblogAdd();
@@ -71,17 +71,27 @@
   function githubblogAdd() {
     for(var i = 0,len = blog.length; i < len; i++){
       var iframe = document.createElement('iframe');
-      iframe.id = blog[i];
-      iframe.src=blog[i];
+      iframe.id = i;
+      iframe.src = blog[i];
       iframe.style = "display: none";
-      var bloghref = blog[i];
-      bloglen = i;
       iframe.onload = function(){
-        doc = this.contentWindow.document;
-        oDiv = parent.document.createElement('div');
-        console.log(this.contentWindow.top['_bloglist']);
-        var bloglist = this.contentWindow.top['_bloglist']._bloglist;
+        var doc = this.contentWindow.document;
+        var oDiv = parent.document.createElement('div');
+        var bloglist = bloglists[this.id] = iframe.contentWindow.top[this.src]._bloglist;
         var blogtags = bloglist.blogtags;
+        var blogtag=blogtags.split(',');
+        for(var k = 0;k<blogtag.length;k++){
+          if(blogtagslist[blogtag[k]])
+            blogtagslist[blogtag[k]] += ","+this.src;
+          else
+            blogtagslist[blogtag[k]] = this.src;
+        }
+        $.each(blogtag,function (index,k) {
+          if(blogtagslist[k])
+            blogtagslist[k] += ","+this.src;
+          else
+            blogtagslist[k] = this.src;
+        });
         oDiv.innerHTML =
                 '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
                 '          <dl>\n' +
@@ -89,20 +99,12 @@
                 '            <dd>\n' +
                 '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
                 '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                '                <a class="read" href="'+bloghref+'">阅读更多</a> \n' +
+                '                <a class="read" href="'+this.src+'">阅读更多</a> \n' +
                 '            </dd>\n' +
                 '          </dl>\n' +
                 '        </li>';
         parent.document.getElementById('bloglistul').appendChild(oDiv);
-        var blogtag=blogtags.split(',');
-        $.each(blogtag,function (index,i) {
-          if(blogtagslist[i])
-            blogtagslist[i] += ","+bloghref;
-          else
-            blogtagslist[i] = bloghref;
-        });
-        if(bloglen == blog.length - 1){
-          console.log(blogtagslist);
+        if(this.id == blog.length - 1){
           var cloud = parent.document.getElementById("tag");
           $.each(blogtagslist,function (index,map) {
             cloud.innerHTML += '<li><a href="./?tag='+index+'">'+index+'</a></li>';

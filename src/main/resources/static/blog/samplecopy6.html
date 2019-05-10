@@ -46,12 +46,12 @@
     var share={
         data:function(name,value){
             var top=window.top,
-                cache=top['_bloglist']||{};
-            top['_bloglist']=cache;
+                cache=top[curWwwPath]||{};
+            top[curWwwPath]=cache;
             return value?cache[name]=value:cache[name];
         },
         removeData:function(name){
-            var cache=window.top['_bloglist'];
+            var cache=window.top[curWwwPath];
             if(cache&&cache[name])
             {
                 delete cache[name];
