@@ -102,6 +102,7 @@
             blogtagslist[i] = bloghref;
         });
         if(bloglen == blog.length - 1){
+          console.log(blogtagslist);
           var cloud = parent.document.getElementById("tag");
           $.each(blogtagslist,function (index,map) {
             cloud.innerHTML += '<li><a href="./?tag='+index+'">'+index+'</a></li>';
