@@ -6,6 +6,7 @@ document.write('<meta name="viewport" content="width=device-width, initial-scale
 document.write('<link href="./../css/base.css" rel="stylesheet">');
 document.write('<link href="./../css/index.css" rel="stylesheet">');
 document.write('<link href="./../css/m.css" rel="stylesheet">');
+document.write('<link href="./../css/music.css" rel="stylesheet"/>');
 document.write('<script src="./../js/hc-sticky.js" ></script>');
 document.write('<script src="./../js/comm.js" ></script>');
 document.write('<link href="./../css/calendar.css" rel="stylesheet" />');

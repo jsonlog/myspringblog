@@ -278,7 +278,7 @@
         var e = this;
         var defaults = {
             date: new Date(),
-            width: document.getElementById("calendar").offsetWidth,//800
+            width: document.getElementById("calendar").offsetWidth?document.getElementById("calendar").offsetWidth:520,//800
             height: 400,//400
             rate: 1,
             week: false,
