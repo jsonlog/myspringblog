@@ -1,19 +1,19 @@
-*{
-	position: relative;
-	margin: 0px;
-	padding: 0px;
-	text-decoration: none;
-	list-style: none;
-}
+/**{*/
+/*	position: relative;*/
+/*	margin: 0px;*/
+/*	padding: 0px;*/
+/*	text-decoration: none;*/
+/*	list-style: none;*/
+/*}*/
 #momo{
 	position: fixed;
 	bottom: -300px;
-	right: 0px;
+	left: -320px;
 	transition:2s bottom,0.4s left;
 }
 #momo:hover{
 	bottom: -0px;
-	right: 300px;
+	left: -0px;
 }
 
 #momo-bidy{
@@ -41,6 +41,6 @@ h6{
 	text-align: center;
 }
 
-*{
+/**{*/
 	/*outline: solid 1px royalblue;*/
-}
+/*}*/
