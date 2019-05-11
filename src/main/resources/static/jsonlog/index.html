@@ -93,7 +93,7 @@
   function githubblogAdd() {
     for(var i = 0,len = blog.length; i < len; i++){
       if(url){
-        if(url.indexOf(blog[i].replace("./","")))
+        if(url.indexOf(blog[i].replace("./","")) != -1)
           console.log(url);
         else
           continue;
@@ -102,7 +102,7 @@
       iframe.id = i;
       iframe.src = blog[i];
       iframe.style = "display: none";
-      // console.log("i"+i+"href"+iframe.src);
+      console.log("i"+i+"href"+iframe.src);
       iframe.onload = function(){
         var doc = this.contentWindow.document;
         var oDiv = parent.document.createElement('div');
@@ -117,7 +117,8 @@
           }
         }
         if(url){
-          parent.document.getElementById("main").innerHTML = this.contentWindow.document.getElementById("main").innerHTML;
+          parent.document.getElementById("main").innerHTML = bloglist.blogmain;
+          console.log(parent.document.getElementById("main").innerHTML);
         }else {
           oDiv.innerHTML =
                   '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +

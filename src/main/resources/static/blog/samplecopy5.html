@@ -4,9 +4,8 @@
     <meta charset="utf-8">
 </head>
 <body>
-<div id="header"></div>
 <div id="wrapper" class="wrapper">
-    <main>
+    <main id="main">
         <div class="infosbox">
             <div class="newsview">
                 <h3 class="news_title" id="blogtitle">标题</h3>
@@ -15,17 +14,15 @@
                         <li class="timer" id="blogtime">2018-07-05</li>
                     </ul>
                 </div>
-                <div class="tags" id="bloghrefs"><a>sample</a> &nbsp;<a>示例</a> <a>sample5</a></div>
+                <div class="tags" id="bloghrefs"><a>sample</a> &nbsp;<a>示例</a> <a>sample</a></div>
                 <div class="news_about"><strong>简介</strong>简介</div>
                 <div class="news_con" id="blogcontent" value="">正文
                 </div>
             </div>
         </div>
     </main>
-    <div id="aside"></div>
 </div>
-<div id="footer"></div>
-<script src="./../js/import.js"></script>
+<script src="./../js/jquery.min.js"></script>
 <script>
     //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
     var curWwwPath=window.document.location.href;
@@ -66,15 +63,6 @@
         blogtags : blogtags.substr(1)
     }
     share.data('_bloglist',bloglist);
-</script>
-<script>
-    $("#header").load("./../jsonlog/header.html");
-</script>
-<script>
-    $("#aside").load("./../jsonlog/aside.html");
-</script>
-<script>
-    $("#footer").load("./../jsonlog/footer.html");
 </script>
 <a href="#" class="cd-top">Top</a>
 </body>
