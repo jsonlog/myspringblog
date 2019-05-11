@@ -13,6 +13,9 @@
   <link href="./css/calendar.css" rel="stylesheet" />
   <script src="./js/calendar.js" type="text/javascript"></script>
   <script src="./js/fest.js" type="text/javascript"></script>
+  <script>
+    $("#header").load("./jsonlog/header.html");
+  </script>
   <script src="./js/hc-sticky.js"></script>
   <script src="./js/comm.js"></script>
   <!--[if lt IE 9]>
@@ -32,9 +35,6 @@
   </main>
   <div id="aside"></div>
 </div>
-<script>
-  $("#header").load("./jsonlog/header.html");
-</script>
 <script>
   $("#aside").load("./jsonlog/aside.html");
 </script>
@@ -83,7 +83,7 @@
                 }
               },
               error: function () {
-                alert("githubajaxerror");
+                console.log("githubajaxerror");
               }
             });
   }

@@ -278,9 +278,9 @@
         var e = this;
         var defaults = {
             date: new Date(),
-            width: auto,//800
-            height: auto,//400
-            rate: 0.7,
+            width: 500,//800
+            height: 400,//400
+            rate: 1,
             week: false,
             week_walue: "2016/9/17",
             isclick: false,
@@ -401,7 +401,7 @@
                     // });
                 },
                 error: function () {
-                    alert("error");
+                    console.log("errorfest");
                 }
             });
     }
@@ -800,12 +800,12 @@
         this.leftWeek();
         this.leftDay();
         this.html += "</div>";
-        this.html += "<div class=\"rightArea\">";
-        this.html += "</div>";
+        // this.html += "<div class=\"rightArea\">";
+        // this.html += "</div>";
         this.html += "</div>";
         this.e.append(this.html);
         this.lunarDay();
-        rightArea(this.Y, this.M);
+        // rightArea(this.Y, this.M);
     };
 
     /* 获取本月多少天 */
@@ -864,40 +864,40 @@
     }
 
     // 生成右边区域代码
-    function rightArea(Y, M) {
-        var html = "";
-        var W = new Date(Y + "/" + M + "/" + ClickDays).getDay();
-        W = W == 0 ? 7 : W;
-        html += "<div class=\"ui\">" + Y + "年" + (M > 9 ? M : "0" + M) + "月" + (ClickDays > 9 ? ClickDays : "0" + ClickDays) + "日 星期"
-            + calendar.Week[W - 1] + "</div>";
-        html += "<div class=\"ud\">" + (ClickDays > 9 ? ClickDays : "0" + ClickDays) + "</div>";
-        var lunar = calendar.calendarConvert(Y, M, ClickDays);
-        var temp = "";
-        temp += calendar.lunarMonthStr[lunar[2] - 1] + " 月 ";
-        if (lunar[0] == 1) temp = "闰 " + temp;
-        if (lunar[3] == 10) {
-            temp += "初 十";
-        } else {
-            temp += calendar.lunarDayStrFirst[parseInt(lunar[3] / 10)] + " " + calendar.lunarDayStrLast[lunar[3] % 10]
-        }
-        html += "<div class=\"uld\">" + temp + "</div>";
-        html += getLunrYMD(lunar, Y, M);
-        html += getJR(lunar, Y, M);
-        if (isclick) {
-            html += "<input type=\"button\" style=\"width:100%;\" value=\"保  存\" class=\"saveChange\" />";
-            html += "<input type=\"button\" style=\"width:100%;\" value=\"重  置\" class=\"resetData\" />";
-        }
-        $(".rightArea").empty();
-        $(".rightArea").append(html);
-        if (lunar[2] == 1 && lunar[3] == 1) {
-            $(".calendar").css("border", "2px solid #f44f23");
-            $(".rightArea").css("background-color", "#f44f23");
-        } else {
-            $(".calendar").css("border", "2px solid #8ec59b");
-            $(".rightArea").css("background-color", "#e0f3e8");
-        }
-        if (isclick) getPushClick(Y, M);
-    };
+    // function rightArea(Y, M) {
+    //     var html = "";
+    //     var W = new Date(Y + "/" + M + "/" + ClickDays).getDay();
+    //     W = W == 0 ? 7 : W;
+    //     html += "<div class=\"ui\">" + Y + "年" + (M > 9 ? M : "0" + M) + "月" + (ClickDays > 9 ? ClickDays : "0" + ClickDays) + "日 星期"
+    //         + calendar.Week[W - 1] + "</div>";
+    //     html += "<div class=\"ud\">" + (ClickDays > 9 ? ClickDays : "0" + ClickDays) + "</div>";
+    //     var lunar = calendar.calendarConvert(Y, M, ClickDays);
+    //     var temp = "";
+    //     temp += calendar.lunarMonthStr[lunar[2] - 1] + " 月 ";
+    //     if (lunar[0] == 1) temp = "闰 " + temp;
+    //     if (lunar[3] == 10) {
+    //         temp += "初 十";
+    //     } else {
+    //         temp += calendar.lunarDayStrFirst[parseInt(lunar[3] / 10)] + " " + calendar.lunarDayStrLast[lunar[3] % 10]
+    //     }
+    //     html += "<div class=\"uld\">" + temp + "</div>";
+    //     html += getLunrYMD(lunar, Y, M);
+    //     html += getJR(lunar, Y, M);
+    //     if (isclick) {
+    //         html += "<input type=\"button\" style=\"width:100%;\" value=\"保  存\" class=\"saveChange\" />";
+    //         html += "<input type=\"button\" style=\"width:100%;\" value=\"重  置\" class=\"resetData\" />";
+    //     }
+    //     $(".rightArea").empty();
+    //     $(".rightArea").append(html);
+    //     if (lunar[2] == 1 && lunar[3] == 1) {
+    //         $(".calendar").css("border", "2px solid #f44f23");
+    //         $(".rightArea").css("background-color", "#f44f23");
+    //     } else {
+    //         $(".calendar").css("border", "2px solid #8ec59b");
+    //         $(".rightArea").css("background-color", "#e0f3e8");
+    //     }
+    //     if (isclick) getPushClick(Y, M);
+    // };
 
     // 保存和重置按钮
     function getPushClick(Y, M) {
@@ -1106,7 +1106,7 @@
             ClickDays = $(this).attr("id").split("days")[1];
             var date = new Date(Y + "/" + M + "/" + ClickDays);
             $("#calendar").titleOver(e,date);//mouseover
-            rightArea(Y, M);
+            // rightArea(Y, M);
         }).mouseout(function () {
             $("#calendar").titleOut();
         }).mousemove(function (e) {
@@ -1186,12 +1186,13 @@
     }
     // 设置表格样式
     function setLayer(options, count) {
-        var width = options.width;
+        var width = options.width;//options.width;
         var height = options.height;
         var rate = options.rate;
         $(".calendar").css("width", width + "px").css("height", height + "px");
         $(".leftArea").css("width", parseInt(width * rate - 16) + "px").css("height", height - 16 + "px");
-        $(".rightArea").css("width", parseInt(width * (1 - rate) - 40) + "px").css("height", height - 20 + "px");
+        // $(".rightArea").css("display", "none");
+        // $(".rightArea").css("width", parseInt(width * (1 - rate) - 40) + "px").css("height", height - 20 + "px");
         $(".head").css("width", parseInt(width * rate - 16) + "px").css("height", parseInt((height - 16) / 7 * 0.6 - 8 + count / 2) + "px")
             .css("line-height", parseInt((height - 16) / (count + 1) * 0.6 - 8) + "px");
         $(".week").css("width", parseInt((width * rate - 16) / 7) + "px").css("height", parseInt((height - 16) / (count + 1) * 0.4) + "px");
