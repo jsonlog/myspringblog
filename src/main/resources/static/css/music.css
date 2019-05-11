@@ -8,12 +8,12 @@
 #momo{
 	position: fixed;
 	bottom: -300px;
-	right: 0px;
+	left: -320px;
 	transition:2s bottom,0.4s left;
 }
 #momo:hover{
 	bottom: -0px;
-	right: -320px;
+	left: -0px;
 }
 
 #momo-bidy{
