@@ -32,13 +32,13 @@
       </ul>
     </div>
     <div class="content-wrapper">
-  </div>
+    </div>
   </main>
   <div id="aside"></div>
 </div>
-<script>
-  $("#aside").load("./jsonlog/aside.html");
-</script>
+<!--<script>-->
+<!--  $("#aside").load("./jsonlog/aside.html");-->
+<!--</script>-->
 <script>
   var share={
     data:function(name,value){
@@ -58,8 +58,10 @@
   var loc = location.href;
   var n1 = loc.length;//地址的总长度
   var n2 = loc.indexOf("=");//取得=号的位置
-  if(n2 != -1)
+  if(loc.indexOf("?tag=") != -1)
   var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
+  else if(loc.indexOf("?url=") != -1)
+    var url = decodeURI(loc.substr(n2+1, n1-n2));
   var blog;
   var blogtagslist = {};
   var bloglists = [];
@@ -90,6 +92,12 @@
   }
   function githubblogAdd() {
     for(var i = 0,len = blog.length; i < len; i++){
+      if(url){
+        if(url.indexOf(blog[i].replace("./","")))
+          console.log(url);
+        else
+          continue;
+      }
       var iframe = document.createElement('iframe');
       iframe.id = i;
       iframe.src = blog[i];
@@ -98,7 +106,7 @@
       iframe.onload = function(){
         var doc = this.contentWindow.document;
         var oDiv = parent.document.createElement('div');
-        var bloglist = bloglists[this.id] = iframe.contentWindow.top[this.src]._bloglist;
+        var bloglist = bloglists[this.id] = this.contentWindow.top[this.src]._bloglist;
         var blogtags = bloglist.blogtags;
         var blogtag=blogtags.split(',');
         for(var k = 0;k<blogtag.length;k++){
@@ -108,21 +116,26 @@
             blogtagslist[blogtag[k]] = this.src;
           }
         }
-        oDiv.innerHTML =
-                '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
-                '          <dl>\n' +
-                '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
-                '            <dd>\n' +
-                '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
-                '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                '                <a class="read" href="'+this.src+'">阅读更多</a> \n' +
-                '            </dd>\n' +
-                '          </dl>\n' +
-                '        </li>';
-        parent.document.getElementById('bloglistul').appendChild(oDiv);
+        if(url){
+          parent.document.getElementById("main").innerHTML = this.contentWindow.document.getElementById("main").innerHTML;
+        }else {
+          oDiv.innerHTML =
+                  '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
+                  '          <dl>\n' +
+                  '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
+                  '            <dd>\n' +
+                  '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
+                  '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
+                  '                <a class="read" href="'+this.src+'">阅读更多</a> \n' +
+                  '            </dd>\n' +
+                  '          </dl>\n' +
+                  '        </li>';
+          parent.document.getElementById('bloglistul').appendChild(oDiv);
+        }
         // console.log(this.id+"---"+blog.length);
         frameonload++;
         if(frameonload == blog.length){
+          $("#aside").load("./jsonlog/aside.html");
           var cloud = parent.document.getElementById("tag");
           $.each(blogtagslist,function (index,map) {
             cloud.innerHTML += '<a href="./?tag='+index+'">'+index+'</a>';
