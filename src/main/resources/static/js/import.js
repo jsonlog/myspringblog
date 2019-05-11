@@ -8,6 +8,10 @@ document.write('<link href="./../css/index.css" rel="stylesheet">');
 document.write('<link href="./../css/m.css" rel="stylesheet">');
 document.write('<script src="./../js/hc-sticky.js" ></script>');
 document.write('<script src="./../js/comm.js" ></script>');
+document.write('<link href="./../css/calendar.css" rel="stylesheet" />');
+document.write('<script src="./../js/calendar.js" type="text/javascript"></script>');
+document.write('<script src="./../js/fest.js" type="text/javascript"></script>');
+// document.write('');
 // document.write('<script src="./../js/modernizr.js" ></script>');
 // $(document).ready()(function ltrb(){
 // });

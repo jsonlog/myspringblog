@@ -278,8 +278,8 @@
         var e = this;
         var defaults = {
             date: new Date(),
-            width: 800,
-            height: 400,
+            width: auto,//800
+            height: auto,//400
             rate: 0.7,
             week: false,
             week_walue: "2016/9/17",
