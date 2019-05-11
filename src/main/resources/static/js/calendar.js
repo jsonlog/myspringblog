@@ -278,7 +278,7 @@
         var e = this;
         var defaults = {
             date: new Date(),
-            width: 500,//800
+            width: document.getElementById("calendar").offsetWidth,//800
             height: 400,//400
             rate: 1,
             week: false,
@@ -1186,7 +1186,7 @@
     }
     // 设置表格样式
     function setLayer(options, count) {
-        var width = options.width;//options.width;
+        var width = options.width - 4 ;//options.width;
         var height = options.height;
         var rate = options.rate;
         $(".calendar").css("width", width + "px").css("height", height + "px");
