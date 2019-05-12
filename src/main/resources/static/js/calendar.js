@@ -1188,10 +1188,11 @@
     function setLayer(options, count) {
         var width ;//options.width;
         try{
-            width = document.getElementById("calendar").offsetWidth;
+            width = document.getElementById("calendar").offsetWidth - 4;
         }catch (e) {
             width = options.width - 4;
         }
+        // alert(width);
         console.log(width);
         var height = options.height;
         var rate = options.rate;

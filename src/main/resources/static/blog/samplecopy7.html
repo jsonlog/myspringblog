@@ -37,8 +37,8 @@
     var a=tags.getElementsByTagName("a");
     var blogtags = "";
     for(var i=0;i<a.length;i++){
-        a[i].href = localhostPath+"?tag="+a[i].innerHTML;
         blogtags += ","+a[i].innerHTML;
+        tags.innerHTML= tags.innerHTML.replace("<a>"+a[i].innerHTML+"</a>","<a href='#' onclick='tagClick(\""+a[i].innerHTML+"\");'>"+a[i].innerHTML+"</a>");
     }
     var share={
         data:function(name,value){

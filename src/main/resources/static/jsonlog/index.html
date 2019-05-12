@@ -31,7 +31,7 @@
       <ul id="bloglistul">
       </ul>
     </div>
-    <div class="content-wrapper">
+    <div id="blogurl">
     </div>
   </main>
   <div id="aside"></div>
@@ -80,7 +80,7 @@
                   for (var j = 0; j < data.length; j++) {
                     blog.push(data[j].path.toString().replace("src/main/resources/static/",""));
                   }
-                  // blog = ["./blog/sample.html"];//test
+                  // blog = ["./blog/samplecopy.html"];//test
                   githubblogAdd();
                 }
               },
@@ -91,8 +91,50 @@
   }
   function urlClick(url) {
     try {
+
+      // var li = ul.getElementsByTagName("li");
+      // for (var i = 0; i < li.length; i++) {
+      //     li[i].style.display = 'none';
+      // }
+      var main = document.getElementById("main");
+      var childs = main.childNodes;
+      for(var i = childs.length - 1; i >= 0; i--) {
+        console.log(childs[i].nodeName);
+        if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
+        childs[i].style.display = "none";
+      }
+
       var urliframe = document.getElementById(url);
-      document.getElementById("main").innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
+      var blogurl = document.getElementById("blogurl");
+      blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
+      blogurl.style.display = "";
+      return;
+    }catch (e){
+      alert(e);
+    }
+  }
+  function tagClick(tag) {
+    try {
+      var main = document.getElementById("main");
+      var childs = main.childNodes;
+      for(var i = childs.length - 1; i >= 0; i--) {
+        console.log(childs[i].nodeName);
+        if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
+          childs[i].style.display = "none";
+      }
+
+      var bloglist = document.getElementsByClassName("bloglist");
+      bloglist[0].style.display = "";
+      var ul = document.getElementById("bloglistul");
+      var li = ul.getElementsByTagName("li");
+      for (var i = 0; i < li.length; i++) {
+        var ids = "," + li[i].id + ",";
+        if (ids.indexOf("," + tag + ",") != -1) {
+            li[i].style.display = '';
+        } else {
+          li[i].style.display = 'none';
+        }
+      }
       return;
     }catch (e){
       alert(e);
@@ -129,7 +171,7 @@
                   '            <dd>\n' +
                   '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
                   '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                  '                <a class="read" href="javascript:void(0);" onclick="urlClick(\''+this.id+'\');">阅读更多</a> \n' +
+                  '                <a class="read" href="#" onclick="urlClick(\''+this.id+'\');">阅读更多</a> \n' +
                   '            </dd>\n' +
                   '          </dl>\n' +
                   '        </li>';
@@ -140,21 +182,9 @@
         if(frameonload == blog.length){
           var cloud = parent.document.getElementById("tag");
           $.each(blogtagslist,function (index,map) {
-            cloud.innerHTML += '<a href="./?tag='+index+'">'+index+'</a>';
+            cloud.innerHTML += '<a href="#" onclick="tagClick(\''+index+'\');">'+index+'</a>';
           });
           share.data('asidetag',cloud.innerHTML);
-          if(tag) {
-            var ul = parent.document.getElementById("bloglistul");
-            var li = ul.getElementsByTagName("li");
-            for (var i = 0; i < li.length; i++) {
-              var ids = "," + li[i].id + ",";
-              if (ids.indexOf("," + tag + ",") != -1) {
-                li[i].style.display = '';
-              } else {
-                li[i].style.display = 'none';
-              }
-            }
-          }
         }
       };
       document.body.appendChild(iframe);
