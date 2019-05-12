@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head runat="server">
-<meta charset="utf-8">
+  <meta charset="utf-8">
   <title>首页_老G博客网站</title>
   <meta name="keywords" content="个人博客,老G个人博客,个人博客模板,老G" />
   <meta name="description" content="老G个人博客，是一个支持springboot个人原创网站。" />
@@ -26,20 +26,23 @@
   $("#header").load("./jsonlog/header.html");
 </script>
 <div id="wrapper" class="wrapper">
-  <main id="main" class="main" style="height: 100%">
-    <div class="bloglist">
-      <ul id="bloglistul">
-      </ul>
+  <form>
+    <main id="main" style="width:60%;">
+      <div class="bloglist">
+        <ul id="bloglistul">
+        </ul>
+      </div>
+      <div id="blogurl">
+      </div>
+    </main>
+    <div style="text-align:left;">
+      <div class="sidebar" id="calendar" style="margin-bottom:15px;">
+      </div>
+      <div id="aside">
+      </div>
     </div>
-    <div id="blogurl">
-    </div>
-  </main>
-  <div>
-  <div class="sidebar" id="calendar" style="margin-bottom:15px;">
-  </div>
-  <div id="aside">
-  </div>
-  </div>
+  </form>
+  <!--  </div>-->
 </div>
 <script>
   $("#aside").load("./jsonlog/aside.html");
@@ -64,7 +67,7 @@
   var n1 = loc.length;//地址的总长度
   var n2 = loc.indexOf("=");//取得=号的位置
   if(loc.indexOf("?tag=") != -1)
-  var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
+    var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
   else if(loc.indexOf("?url=") != -1)
     var url = decodeURI(loc.substr(n2+1, n1-n2));
   var blog;
@@ -96,23 +99,19 @@
   }
   function urlClick(url) {
     try {
+      if(url) {
+        var main = document.getElementById("main");
+        var childs = main.childNodes;
+        for(var i = childs.length - 1; i >= 0; i--) {
+          if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
+            childs[i].style.display = "none";
+        }
 
-      // var li = ul.getElementsByTagName("li");
-      // for (var i = 0; i < li.length; i++) {
-      //     li[i].style.display = 'none';
-      // }
-      var main = document.getElementById("main");
-      var childs = main.childNodes;
-      for(var i = childs.length - 1; i >= 0; i--) {
-        console.log(childs[i].nodeName);
-        if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
-        childs[i].style.display = "none";
+        var blogurl = document.getElementById("blogurl");
+        var urliframe = document.getElementById(url);
+        blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
+        blogurl.style.display = "";
       }
-
-      var urliframe = document.getElementById(url);
-      var blogurl = document.getElementById("blogurl");
-      blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
-      blogurl.style.display = "";
       return;
     }catch (e){
       alert(e);
@@ -124,7 +123,6 @@
       var main = document.getElementById("main");
       var childs = main.childNodes;
       for(var i = childs.length - 1; i >= 0; i--) {
-        console.log(childs[i].nodeName);
         if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
           childs[i].style.display = "none";
       }
@@ -136,10 +134,10 @@
       for (var i = 0; i < li.length; i++) {
         var ids = "," + li[i].id + ",";
         if (ids.indexOf("," + tag + ",") != -1) {
-            li[i].style.display = '';
-            count.push(li[i].title);
+          li[i].style.display = '';
+          count.push(li[i].title);
         } else {
-          li[i].style.display = 'none';
+          li[i].style.display = tag?'none':"";
         }
       }
       if(count.length == 1){
@@ -174,18 +172,18 @@
         //   parent.document.getElementById("main").innerHTML = bloglist.blogmain;
         //   console.log(parent.document.getElementById("main").innerHTML);
         // }else {
-          oDiv.innerHTML =
-                  '        <li title="'+this.id+'" id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
-                  '          <dl>\n' +
-                  '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
-                  '            <dd>\n' +
-                  '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
-                  '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                  '                <a class="read" href="#" onclick="urlClick(\''+this.id+'\');">阅读更多</a> \n' +
-                  '            </dd>\n' +
-                  '          </dl>\n' +
-                  '        </li>';
-          parent.document.getElementById('bloglistul').appendChild(oDiv);
+        oDiv.innerHTML =
+                '        <li title="'+this.id+'" id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
+                '          <dl>\n' +
+                '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
+                '            <dd>\n' +
+                '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
+                '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
+                '                <a class="read" href="#" onclick="urlClick(\''+this.id+'\');">阅读更多</a> \n' +
+                '            </dd>\n' +
+                '          </dl>\n' +
+                '        </li>';
+        parent.document.getElementById('bloglistul').appendChild(oDiv);
         // }
         // console.log(this.id+"---"+blog.length);
         frameonload++;
