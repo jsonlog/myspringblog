@@ -64,7 +64,6 @@
     var url = decodeURI(loc.substr(n2+1, n1-n2));
   var blog;
   var blogtagslist = {};
-  var bloglists = [];
   var frameonload = 0;
   githubblog();
   function githubblog() {
@@ -91,22 +90,27 @@
             });
   }
   function githubblogAdd() {
+    if(url && frameonload == blog.length){
+      var urliframe = document.getElementById(url);
+      document.getElementById("main").innerHTML = urliframe.contentWindow.top[this.src]._bloglist.blogmain;
+      return;
+    }
     for(var i = 0,len = blog.length; i < len; i++){
       if(url){
         if(url.indexOf(blog[i].replace("./","")) != -1)
           console.log(url);
-        else
-          continue;
+        // else if(frameonload == blog.length)
+        //   continue;
       }
       var iframe = document.createElement('iframe');
-      iframe.id = i;
+      iframe.id = blog[i];
       iframe.src = blog[i];
       iframe.style = "display: none";
       console.log("i"+i+"href"+iframe.src);
       iframe.onload = function(){
         var doc = this.contentWindow.document;
         var oDiv = parent.document.createElement('div');
-        var bloglist = bloglists[this.id] = this.contentWindow.top[this.src]._bloglist;
+        var bloglist = this.contentWindow.top[this.src]._bloglist;
         var blogtags = bloglist.blogtags;
         var blogtag=blogtags.split(',');
         for(var k = 0;k<blogtag.length;k++){
@@ -116,7 +120,7 @@
             blogtagslist[blogtag[k]] = this.src;
           }
         }
-        if(url){
+        if(url && url.indexOf(blog[i].replace("./","")) != -1){
           parent.document.getElementById("main").innerHTML = bloglist.blogmain;
           console.log(parent.document.getElementById("main").innerHTML);
         }else {
@@ -127,7 +131,7 @@
                   '            <dd>\n' +
                   '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
                   '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                  '                <a class="read" href="'+this.src+'">阅读更多</a> \n' +
+                  '                <a class="read" href="./?url='+bloglist.bloghref+'">阅读更多</a> \n' +
                   '            </dd>\n' +
                   '          </dl>\n' +
                   '        </li>';
