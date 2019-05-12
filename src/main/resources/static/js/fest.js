@@ -1,5 +1,5 @@
 ﻿
-$(function() {
+$(function fest() {
     $("#calendar").calendar({
         /*
          * 传入今天的时间
