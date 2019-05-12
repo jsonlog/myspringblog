@@ -26,7 +26,7 @@
   $("#header").load("./jsonlog/header.html");
 </script>
 <div id="wrapper" class="wrapper">
-  <main id="main" class="main">
+  <main id="main" class="main" style="height: 100%">
     <div class="bloglist">
       <ul id="bloglistul">
       </ul>
@@ -34,9 +34,11 @@
     <div id="blogurl">
     </div>
   </main>
+  <div>
   <div class="sidebar" id="calendar" style="margin-bottom:15px;">
   </div>
   <div id="aside">
+  </div>
   </div>
 </div>
 <script>
@@ -83,7 +85,7 @@
                   for (var j = 0; j < data.length; j++) {
                     blog.push(data[j].path.toString().replace("src/main/resources/static/",""));
                   }
-                  // blog = ["./blog/samplecopy.html"];//test
+                  // blog = ["blog/samplecopy.html"];//test
                   githubblogAdd();
                 }
               },
@@ -151,7 +153,7 @@
       iframe.style = "display: none";
       console.log("i"+i+"href"+iframe.src);
       iframe.onload = function(){
-        var doc = this.contentWindow.document;
+        // var doc = this.contentWindow.document;
         var oDiv = parent.document.createElement('div');
         var bloglist = this.contentWindow.top[this.src]._bloglist;
         var blogtags = bloglist.blogtags;
