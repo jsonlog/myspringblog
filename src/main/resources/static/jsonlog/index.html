@@ -36,9 +36,9 @@
   </main>
   <div id="aside"></div>
 </div>
-<!--<script>-->
-<!--  $("#aside").load("./jsonlog/aside.html");-->
-<!--</script>-->
+<script>
+  $("#aside").load("./jsonlog/aside.html");
+</script>
 <script>
   var share={
     data:function(name,value){
@@ -78,7 +78,7 @@
                 blog = [];
                 if (data != null) {
                   for (var j = 0; j < data.length; j++) {
-                    blog.push(data[j].path.toString().replace("src/main/resources/static/","./"));
+                    blog.push(data[j].path.toString().replace("src/main/resources/static/",""));
                   }
                   // blog = ["./blog/sample.html"];//test
                   githubblogAdd();
@@ -89,19 +89,17 @@
               }
             });
   }
-  function githubblogAdd() {
-    if(url && frameonload == blog.length){
+  function urlClick(url) {
+    try {
       var urliframe = document.getElementById(url);
-      document.getElementById("main").innerHTML = urliframe.contentWindow.top[this.src]._bloglist.blogmain;
+      document.getElementById("main").innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
       return;
+    }catch (e){
+      alert(e);
     }
+  }
+  function githubblogAdd() {
     for(var i = 0,len = blog.length; i < len; i++){
-      if(url){
-        if(url.indexOf(blog[i].replace("./","")) != -1)
-          console.log(url);
-        // else if(frameonload == blog.length)
-        //   continue;
-      }
       var iframe = document.createElement('iframe');
       iframe.id = blog[i];
       iframe.src = blog[i];
@@ -120,10 +118,10 @@
             blogtagslist[blogtag[k]] = this.src;
           }
         }
-        if(url && url.indexOf(blog[i].replace("./","")) != -1){
-          parent.document.getElementById("main").innerHTML = bloglist.blogmain;
-          console.log(parent.document.getElementById("main").innerHTML);
-        }else {
+        // if(url && url.indexOf(blog[i].replace("./","")) != -1){
+        //   parent.document.getElementById("main").innerHTML = bloglist.blogmain;
+        //   console.log(parent.document.getElementById("main").innerHTML);
+        // }else {
           oDiv.innerHTML =
                   '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
                   '          <dl>\n' +
@@ -131,16 +129,15 @@
                   '            <dd>\n' +
                   '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
                   '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                  '                <a class="read" href="./?url='+bloglist.bloghref+'">阅读更多</a> \n' +
+                  '                <a class="read" href="javascript:void(0);" onclick="urlClick(\''+this.id+'\');">阅读更多</a> \n' +
                   '            </dd>\n' +
                   '          </dl>\n' +
                   '        </li>';
           parent.document.getElementById('bloglistul').appendChild(oDiv);
-        }
+        // }
         // console.log(this.id+"---"+blog.length);
         frameonload++;
         if(frameonload == blog.length){
-          $("#aside").load("./jsonlog/aside.html");
           var cloud = parent.document.getElementById("tag");
           $.each(blogtagslist,function (index,map) {
             cloud.innerHTML += '<a href="./?tag='+index+'">'+index+'</a>';

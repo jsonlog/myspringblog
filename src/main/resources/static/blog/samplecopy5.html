@@ -14,7 +14,7 @@
                         <li class="timer" id="blogtime">2018-07-05</li>
                     </ul>
                 </div>
-                <div class="tags" id="bloghrefs"><a>sample</a> &nbsp;<a>示例</a> <a>sample</a></div>
+                <div class="tags" id="bloghrefs"><a>sample</a> &nbsp;<a>示例</a> <a>sample5</a></div>
                 <div class="news_about"><strong>简介</strong>简介</div>
                 <div class="news_con" id="blogcontent" value="">正文
                 </div>
@@ -60,7 +60,9 @@
         blogtime : document.getElementById("blogtime").innerHTML,
         bloghrefs : document.getElementById("bloghrefs").innerHTML,
         blogcontent : document.getElementById("blogcontent").innerHTML,
-        blogtags : blogtags.substr(1)
+        blogtags : blogtags.substr(1),
+        blogmain : document.getElementById("main").innerHTML,
+        bloghref : pathName
     }
     share.data('_bloglist',bloglist);
 </script>
