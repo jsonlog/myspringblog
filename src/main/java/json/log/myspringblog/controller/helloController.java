@@ -21,28 +21,18 @@ public class helloController {
         return "blog/"+url;
     }
     @GetMapping("/jsonlog/index")
-    public String homeindex(){
+    public String secondindex(){
         System.out.println("jsonlog/index-----------------");
-        return index();
+        return "jsonlog/index";
     }
 //    @GetMapping("/myspringblog")
 //    public String myspringblog(){
 //        System.out.println("myspringblog-----------------");
 //        return index();
 //    }
-    @GetMapping("/home")
-    public String home(){
-        System.out.println("home-----------------");
-        return index();
-    }
-    @GetMapping("/index")
+    @GetMapping({"","/","/index","/home","/jsonlog/home"})
     public String index(){
         System.out.println("index-----------------");
-        return "redirect:/";
-    }
-    @GetMapping("/")
-    public String gang(){
-        System.out.println("/-----------------");
-        return "jsonlog/index";
+        return "redirect:/jsonlog/index";
     }
 }
