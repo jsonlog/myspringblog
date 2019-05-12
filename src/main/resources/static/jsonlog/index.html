@@ -120,6 +120,7 @@
   }
   function tagClick(tag) {
     try {
+      var count = new Array();
       var main = document.getElementById("main");
       var childs = main.childNodes;
       for(var i = childs.length - 1; i >= 0; i--) {
@@ -136,9 +137,13 @@
         var ids = "," + li[i].id + ",";
         if (ids.indexOf("," + tag + ",") != -1) {
             li[i].style.display = '';
+            count.push(li[i].title);
         } else {
           li[i].style.display = 'none';
         }
+      }
+      if(count.length == 1){
+        urlClick(count[0]); //只有一篇文章直接打开,不显示列表
       }
       return;
     }catch (e){
@@ -170,7 +175,7 @@
         //   console.log(parent.document.getElementById("main").innerHTML);
         // }else {
           oDiv.innerHTML =
-                  '        <li id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
+                  '        <li title="'+this.id+'" id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./images/9.jpg" alt=""> </a></i>\n' +
                   '          <dl>\n' +
                   '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
                   '            <dd>\n' +
