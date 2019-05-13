@@ -1,5 +1,6 @@
 package json.log.myspringblog.mapper;
 
+import json.log.myspringblog.domain.Foreveryear;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,21 @@ public class FestMapperTest {
     @Autowired
     private FestMapper festMapper;
 
+    @Autowired
+    private ForEveryearMapper forEveryearMapper;
+
     SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd");
+
+    @Test
+    public void select() throws Exception {
+        List<Foreveryear> years = forEveryearMapper.select();
+        System.out.println(years);
+    }
+    @Test
+    public void selectxml() throws Exception {
+        List<Foreveryear> years = forEveryearMapper.selectForeveryear();
+        System.out.println(years);
+    }
 
     @Test
     public void testDelete() throws Exception {

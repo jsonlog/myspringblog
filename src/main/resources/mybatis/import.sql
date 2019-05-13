@@ -17,11 +17,14 @@
 use blog;
 
 drop table if exists fest;
+drop table if exists foreveryear;
 
 create table fest (id int primary key auto_increment, timing varchar(64), cal DATE);
 
-insert into fest (timing, cal) values ('sql国历生日', '2019-06-30');
-insert into fest (timing, cal) values ('sql造物节~', '2019-09-15');
+create table foreveryear (id int primary key auto_increment, month int, day int,timing varchar(64),solar bool);
+insert into foreveryear (timing,month,day,solar) values ("sql农历生日",4,24,false);
+insert into foreveryear (timing,month,day,solar) values ("sql国历生日",6,25,true);
+insert into foreveryear (timing,month,day,solar) values ("sql造物节~",9,15,true)
 
 insert into fest (timing, cal) values ('元旦节休', '2017-12-30');
 insert into fest (timing, cal) values ('元旦节休', '2017-12-31');
