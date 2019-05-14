@@ -14,7 +14,7 @@
 --    limitations under the License.
 --
 
-use blog;
+-- use blog;
 
 drop table if exists fest;
 drop table if exists foreveryear;

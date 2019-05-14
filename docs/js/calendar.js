@@ -9,6 +9,7 @@
         "6-14": "618家电~",
         "8-18": "苏宁818~",
         "9-12": "魅友节~",
+        "9-15": "造物节~",
         "11-1": "万圣节~",
         "11-11": "双11~",
         "12-12": "双12~",
@@ -395,11 +396,11 @@
                     success: function (data) {
                         var serverlunarFestival = {};
                         for(var i =0;i<data.length;i++){
-                            var year = data[i];
-                            var m = year.month;
-                            var d = year.day;
+                            var m = data[i].month;
+                            var d = data[i].day;
                             var y = Y;
-                            if(year.solar == true){
+                            if(data[i].solar == true){
+                                if(servergregorianFestival[m+"-"+d] && servergregorianFestival[m+"-"+d].indexOf(data[i].timing) != -1) continue;
                                 if (servergregorianFestival[m + "-" + d]) {
                                     if(servergregorianFestival[m + "-" + d].indexOf("~") != -1) {
                                         addRemindFestival(Y, y, M, m, d, servergregorianFestival[m + "-" + d]);
@@ -411,19 +412,22 @@
                                     }
                                     servergregorianFestival[m + "-" + d] = servergregorianFestival[m + "-" + d].replace("节~","").replace("~","");
                                 } else servergregorianFestival[m + "-" + d] = data[i].timing;
-                            }else if(year.solar == false){
-                                serverlunarFestival[m+"-"+d] = year.timing;
+                            }else if(data[i].solar == false){
+                                if(serverlunarFestival[m+"-"+d] && serverlunarFestival[m+"-"+d].indexOf(data[i].timing) != -1) continue;
+                                serverlunarFestival[m+"-"+d] = data[i].timing;
                             }
-                            if(i == data.length -1 ){
-                                addAutoFestivalFlag = false;
-                                foreveryearFlag = true;
-                                calendar.gregorianFestival = {};
+                        }
+                        if(servergregorianFestival != {}){
+                            addAutoFestivalFlag = false;
+                            foreveryearFlag = true;
+                            calendar.gregorianFestival = {};
+                            calendar.gregorianFestival = servergregorianFestival;
+                            if(serverlunarFestival != {}) {
                                 calendar.lunarFestival = {};
-                                calendar.gregorianFestival = servergregorianFestival;
                                 calendar.lunarFestival = serverlunarFestival;
-                                console.log(servergregorianFestival);
-                                console.log(serverlunarFestival);
                             }
+                            console.log(servergregorianFestival);
+                            console.log(serverlunarFestival);
                         }
 
                     },//[{"id":1,"timing":"sql农历生日","month":4,"day":24,"solar":false},{"id":2,"timing":"sql国历生日","month":6,"day":25,"solar":true},{"id":3,"timing":"sql造物节~","month":9,"day":15,"solar":true}]
@@ -436,18 +440,18 @@
     /*
     [{"id":18,"timing":"rest","cal":"2019-05-01T00:00:00.000+0000"},{"id":19,"timing":"rest","cal":"2019-05-02T00:00:00.000+0000"}]
      */
-    function addqingming() {
+    function addqingming(Y) {
         var coefficient = [5.15, 5.37, 5.59, 4.82, 5.02, 5.26, 5.48, 4.70, 4.92, 5.135, 5.36, 4.60, 4.81, 5.04, 5.26];
         var cd = parseInt(Y / 100 - 17);
         var mod = parseInt(Y % 100);
         var qingming = parseInt(mod * 0.2422 + coefficient[cd] - parseInt(mod / 4));
-        delete calendar.gregorianFestival["4-4"];
-        delete calendar.gregorianFestival["4-5"];
-        delete calendar.gregorianFestival["4-6"];
-        // calendar.gregorianFestival["4-6"] = "4-6";
-        // calendar.gregorianFestival["4-5"] = "4-5";
-        // calendar.gregorianFestival["4-4"] = "4-4";
-        calendar.gregorianFestival[4 + "-" + qingming] = "清明节";//TODO
+        // delete calendar.gregorianFestival["4-4"];
+        // delete calendar.gregorianFestival["4-5"];
+        // delete calendar.gregorianFestival["4-6"];
+        if(calendar.gregorianFestival[4 + "-" + qingming] && calendar.gregorianFestival[4 + "-" + qingming].indexOf("清明节") == -1)
+            calendar.gregorianFestival[4 + "-" + qingming] += "清明节";//TODO
+        if(!calendar.gregorianFestival[4 + "-" + qingming])
+            calendar.gregorianFestival[4 + "-" + qingming] = "清明节";
         // alert(qingming+""+calendar.gregorianFestival[4+"-"+qingming]);
     }
 
@@ -459,7 +463,7 @@
         // console.log(calendar.gregorianFestival);
 
         getfest(Y, M);
-
+        addqingming(Y);
         var date = new Date(Y + "/" + M + "/" + 1);
         date.setDate(date.getDate() - 4);
         for (var D = 1; D < (days + 7); D++) {
@@ -496,7 +500,7 @@
             nextt.setDate(nextt.getDate() + 29);
             lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
             rest = xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
-            //addRobFestival(Y, y, M, m, d, rest, nextt.getDay());
+            addRobFestival(Y, y, M, m, d, rest, nextt.getDay());
 
             if (addAutoFestivalFlag == true) {
                 console.log("addAutoFestivalFlag" + addAutoFestivalFlag);

@@ -19,6 +19,8 @@
   <!--[if lt IE 9]>
   <script src="./../js/modernizr.js"></script>
   <![endif]-->
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 </head>
 <body>
 <div id="header"></div>
@@ -34,6 +36,7 @@
       </div>
       <div id="blogurl">
       </div>
+      <div id="container"></div>
     </main>
     <div style="text-align:left;width: 32%;padding-left:30px;display:inline-block;vertical-align: top;">
       <div class="sidebar" id="calendar" style="margin-bottom:15px;" onload="fest();">
@@ -110,11 +113,24 @@
         var urliframe = document.getElementById(url);
         blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
         blogurl.style.display = "";
+        mygitment(url);
       }
       return;
     }catch (e){
       alert(e);
     }
+  }
+  function mygitment(url) {
+    var gitment = new Gitment({
+      id: url, // 可选。默认为 location.href
+      owner: 'jsonlog',
+      repo: 'https://github.com/jsonlog/myspringblog',
+      oauth: {
+        client_id: '83fafd2b81e1f524f91b',
+        client_secret: '88d16eb691759ec21b6b17c43a66187c83711e34',
+      },
+    })
+    gitment.render('container')
   }
   function tagClick(tag) {
     try {
