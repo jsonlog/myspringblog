@@ -68,7 +68,6 @@
       }
     }
   };
-  var container = document.getElementById("container");
   var realloc = location.href;
   var myloc = realloc.split("&code=");
   var loc = myloc[0];
@@ -77,13 +76,13 @@
   var n2 = loc.indexOf("=");//取得=号的位置
   var dengyu = loc.substr(n2+1, n1-n2);
   if(loc.indexOf("?tag=") != -1)
-    var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
+    var tag = decodeURI(dengyu);//从=号后面的内容
   else if(loc.indexOf("?url=") != -1)
-    var url = decodeURI(loc.substr(n2+1, n1-n2));
+    var url = decodeURI(dengyu);
   var blog;
   var blogtagslist = {};
   var frameonload = 0;
-  if(loc[loc.length -1] != "?")
+  // if(loc[loc.length -1] != "?")
   githubblog();
   function githubblog() {
     $.ajax({
@@ -132,6 +131,7 @@
     }
   }
   function mygitment(url) {
+    var container = document.getElementById("container");
     container.style.display = "";
     var gitment = new Gitment({
       id: url.toString(), // 可选。默认为 location.href
@@ -177,13 +177,18 @@
     }
   }
   function githubblogAdd() {
+    if(frameonload == blog.length && url) {
+      urlClick(url);
+      console.log("secondtime");
+      return;
+    }
     for(var i = 0,len = blog.length; i < len; i++){
       if(url){
         if(blog[i] == url){
           try{
             if (document.getElementsById(url)) {
               urlClick(url);
-              console("notfirsttime");
+              console.log("notfirsttime");
               break;
             }
 
@@ -238,12 +243,6 @@
       document.body.appendChild(iframe);
     }
   }
-
-  // if(code){
-  //   container.style.display = "";
-  //   if(code == "fe1898a909c6f4fa4a2c")
-  //   mygitment("blog/sample.html");
-  // }
 </script>
 <div id="footer"></div>
 <script>

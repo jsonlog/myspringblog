@@ -22,7 +22,7 @@
         <nav>
 <!--            <h2 id="mnavh"><span class="navicon"></span></h2>-->
             <ul id="starlist" style="width:100%;">
-                <li><a href="#" onclick="tagClick();">首页</a></li>
+                <li><a href="javascript:void(0);" onclick="home();">首页</a></li>
                 <li><a target="_blank" href="https://github.com/jsonlog/document">文档*</a></li>
                 <li><a target="_blank" href="https://github.com/jsonlog/ebook">书籍*</a></li>
                 <li class="menu"><a target="_blank" href="https://music.163.com/#/discover/recommend/taste">音乐*</a>
@@ -97,5 +97,10 @@
             // second = minute < 10 ? ('0' + second) : second;
             return y + '年' + m + '月' + d + '日';//+' '+h+':'+minute+':'+ second;
         };
+        function home() {
+            var realloc = location.href;
+            var myloc = realloc.split("?");
+            location.href = myloc[0];
+        }
     </script>
 </header>
