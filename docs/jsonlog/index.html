@@ -167,7 +167,8 @@
         }
       }
       if(count.length == 1){
-        urlClick(count[0]); //只有一篇文章直接打开,不显示列表
+        // urlClick(count[0]); //只有一篇文章直接打开,不显示列表
+        window.location.href += "?url="+count[0];
       }
       return;
     }catch (e){
@@ -216,7 +217,7 @@
                 '            <dd>\n' +
                 '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
                 '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                '                <a class="read" href="./?url='+this.id+'">阅读更多</a> \n' +
+                '                <a class="read" href="?url='+this.id+'">阅读更多</a> \n' +
                 '            </dd>\n' +
                 '          </dl>\n' +
                 '        </li>';
