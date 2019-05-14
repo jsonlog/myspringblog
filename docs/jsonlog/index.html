@@ -70,7 +70,7 @@
   };
   var container = document.getElementById("container");
   var realloc = location.href;
-  var myloc = realloc.split("?code=");
+  var myloc = realloc.split("&code=");
   var loc = myloc[0];
   // var code = myloc[1];
   var n1 = loc.length;//地址的总长度
@@ -83,6 +83,7 @@
   var blog;
   var blogtagslist = {};
   var frameonload = 0;
+  if(loc[loc.length -1] != "?")
   githubblog();
   function githubblog() {
     $.ajax({
