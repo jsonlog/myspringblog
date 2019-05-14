@@ -35,6 +35,8 @@ public class Foreveryear {
 
     private int day;
 
+    private boolean solar;
+
     public int getId() {
         return id;
     }
@@ -66,4 +68,13 @@ public class Foreveryear {
     public void setDay(int day) {
         this.day = day;
     }
+
+    public boolean getSolar() {
+        return solar;
+    }
+
+    public void setSolar(boolean solar) {
+        this.solar = solar;
+    }
+
 }

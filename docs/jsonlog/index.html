@@ -75,8 +75,7 @@
   var frameonload = 0;
   githubblog();
   function githubblog() {
-    $.ajax(
-            {
+    $.ajax({
               url: "https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog",
               async: false,//time
               data: {},

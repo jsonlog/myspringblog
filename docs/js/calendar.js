@@ -266,7 +266,7 @@
     var configDayM = {};
     var isclick = false;
     var addAutoFestivalFlag = true;
-    var serverReceived = false;
+    var foreveryearFlag = false;
     var untilYear = 2049;
     var untilMonth = 12;
     var untilDay = 31;
@@ -342,8 +342,9 @@
 
     function getfest(Y, M) {
         var date = new Date(Y + "/" + M + "/" + 1);
+        var servergregorianFestival = {};
         // alert(date);
-        $.ajax(
+        $.ajax(//TODO ajax order
             {
                 url: "../fest",
                 async: false,//time
@@ -353,8 +354,10 @@
                 success: function (data) {
                     // alert(JSON.stringify(data));
                     // alert(JSON.parse(data));
-                    var servergregorianFestival = {};
-                    var festflag = false;
+                    if(servergregorianFestival != {}){
+                        calendar.gregorianFestival = {};
+                        calendar.gregorianFestival = servergregorianFestival;
+                    }
                     if (data != null) {
                         for (var i = 0; i < data.length; i++) {
                             var date = data[i].cal.toString();
@@ -363,32 +366,11 @@
                             var d = ~~date.substr(8, 2);
                             // if (Y.toString() == y.toString()) {//TODO 返回一年,支持多年
                             // alert(y+"!"+m+"!"+d);
-                            if (servergregorianFestival[m + "-" + d]) {
-                                if(servergregorianFestival[m + "-" + d].indexOf("~") != -1) {
-                                    addRemindFestival(Y, y, M, m, d, servergregorianFestival[m + "-" + d]);
-                                    servergregorianFestival[m + "-" + d] = data[i].timing + servergregorianFestival[m + "-" + d];
-                                }
-                                else {
-                                    addRemindFestival(Y, y, M, m, d, data[i].timing);
-                                    servergregorianFestival[m + "-" + d] += data[i].timing;
-                                }
-                                servergregorianFestival[m + "-" + d] = servergregorianFestival[m + "-" + d].replace("节~","").replace("~","");
-                            } else servergregorianFestival[m + "-" + d] = data[i].timing;
+                            servergregorianFestival[m + "-" + d] = data[i].timing;
 
                             // if(m == M || m+1 == M)
-                            festflag = true;
                             // }
                         }
-                    }
-                    console.log(servergregorianFestival);
-                    if (festflag == true) {
-                        addAutoFestivalFlag = false;
-                        serverReceived = true;
-                        // delete calendar.gregorianFestival;
-                        calendar.gregorianFestival = {};
-                        calendar.lunarFestival = {};
-                        calendar.gregorianFestival = servergregorianFestival;
-                        // alert("addAutoFestivalFlag"+addAutoFestivalFlag+"servergregorianFestival"+calendar.gregorianFestival)
                     }
                     // for(var key in servergregorianFestival){
                     //     console.log("属性：" + key + ",值："+ jsonData[key]);
@@ -404,6 +386,51 @@
                     console.log("errorfest");
                 }
             });
+            $.ajax(
+                {
+                    url: "../foreveryear",
+                    async: false,//time
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        var serverlunarFestival = {};
+                        for(var i =0;i<data.length;i++){
+                            var year = data[i];
+                            var m = year.month;
+                            var d = year.day;
+                            var y = Y;
+                            if(year.solar == true){
+                                if (servergregorianFestival[m + "-" + d]) {
+                                    if(servergregorianFestival[m + "-" + d].indexOf("~") != -1) {
+                                        addRemindFestival(Y, y, M, m, d, servergregorianFestival[m + "-" + d]);
+                                        servergregorianFestival[m + "-" + d] = data[i].timing + servergregorianFestival[m + "-" + d];
+                                    }
+                                    else {
+                                        addRemindFestival(Y, y, M, m, d, data[i].timing);
+                                        servergregorianFestival[m + "-" + d] += data[i].timing;
+                                    }
+                                    servergregorianFestival[m + "-" + d] = servergregorianFestival[m + "-" + d].replace("节~","").replace("~","");
+                                } else servergregorianFestival[m + "-" + d] = data[i].timing;
+                            }else if(year.solar == false){
+                                serverlunarFestival[m+"-"+d] = year.timing;
+                            }
+                            if(i == data.length -1 ){
+                                addAutoFestivalFlag = false;
+                                foreveryearFlag = true;
+                                calendar.gregorianFestival = {};
+                                calendar.lunarFestival = {};
+                                calendar.gregorianFestival = servergregorianFestival;
+                                calendar.lunarFestival = serverlunarFestival;
+                                console.log(servergregorianFestival);
+                                console.log(serverlunarFestival);
+                            }
+                        }
+
+                    },//[{"id":1,"timing":"sql农历生日","month":4,"day":24,"solar":false},{"id":2,"timing":"sql国历生日","month":6,"day":25,"solar":true},{"id":3,"timing":"sql造物节~","month":9,"day":15,"solar":true}]
+                    error: function () {
+                        console.log("errorforeveryear");
+                    }
+                });
     }
 
     /*
@@ -426,7 +453,7 @@
 
     function addFestival(Y, M, days, options) {
         addAutoFestivalFlag = true;
-        serverReceived = false;
+        foreveryearFlag = false;
         calendar.gregorianFestival = gregorianFestivalGlobal;
         calendar.lunarFestival = lunarFestivalGlobal;
         // console.log(calendar.gregorianFestival);
@@ -457,8 +484,7 @@
                 calendar.gregorianFestival[m + "-" + d] += "历父亲节~";
             }
             addRestFestival(Y, y, M, m, d, xiu + calendar.gregorianFestival[m + "-" + d], w); //all
-            if (serverReceived == false)
-                addRestFestival(Y, y, M, m, d, xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]], w); //all
+            addRestFestival(Y, y, M, m, d, xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]], w); //all
 
             var xiu = "抢";
             var nextt = new Date(y + "/" + m + "/" + d);
@@ -470,8 +496,7 @@
             nextt.setDate(nextt.getDate() + 29);
             lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
             rest = xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
-            if (serverReceived == false)
-                addRobFestival(Y, y, M, m, d, rest, nextt.getDay());
+            //addRobFestival(Y, y, M, m, d, rest, nextt.getDay());
 
             if (addAutoFestivalFlag == true) {
                 console.log("addAutoFestivalFlag" + addAutoFestivalFlag);

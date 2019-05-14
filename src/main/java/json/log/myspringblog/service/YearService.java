@@ -27,4 +27,8 @@ public class YearService {
     public List<Foreveryear> select(){
         return forevevyearDao.select();
     }
+
+    public int addYear(List<Foreveryear> years){
+        return forevevyearDao.insertForeveryear(years);
+    }
 }

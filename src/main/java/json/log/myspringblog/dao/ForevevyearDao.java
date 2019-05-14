@@ -17,4 +17,13 @@ public class ForevevyearDao {
     private ForEveryearMapper yearMapper;
 
     public List<Foreveryear> select(){return yearMapper.select();}
+
+    public int insertForeveryear(List<Foreveryear> years){
+        for(Foreveryear year:years){
+            System.out.println(year.toString());
+        }
+        Foreveryear year = years.get(0);
+        yearMapper.insertYear(year.getTiming(),year.getMonth(),year.getDay(),year.getSolar());
+        return years.size();
+    }
 }
