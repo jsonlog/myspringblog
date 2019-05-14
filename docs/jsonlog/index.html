@@ -70,15 +70,15 @@
   };
   var container = document.getElementById("container");
   var realloc = location.href;
-  var myloc = realloc.split("&code=");
+  var myloc = realloc.split("?code=");
   var loc = myloc[0];
   // var code = myloc[1];
   var n1 = loc.length;//地址的总长度
   var n2 = loc.indexOf("=");//取得=号的位置
   var dengyu = loc.substr(n2+1, n1-n2);
-  if(loc.indexOf("?tag=") != -1)
+  if(loc.indexOf("&tag=") != -1)
     var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
-  else if(loc.indexOf("?url=") != -1)
+  else if(loc.indexOf("&url=") != -1)
     var url = decodeURI(loc.substr(n2+1, n1-n2));
   var blog;
   var blogtagslist = {};
@@ -138,7 +138,7 @@
       repo: 'https://github.com/jsonlog/myspringblog',
       oauth: {
         client_id: '2d98f5c7f2423770ccb3',
-        client_secret: '82084c6420c40e15887190aa40f81c85b1456950',
+        client_secret: '6a2d8348da9aa6dcb80f2d417617dc5c078f72e2',
       },
     })
     gitment.render('container')
@@ -168,7 +168,7 @@
       }
       if(count.length == 1){
         // urlClick(count[0]); //只有一篇文章直接打开,不显示列表
-        window.location.href += "?url="+count[0];
+        window.location.href += "&url="+count[0];
       }
       return;
     }catch (e){
@@ -217,7 +217,7 @@
                 '            <dd>\n' +
                 '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
                 '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                '                <a class="read" href="?url='+this.id+'">阅读更多</a> \n' +
+                '                <a class="read" href="&url='+this.id+'">阅读更多</a> \n' +
                 '            </dd>\n' +
                 '          </dl>\n' +
                 '        </li>';
