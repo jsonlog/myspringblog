@@ -77,8 +77,7 @@
   else if(loc.indexOf("?url=") != -1)
     var url = decodeURI(loc.substr(n2+1, n1-n2));
   else if(loc.indexOf("?code=") != -1) {
-    container.style.display = "";
-    container.innerText = dengyu;
+    var code = dengyu;
   }
   var blog;
   var blogtagslist = {};
@@ -225,6 +224,12 @@
       };
       document.body.appendChild(iframe);
     }
+  }
+
+  if(code){
+    container.style.display = "";
+    if(code == "fe1898a909c6f4fa4a2c")
+    mygitment("blog/sample.html");
   }
 </script>
 <div id="footer"></div>
