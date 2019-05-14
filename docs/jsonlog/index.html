@@ -178,9 +178,15 @@
     for(var i = 0,len = blog.length; i < len; i++){
       if(url){
         if(blog[i] == url){
-          if(document.getElementsById(url))
-            urlClick(url);
-          break;
+          try{
+            if (document.getElementsById(url)) {
+              urlClick(url);
+              console("notfirsttime");
+              break;
+            }
+
+          }catch(e) {
+          }
         }
         else
           continue;

@@ -583,7 +583,7 @@
             }
             // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
         }
-        console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
+        // console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
     }
 
     function addRestFestival(Y, y, M, m, d, rest, w) {
