@@ -134,7 +134,7 @@
   function mygitment(url) {
     container.style.display = "";
     var gitment = new Gitment({
-      // id: url, // 可选。默认为 location.href
+      id: url.toString(), // 可选。默认为 location.href
       owner: 'jsonlog',
       repo: 'myspringblog',
       oauth: {
