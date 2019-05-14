@@ -102,17 +102,24 @@
   function urlClick(url) {
     try {
       if(url) {
-        var main = document.getElementById("main");
-        var childs = main.childNodes;
-        for(var i = childs.length - 1; i >= 0; i--) {
-          if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
-            childs[i].style.display = "none";
-        }
+        // var main = document.getElementById("main");
+        // var childs = main.childNodes;
+        // for(var i = childs.length - 1; i >= 0; i--) {
+        //   if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
+        //     childs[i].style.display = "none";
+        // }
+
+        var bloglist = document.getElementsByClassName("bloglist");
+        bloglist[0].style.display = "none";
 
         var blogurl = document.getElementById("blogurl");
         var urliframe = document.getElementById(url);
         blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
         blogurl.style.display = "";
+        // mygitment(url);
+        var container = document.getElementById("container");
+        // container.innerText="test";
+        container.style.display = "";
         mygitment(url);
       }
       return;
