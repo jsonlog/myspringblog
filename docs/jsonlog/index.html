@@ -66,13 +66,20 @@
       }
     }
   };
+  var container = document.getElementById("container");
   var loc = location.href;
   var n1 = loc.length;//地址的总长度
   var n2 = loc.indexOf("=");//取得=号的位置
+  var dengyu = loc.substr(n2+1, n1-n2);
+  alert(dengyu);
   if(loc.indexOf("?tag=") != -1)
     var tag = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
   else if(loc.indexOf("?url=") != -1)
     var url = decodeURI(loc.substr(n2+1, n1-n2));
+  else if(loc.indexOf("?code=") != -1) {
+    container.style.display = "";
+    container.innerText = dengyu;
+  }
   var blog;
   var blogtagslist = {};
   var frameonload = 0;
@@ -117,7 +124,6 @@
         blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
         blogurl.style.display = "";
         // mygitment(url);
-        var container = document.getElementById("container");
         // container.innerText="test";
         container.style.display = "";
         mygitment(url);
