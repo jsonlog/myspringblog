@@ -13,7 +13,9 @@
 - 每篇文章需要在其底部点初始化才能开启gitment评论功能,等同于新开一个Github issues
 
 # 部署
-- docs/jsonlog/index.html里面这个[地址](https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog)替换repo/你的id/你的repo
+- 动态版:修改自己的数据库用户名密码,参考mybatis/import.sql生成你的数据库
+- [index](docs/jsonlog/index.html)里面这个[地址](https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog)替换repo/你的id/你的repo
+- 新文章列表是从github网站读取的哦,所以要push到github才能看到新文章~或者可以自己修改上一步涉及的函数进行测试~
 - 请参照[gitment说明](https://github.com/imsun/gitment)把代码中client_secret等多个参数修改为自己的
 - [settings](https://github.com/jsonlog/myspringblog/settings) -> master banch /docs folder for Github pages
 
@@ -48,7 +50,7 @@
 
 
 ## 请我喝一杯奶茶吧!
-
-![image](https://github.com/jsonlog/myspringblog/docs/images/payali.jpg)
-![image](https://github.com/jsonlog/myspringblog/docs/images/paywechat.jpg)
-![image](https://github.com/jsonlog/myspringblog/docs/images/payredpacket.jpg)
+/weipayimg.jpg
+![image](https://github.com/jsonlog/myspringblog/blob/master/docs/images/payali.jpg)
+![image](https://github.com/jsonlog/myspringblog/blob/master/docs/images/paywechat.jpg)
+![image](https://github.com/jsonlog/myspringblog/blob/master/docs/images/payredpacket.jpg)
