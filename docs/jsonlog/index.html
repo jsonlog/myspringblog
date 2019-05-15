@@ -55,25 +55,14 @@
   $("#aside").load("./../jsonlog/aside.html");
 </script>
 <script>
-  var share={
-    data:function(name,value){
-      var top=window.top,
-              cache=top['indexhtml']||{};
-      top['indexhtml']=cache;
-      return value?cache[name]=value:cache[name];
-    },
-    removeData:function(name){
-      var cache=window.top['indexhtml'];
-      if(cache&&cache[name])
-      {
-        delete cache[name];
-      }
-    }
-  };
+  $.ajaxSetup({
+    async : false
+  });
   var realloc = location.href;
   var myloc = realloc.split("&code=");
   var loc = myloc[0];
   // var code = myloc[1];
+  // if(loc[loc.length -1] != "?")
   var n1 = loc.length;//地址的总长度
   var n2 = loc.indexOf("=");//取得=号的位置
   var dengyu = loc.substr(n2+1, n1-n2);
@@ -81,11 +70,11 @@
     var tag = decodeURI(dengyu);//从=号后面的内容
   else if(loc.indexOf("?url=") != -1)
     var url = decodeURI(dengyu);
+  if(url) urlClick(url);
   var blog;
-  var blogtagslist = {};
-  var frameonload = 0;
-  // if(loc[loc.length -1] != "?")
-  githubblog();
+  var bloglist = {};
+  var blogtagslist = new Set();
+  tagClick();
   function githubblog() {
     $.ajax({
               url: "https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog",
@@ -99,7 +88,7 @@
                   for (var j = 0; j < data.length; j++) {
                     blog.push(data[j].path.toString().replace("docs/",""));
                   }
-                  // blog = ["blog/samplecopy.html"];//test
+                  // blog = ["blog/sample.html"];//test
                   githubblogAdd();
                 }
               },
@@ -109,28 +98,18 @@
             });
   }
   function urlClick(url) {
-    try {
-      if(url) {
-        // var main = document.getElementById("main");
-        // var childs = main.childNodes;
-        // for(var i = childs.length - 1; i >= 0; i--) {
-        //   if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
-        //     childs[i].style.display = "none";
-        // }
-
-        var bloglist = document.getElementsByClassName("bloglist");
-        bloglist[0].style.display = "none";
+        var list = document.getElementsByClassName("bloglist");
+        list[0].style.display = "none";
 
         var blogurl = document.getElementById("blogurl");
-        var urliframe = document.getElementById(url);
-        blogurl.innerHTML = urliframe.contentWindow.top[urliframe.src]._bloglist.blogmain;
+        // if(bloglist[url])
+        //   blogurl.innerHTML = bloglist[url];
+        // else
+        //   blogurl.innerHTML =
+        html(url,$("#blogurl")); //markdown
+        tag(blogurl);
         blogurl.style.display = "";
         mygitment(url);
-      }
-      return;
-    }catch (e){
-      alert(e);
-    }
   }
   function mygitment(url) {
     var container = document.getElementById("container");
@@ -147,110 +126,113 @@
     gitment.render('container')
   }
   function tagClick(tag) {
-    try {
-      var count = new Array();
-      var main = document.getElementById("main");
-      var childs = main.childNodes;
-      for(var i = childs.length - 1; i >= 0; i--) {
-        if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
-          childs[i].style.display = "none";
-      }
+    if(!tag ){githubblog();}
 
-      var bloglist = document.getElementsByClassName("bloglist");
-      bloglist[0].style.display = "";
-      var ul = document.getElementById("bloglistul");
-      var li = ul.getElementsByTagName("li");
-      for (var i = 0; i < li.length; i++) {
-        var ids = "," + li[i].id + ",";
-        if (ids.indexOf("," + tag + ",") != -1) {
-          li[i].style.display = '';
-          count.push(li[i].title);
-        } else {
-          li[i].style.display = tag?'none':"";
-        }
+    var count = new Array();
+    var list = document.getElementsByClassName("bloglist");
+    var ul = document.getElementById("bloglistul");
+    var li = ul.getElementsByTagName("li");
+    for (var i = 0; i < li.length; i++) {
+      var ids = "," + li[i].id + ",";
+      if (ids.indexOf("," + tag + ",") != -1) {
+        li[i].style.display = '';
+        count.push(li[i]);
+      } else {
+        li[i].style.display = tag?'none':"";
       }
-      if(count.length == 1){
-        // urlClick(count[0]); //只有一篇文章直接打开,不显示列表
-        window.location.href += "?url="+count[0];
-      }
-      return;
-    }catch (e){
-      alert(e);
     }
+    if(count.length == 1){
+      // urlClick(count[0]); //只有一篇文章直接打开,不显示列表
+      var readmore = count[0].getElementsByClassName("read")[0];
+      readmore.click();
+      // window.location.href += "?url="+count[0].title;
+      return;
+    }
+    var main = document.getElementById("main");
+    var childs = main.childNodes;
+    for(var i = childs.length - 1; i >= 0; i--) {
+      if(childs[i].nodeName.toLowerCase().indexOf("div")!= -1)
+        childs[i].style.display = "none";
+    }
+    list[0].style.display = "";
   }
   function githubblogAdd() {
-    if(frameonload == blog.length && url) {
-      urlClick(url);
-      console.log("secondtime");
-      return;
-    }
     for(var i = 0,len = blog.length; i < len; i++){
-      if(url){
-        if(blog[i] == url){
-          try{
-            if (document.getElementsById(url)) {
-              urlClick(url);
-              console.log("notfirsttime");
-              break;
-            }
+      // if(blog[i].indexOf(".md") != -1)
+      //   bloglistli.innerHTML = markdown(blog[i]);
+      bloglistli = bloglist[blog[i]] = {};
+      var bloglistul = document.getElementById('bloglistul');
+      var oDiv = document.createElement('div');
+      oDiv.id = i;
+      // oDiv.innerHTML = bloglistli.innerHTML;
+      bloglistul.appendChild(oDiv);
+      html(blog[i],$("#"+i));
+      tag(oDiv,bloglistli);
+      var classname = oDiv.getElementsByClassName("news_title");
+      bloglistli.news_title = classname[0].innerHTML;
+      classname = oDiv.getElementsByClassName("timer");
+      bloglistli.timer = classname[0].innerHTML;
+      classname = oDiv.getElementsByClassName("news_con");
+      bloglistli.news_con = classname[0].innerHTML;
 
-          }catch(e) {
-          }
-        }
-        else
-          continue;
+      oDiv.innerHTML =
+              '        <li title="'+blog[i]+'" id="'+bloglistli.tagslist+'"> <i class="blogpic"><a><img src="./../images/9.jpg" alt=""> </a></i>\n' +
+              '          <dl>\n' +
+              '            <dt><a>'+bloglistli.news_title+'</a></dt>\n' +
+              '            <dd>\n' +
+              '                <span class="bloginfo">'+bloglistli.news_con+'</span>\n' +
+              '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' +
+              '                <a class="read" href="?url='+blog[i]+'">阅读更多</a> \n' +
+              '            </dd>\n' +
+              '          </dl>\n' +
+              '        </li>';
+      if(i == blog.length - 1) {
+        var cloud = document.getElementById("tag");
+        blogtagslist.forEach(function (element, index, array) {
+          cloud.innerHTML += '<a href="#" onclick="tagClick(\''+element+'\');">'+element+'</a>';
+        });
+        // tagClick();
       }
-      var iframe = document.createElement('iframe');
-      iframe.id = blog[i];
-      iframe.src = "../"+blog[i];
-      iframe.style = "display: none";
-      // console.log("i"+i+"href"+iframe.src);
-      iframe.onload = function(){
-        // var doc = this.contentWindow.document;
-        var oDiv = parent.document.createElement('div');
-        var bloglist = this.contentWindow.top[this.src]._bloglist;
-        var blogtags = bloglist.blogtags;
-        var blogtag=blogtags.split(',');
-        for(var k = 0;k<blogtag.length;k++){
-          if(blogtagslist[blogtag[k]])
-            blogtagslist[blogtag[k]] += ","+this.src;
-          else {
-            blogtagslist[blogtag[k]] = this.src;
-          }
-        }
-        oDiv.innerHTML =
-                '        <li title="'+this.id+'" id="'+bloglist.blogtags+'"> <i class="blogpic"><a><img src="./../images/9.jpg" alt=""> </a></i>\n' +
-                '          <dl>\n' +
-                '            <dt><a>'+bloglist.blogtitle+'</a></dt>\n' +
-                '            <dd>\n' +
-                '                <span class="bloginfo">'+bloglist.blogcontent+'</span>\n' +
-                '                <p class="timeinfo"><span class="date">'+bloglist.blogtime +'</span><span class="tags">'+ bloglist.bloghrefs+'</span></p>\n' +
-                '                <a class="read" href="?url='+this.id+'">阅读更多</a> \n' +
-                '            </dd>\n' +
-                '          </dl>\n' +
-                '        </li>';
-        parent.document.getElementById('bloglistul').appendChild(oDiv);
-        if(url) urlClick(url);
-        // }
-        // console.log(this.id+"---"+blog.length);
-        frameonload++;
-        if(frameonload == blog.length){
-          var cloud = parent.document.getElementById("tag");
-          $.each(blogtagslist,function (index,map) {
-            cloud.innerHTML += '<a href="#" onclick="tagClick(\''+index+'\');">'+index+'</a>';
-          });
-          share.data('asidetag',cloud.innerHTML);
-        }
-      };
-      document.body.appendChild(iframe);
     }
   }
-  markdown();
-  function markdown() {
-    $.get("../markdown/README.md", function(response, status, xhr){
+  function markdown(file) {
+    $.ajaxSettings.async = false;
+    $.get("../"+file, function(response, status, xhr){
       // $("#content").html(marked(response));
-      alert(marked(response));
+      return (marked(response));
     });
+  }
+  function html2(file,div) {
+    $.ajax({
+      url: "../"+file+" #main",
+      async: false,
+      type: "get",
+      dataType: "html",
+      success: function (data) {
+        div.html(data);
+      },
+      error: function () {
+        console.log("githubajaxerror");
+      }
+    });
+  }
+  function html(file,div) {
+    div.load("../"+file+" #main");
+  }
+  function tag(oDiv,bloglistli) {
+    var classname = oDiv.getElementsByClassName("tags");
+    var a=classname[0].getElementsByTagName("a");
+    var tagslist = "";
+    for(var j=0;j<a.length;j++){
+      tagslist += ","+a[j].innerHTML;
+      classname[0].innerHTML= classname[0].innerHTML.replace("<a>"+a[j].innerHTML+"</a>","<a href='#' onclick='tagClick(\""+a[j].innerHTML+"\");'>"+a[j].innerHTML+"</a>");
+      blogtagslist.add(a[j].innerHTML);
+    }
+    if(bloglistli)
+    {
+      bloglistli.tags = classname[0].innerHTML;
+      bloglistli.tagslist = tagslist.substr(1);
+    }
   }
 </script>
 <div id="footer"></div>

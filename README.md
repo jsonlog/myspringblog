@@ -50,7 +50,6 @@
 
 
 ## 请我喝一杯奶茶吧!
-/weipayimg.jpg
-![image](https://github.com/jsonlog/myspringblog/blob/master/docs/images/payali.jpg)
-![image](https://github.com/jsonlog/myspringblog/blob/master/docs/images/paywechat.jpg)
-![image](https://github.com/jsonlog/myspringblog/blob/master/docs/images/payredpacket.jpg)
+|\>|_|<|
+|---|---|---|
+|![image](docs/images/payali.jpg)|![image](docs/images/paywechat.jpg)|![image](docs/images/payredpacket.jpg)|
