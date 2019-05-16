@@ -91,8 +91,10 @@
                     for (var j = 0; j < data.length; j++) {
                         blog.push(data[j].path.toString().replace("docs/",""));
                     }
+                    console.log(blog);
                     // blog = ["blog/sample.html"];//test
                     // blog = ["markdown/sample.md"];//test
+                    // blog = ["blog/sample.html", "blog/samplecopy.html", "blog/samplecopy10.html", "blog/samplecopy11.html", "blog/samplecopy12.html", "blog/samplecopy13.html", "blog/samplecopy14.html", "blog/samplecopy2.html", "blog/samplecopy3.html", "blog/samplecopy4.html", "blog/samplecopy5.html", "blog/samplecopy6.html", "blog/samplecopy7.html", "blog/samplecopy8.html", "blog/samplecopy9.html"];
                     githubblogAdd(blog);
                 }
             },
@@ -111,7 +113,7 @@
         // else
         //   blogurl.innerHTML =
         html(url,$("#blogurl")); //markdown
-        tag(blogurl);
+        tagtolist(blogurl);
         blogurl.style.display = "";
         mygitment(url);
     }
@@ -139,7 +141,7 @@
         var arr = [];
         for (var i = 0; i < li.length; i++) {
             arr.push(li[i]);
-            var ids = "," + li[i].id + ",";
+            var ids = "," + li[i].getAttribute("tagslist") + ",";
             if (ids.indexOf("," + tag + ",") != -1) {
                 li[i].style.display = '';
                 count.push(li[i]);
@@ -150,6 +152,7 @@
         if(count.length == 1){
             // urlClick(count[0].title); //只有一篇文章直接打开,不显示列表
             var readmore = count[0].getElementsByClassName("read")[0];
+            count[0].style.display = 'none';
             readmore.click();
             // window.location.href += "?url="+count[0].title;
             return;
@@ -183,19 +186,19 @@
             bloglistli = bloglist[blog[i]] = {};
             var bloglistul = document.getElementById('bloglistul');
             var oDiv = document.createElement('div');
-            oDiv.id = i;
+            // oDiv.id = i;
             bloglistul.appendChild(oDiv);
-            html(blog[i],$("#"+i));
-            tag(oDiv,bloglistli,blogtagslist);
+            html(blog[i],$(oDiv))
+            console.log(oDiv.innerHTML);
             var classname = oDiv.getElementsByClassName("news_title");
             bloglistli.news_title = classname[0].innerHTML;
             classname = oDiv.getElementsByClassName("timer");
             bloglistli.timer = classname[0].innerHTML;
             classname = oDiv.getElementsByClassName("news_con");
-            bloglistli.news_con = classname[0].innerHTML;
-            console.log(bloglistli);
+            bloglistli.news_con = classname[0].innerText;
+            tagtolist(oDiv,bloglistli,blogtagslist);
             oDiv.innerHTML =
-                '        <li timer="'+bloglistli.timer+'" title="'+blog[i]+'" id="'+bloglistli.tagslist+'"> <i class="blogpic"><a><img src="./../images/9.jpg" alt=""> </a></i>\n' +
+                '        <li timer="'+bloglistli.timer+'" title="'+blog[i]+'" tagslist="'+bloglistli.tagslist+'"> <i class="blogpic"><a><img src="./../images/9.jpg" alt=""> </a></i>\n' +
                 '          <dl>\n' +
                 '            <dt><a>'+bloglistli.news_title+'</a></dt>\n' +
                 '            <dd>\n' +
@@ -219,13 +222,14 @@
             var end  = response.indexOf("markdownend");
             if(start == -1 || end == -1) console.error("markdownstart"+start+"makrdownend"+end);
             var json = response.substring(start,end);
-            var bloglistli = JSON.parse(json);
-            var tags = bloglistli.tagslist.replace(new RegExp(',',"g"),"</a><a>");
-            console.log();
-            div.html('<h3 class="news_title">'+bloglistli.news_title+'</h3>\n' +
+            var li = JSON.parse(json);
+            var tags = li.tagslist.replace(new RegExp(',',"g"),"</a><a>");
+            // response = response.replace("/<!--.*-->/gm","");
+            // alert(response);
+            div.html('<h3 class="news_title">'+li.news_title+'</h3>\n' +
                 '<div class="bloginfo">\n' +
                 '    <ul>\n' +
-                '        <li class="timer">'+bloglistli.timer+'</li>\n' +
+                '        <li class="timer">'+li.timer+'</li>\n' +
                 '    </ul>\n' +
                 '</div>\n' +
                 '<div class="tags"><a>'+tags+'</a></div>\n' +
@@ -247,10 +251,11 @@
         });
     }
     function html(file,div) {
+        $.ajaxSettings.async = false;
         if(file.indexOf(".md") != -1) markdown(file,div);
         else div.load("../"+file+" #main");
     }
-    function tag(oDiv,bloglistli,blogtagslist) {
+    function tagtolist(oDiv, bloglistli, blogtagslist) {
         var classname = oDiv.getElementsByClassName("tags");
         var a=classname[0].getElementsByTagName("a");
         var tagslist = "";

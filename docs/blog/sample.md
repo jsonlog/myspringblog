@@ -1,9 +1,9 @@
-<!- 
+<!-- 
 markdownstart{
     "news_title" : "标题", 
-    "timer" : "2018-07-05", 
+    "timer" : "2017-12-05", 
     "news_con" : "正文",
-    "tagslist" : "sample,示例,sample10"
+    "tagslist" : "sample,示例,samplemd"
 }markdownend
 -->
 # 博客系统
