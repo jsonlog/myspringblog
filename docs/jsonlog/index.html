@@ -60,9 +60,11 @@
     $("#aside").load("./../jsonlog/aside.html");
     function aside(blogtagslist) {
         var cloud = document.getElementById("tag");
-        blogtagslist.forEach(function (element, index, array) {
-            cloud.innerHTML += '<a href="#" onclick="tagClick(\''+element+'\');">'+element+'</a>';
-        });
+        if(cloud) {
+            blogtagslist.forEach(function (element, index, array) {
+                cloud.innerHTML += '<a href="#" onclick="tagClick(\'' + element + '\');">' + element + '</a>';
+            });
+        }
     }
 </script>
 <script>
@@ -163,9 +165,7 @@
             return;
         }
         arr.sort(function(a,b){
-            // console.log(getDate(a.getAttribute('timer')));
-            // console.log(getDate(b.getAttribute('timer')));
-            // console.log(getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer')));
+            console.log(getDate(a.getAttribute('timer'))+getDate(b.getAttribute('timer'))+(getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))));
             return getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))?1:-1;
         });
         ul.innerHTML = "";
@@ -193,7 +193,7 @@
             var oDiv = document.createElement('div');
             bloglistul.appendChild(oDiv);
             html(blog[i],$(oDiv))
-            console.log(oDiv.innerHTML);
+            // console.log(oDiv.innerHTML);
             var classname = oDiv.getElementsByClassName("news_title");
             bloglistli.news_title = classname[0].innerHTML;
             classname = oDiv.getElementsByClassName("timer");
