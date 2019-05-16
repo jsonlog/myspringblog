@@ -1,4 +1,4 @@
-#博客系统
+# 博客系统
 同时支持静态网站和动态网站,两开花才是好花~_~
 
 # 初衷
@@ -7,7 +7,7 @@
 
 # 特点
 该博客不同于其它博客直接在线上写博客并且存入数据库的方式,当然也没博客引擎那种腻害,本项目目前做到了:
-- 支持文章标签,~~文章时间排序~~,~~支持markdown文件~~
+- 支持文章标签,文章时间排序,~~支持markdown文件~~
 - 如果部署成功,那么以后每次新增博客文章只需要操作如下即可更新网站文章列表:
 - push一个博客文件到docs/blog目录即可,格式参照[sample.html](docs/blog/sample.html),甚至不需要本地repo
 - 每篇文章需要在其底部点初始化才能开启gitment评论功能,等同于新开一个Github issues
@@ -15,7 +15,7 @@
 # 部署
 - 动态版:修改自己的数据库用户名密码,参考mybatis/import.sql生成你的数据库
 - [index](docs/jsonlog/index.html)里面这个[地址](https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog)替换repo/你的id/你的repo
-- 新文章列表是从github网站读取的哦,所以要push到github才能看到新文章~或者可以自己修改上一步涉及的函数进行测试~
+- 新文章列表是从github网站读取的哦,所以要push到github才能看到新文章,或者可以自己修改上一步涉及的函数进行测试
 - 请参照[gitment说明](https://github.com/imsun/gitment)把代码中client_secret等多个参数修改为自己的
 - [settings](https://github.com/jsonlog/myspringblog/settings) -> master banch /docs folder for Github pages
 
@@ -45,8 +45,8 @@
 |单双周|[week,week_walue](docs/js/calendar.js)|同左|
 |评论系统|gitment|同左|
 |other|天气,音乐|同左|
-|todo|时间排序,heroku,markdown|同左|
-|缺点|为了兼容两个版本,目前用的iframe|模板扒过来时觉得还可以,现在觉得难看,对前端也不熟|
+|todo|倒序,heroku|同左|
+|缺点|模板扒过来时觉得还可以,现在觉得难看,对前端也不熟||
 
 
 ## 请我喝一杯奶茶吧!
