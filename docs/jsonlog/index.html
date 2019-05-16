@@ -92,6 +92,7 @@
                         blog.push(data[j].path.toString().replace("docs/",""));
                     }
                     // blog = ["blog/sample.html"];//test
+                    // blog = ["markdown/sample.md"];//test
                     githubblogAdd(blog);
                 }
             },
@@ -183,7 +184,6 @@
             var bloglistul = document.getElementById('bloglistul');
             var oDiv = document.createElement('div');
             oDiv.id = i;
-            // oDiv.innerHTML = bloglistli.innerHTML;
             bloglistul.appendChild(oDiv);
             html(blog[i],$("#"+i));
             tag(oDiv,bloglistli,blogtagslist);
@@ -193,7 +193,7 @@
             bloglistli.timer = classname[0].innerHTML;
             classname = oDiv.getElementsByClassName("news_con");
             bloglistli.news_con = classname[0].innerHTML;
-
+            console.log(bloglistli);
             oDiv.innerHTML =
                 '        <li timer="'+bloglistli.timer+'" title="'+blog[i]+'" id="'+bloglistli.tagslist+'"> <i class="blogpic"><a><img src="./../images/9.jpg" alt=""> </a></i>\n' +
                 '          <dl>\n' +
@@ -212,11 +212,24 @@
             }
         }
     }
-    function markdown(file) {
+    function markdown(file,div) {
         $.ajaxSettings.async = false;
         $.get("../"+file, function(response, status, xhr){
-            // $("#content").html(marked(response));
-            return (marked(response));
+            var start = response.indexOf("markdownstart") + 13;
+            var end  = response.indexOf("markdownend");
+            if(start == -1 || end == -1) console.error("markdownstart"+start+"makrdownend"+end);
+            var json = response.substring(start,end);
+            var bloglistli = JSON.parse(json);
+            var tags = bloglistli.tagslist.replace(new RegExp(',',"g"),"</a><a>");
+            console.log();
+            div.html('<h3 class="news_title">'+bloglistli.news_title+'</h3>\n' +
+                '<div class="bloginfo">\n' +
+                '    <ul>\n' +
+                '        <li class="timer">'+bloglistli.timer+'</li>\n' +
+                '    </ul>\n' +
+                '</div>\n' +
+                '<div class="tags"><a>'+tags+'</a></div>\n' +
+                '<div class="news_con">'+marked(response)+'</div>');
         });
     }
     function html2(file,div) {
@@ -234,7 +247,8 @@
         });
     }
     function html(file,div) {
-        div.load("../"+file+" #main");
+        if(file.indexOf(".md") != -1) markdown(file,div);
+        else div.load("../"+file+" #main");
     }
     function tag(oDiv,bloglistli,blogtagslist) {
         var classname = oDiv.getElementsByClassName("tags");
@@ -254,8 +268,6 @@
     function getDate(strDate){
         var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
             function (d) { return parseInt(d, 10) - 1; }).match(/\d+/g) + ')');
-        // console.log(strDate);
-        // console.log(date);
         return date;
     }
 </script>
