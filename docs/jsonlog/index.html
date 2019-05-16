@@ -23,7 +23,11 @@
     <!--  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
     <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>-->
+    <link rel="stylesheet" href="./../editormd/css/editormd.preview.css" />
+    <script src="./../editormd/editormd.js"></script>
+    <script src="./../editormd/lib/marked.min.js"></script>
+    <script src="./../editormd/lib/prettify.min.js"></script>
 </head>
 <body>
 <div id="header"></div>
@@ -31,13 +35,14 @@
     $("#header").load("./../jsonlog/header.html");
 </script>
 <div id="wrapper" class="wrapper">
+    <div id="test-markdown-view" style="display: none;"></div>
     <form>
         <main id="main" style="width:65%;display:inline-block;vertical-align: top;">
             <div class="bloglist">
                 <ul id="bloglistul">
                 </ul>
             </div>
-            <div id="blogurl">
+            <div id="blogurl" style="background: #fff">
             </div>
             <div id="container"></div>
         </main>
@@ -52,8 +57,8 @@
     <!--  </div>-->
 </div>
 <script>
+    $("#aside").load("./../jsonlog/aside.html");
     function aside(blogtagslist) {
-        $("#aside").load("./../jsonlog/aside.html");
         var cloud = document.getElementById("tag");
         blogtagslist.forEach(function (element, index, array) {
             cloud.innerHTML += '<a href="#" onclick="tagClick(\''+element+'\');">'+element+'</a>';
@@ -186,7 +191,6 @@
             bloglistli = bloglist[blog[i]] = {};
             var bloglistul = document.getElementById('bloglistul');
             var oDiv = document.createElement('div');
-            // oDiv.id = i;
             bloglistul.appendChild(oDiv);
             html(blog[i],$(oDiv))
             console.log(oDiv.innerHTML);
@@ -209,7 +213,7 @@
                 '            </dd>\n' +
                 '          </dl>\n' +
                 '        </li>';
-            if(i == blog.length - 1) {
+            if(i == blog.length - 1) {//.md; *.txt; *.rst; *.adoc
                 aside(blogtagslist);
                 // tagClick();
             }
@@ -218,6 +222,11 @@
     function markdown(file,div) {
         $.ajaxSettings.async = false;
         $.get("../"+file, function(response, status, xhr){
+            var testView = editormd.markdownToHTML("test-markdown-view", {
+                markdown : response, // Also, you can dynamic set Markdown text
+                // htmlDecode : true,  // Enable / disable HTML tag encode.
+                // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+            });
             var start = response.indexOf("markdownstart") + 13;
             var end  = response.indexOf("markdownend");
             if(start == -1 || end == -1) console.error("markdownstart"+start+"makrdownend"+end);
@@ -226,6 +235,7 @@
             var tags = li.tagslist.replace(new RegExp(',',"g"),"</a><a>");
             // response = response.replace("/<!--.*-->/gm","");
             // alert(response);
+            var id = file.replace(new RegExp('/',"g"),"");
             div.html('<h3 class="news_title">'+li.news_title+'</h3>\n' +
                 '<div class="bloginfo">\n' +
                 '    <ul>\n' +
@@ -233,7 +243,7 @@
                 '    </ul>\n' +
                 '</div>\n' +
                 '<div class="tags"><a>'+tags+'</a></div>\n' +
-                '<div class="news_con">'+marked(response)+'</div>');
+                '<div class="news_con"><div class="markdown-body editormd-html-preview">'+document.getElementById("test-markdown-view").innerHTML+'</div></div>');//marked(response)
         });
     }
     function html2(file,div) {
