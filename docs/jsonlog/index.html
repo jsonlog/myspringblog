@@ -42,9 +42,10 @@
                 <ul id="bloglistul">
                 </ul>
             </div>
-            <div id="blogurl" style="background: #fff">
+            <div id="blogurl" style="background: #fff;">
             </div>
             <div id="container"></div>
+            <div style="clear: both;"></div>
         </main>
         <div style="text-align:left;width: 32%;padding-left:30px;display:inline-block;vertical-align: top;">
             <iframe class="about" style="padding-bottom: 15px" width="100%" scrolling="no" height="70" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=2&icon=1&num=3&site=12"></iframe>
@@ -144,7 +145,7 @@
         var ul = document.getElementById("bloglistul");
         var li = ul.getElementsByTagName("li");
         // if(!tag && )
-        if(li.length == 0){githubblog();alert("start");}
+        if(li.length == 0){githubblog();}
         var arr = [];
         for (var i = 0; i < li.length; i++) {
             arr.push(li[i]);
