@@ -2,7 +2,7 @@
 <html>
 <head runat="server">
     <meta charset="utf-8">
-    <title>首页_老G博客网站</title>
+    <title>老G博客网站</title>
     <meta name="keywords" content="个人博客,老G个人博客,个人博客模板,老G" />
     <meta name="description" content="老G个人博客，是一个支持springboot个人原创网站。" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,8 +19,6 @@
     <!--[if lt IE 9]>
     <script src="./../js/modernizr.js"></script>
     <![endif]-->
-    <!--  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
-    <!--  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
     <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.css"/>
 <!--    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>-->
@@ -42,7 +40,7 @@
                 <ul id="bloglistul">
                 </ul>
             </div>
-            <div id="blogurl" style="background: #fff;">
+            <div id="blogurl" style="background: #fff;width: 100%">
             </div>
             <div id="container"></div>
             <div style="clear: both;"></div>
@@ -223,15 +221,16 @@
     function markdown(file,div) {
         $.ajaxSettings.async = false;
         $.get("../"+file, function(response, status, xhr){
+            var start = response.indexOf("markdownstart") + 13;
+            var end  = response.indexOf("markdownend");
+            if(start == -1 || end == -1) console.error("markdownstart"+start+"makrdownend"+end);
+            var json = response.substring(start,end);
+            response = response.substr(end+15);
             var testView = editormd.markdownToHTML("test-markdown-view", {
                 markdown : response, // Also, you can dynamic set Markdown text
                 // htmlDecode : true,  // Enable / disable HTML tag encode.
                 // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
             });
-            var start = response.indexOf("markdownstart") + 13;
-            var end  = response.indexOf("markdownend");
-            if(start == -1 || end == -1) console.error("markdownstart"+start+"makrdownend"+end);
-            var json = response.substring(start,end);
             var li = JSON.parse(json);
             var tags = li.tagslist.replace(new RegExp(',',"g"),"</a><a>");
             // response = response.replace("/<!--.*-->/gm","");

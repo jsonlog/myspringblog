@@ -1,11 +1,9 @@
-<!-- 
-markdownstart{
+<!--markdownstart{
     "news_title" : "标题", 
     "timer" : "2017-12-05", 
     "news_con" : "正文",
     "tagslist" : "sample,示例,samplemd"
-}markdownend
--->
+}markdownend-->
 # 博客系统
 同时支持静态网站和动态网站,两开花才是好花~_~
 
