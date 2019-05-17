@@ -221,11 +221,11 @@
     function markdown(file,div) {
         $.ajaxSettings.async = false;
         $.get("../"+file, function(response, status, xhr){
-            var start = response.indexOf("markdownstart") + 13;
-            var end  = response.indexOf("markdownend");
+            var start = response.indexOf("<!--{");
+            var end  = response.indexOf("}-->");
             if(start == -1 || end == -1) console.error("markdownstart"+start+"makrdownend"+end);
-            var json = response.substring(start,end);
-            response = response.substr(end+15);
+            var json = response.substring(start+4,end+1);
+            response = response.substr(end+4);
             var testView = editormd.markdownToHTML("test-markdown-view", {
                 markdown : response, // Also, you can dynamic set Markdown text
                 // htmlDecode : true,  // Enable / disable HTML tag encode.
