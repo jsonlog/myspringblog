@@ -17,3 +17,12 @@ heroku ps
 heroku domains:add www.example.com
 heroku run bash
 ```
+
+```
+server
+
+ Starting process with command `java -Dserver.port=9676 $JAVA_OPTS -jar target/myspringblog-0.0.1-SNAPSHOT.jar`
+  Create a Procfile to customize the command used to run this process: https://devcenter.heroku.com/articles/procfile
+  no main manifest attribute, in target/myspringblog-0.0.1-SNAPSHOT.jar
+
+```
