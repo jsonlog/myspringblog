@@ -1,7 +1,6 @@
 <!--{
     "news_title" : "标题", 
     "timer" : "2017-12-05", 
-    "news_con" : "正文",
     "tagslist" : "sample,示例,samplemd"
 }-->
 # 博客系统
