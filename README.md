@@ -36,7 +36,7 @@
 # 2
 |博客|动态|静态|
 |---|---|---|
-|我的博客|[heroku](https://myspringblog.herokuapp.com/)|[Github Pages](https://jsonlog.github.io/myspringblog)|
+|我的博客|[~~heroku~~](https://myspringblog.herokuapp.com/)|[Github Pages](https://jsonlog.github.io/myspringblog)|
 |数据|json,ajax|x|
 |数据库|mysql,mybatis|x|
 |抢票日历|blog.fest|根据放假规律自动计算抢票日期|
@@ -49,7 +49,7 @@
 |文章标签|支持|同左|
 |评论系统|gitment|同左|
 |other|天气,音乐|同左|
-|todo|倒序,heroku,权限|同左|
+|todo|倒序,权限|同左|
 |缺点|外观:模板扒过来时觉得还可以,现在觉得难看,对前端也不熟||
 
 
