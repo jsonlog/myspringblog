@@ -30,7 +30,7 @@ public class helloController {
 //        System.out.println("jsonlog/index-----------------");
 //        return "jsonlog/index";
 //    }
-    @GetMapping({"","/","/index","/home","/jsonlog/home"})
+    @GetMapping({"","/","/index","/home","/myspringblog","/jsonlog/home"})
     public String index(){
         System.out.println("index-----------------");
         return "redirect:/myspringblog/index.html";

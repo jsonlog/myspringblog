@@ -21,7 +21,7 @@
         <nav>
 <!--            <h2 id="mnavh"><span class="navicon"></span></h2>-->
             <ul id="starlist" style="width:100%;">
-                <li class="menu"><a href="javascript:void(0);" onclick="tagClick();">home</a>
+                <li class="menu"><a href="/myspringblog">home</a>
                     <ul class="sub">
                         <li><a target="_blank" href="https://jsonlog.github.io/myspringblog">Github Pages</a></li>
                         <li><a target="_blank" href="https://myspringblog.herokuapp.com/">Heroku</a></li>
@@ -109,10 +109,11 @@
             // second = minute < 10 ? ('0' + second) : second;
             return y + '年' + m + '月' + d + '日';//+' '+h+':'+minute+':'+ second;
         };
-        function home() {
-            var realloc = location.href;
-            var myloc = realloc.split("?");
-            location.href = myloc[0];
-        }
+        // function home() {
+        //     var realloc = location.href;
+        //     var myloc = realloc.split("?");
+        //     location.href = myloc[0];
+            // tagClick();
+        // }
     </script>
 </header>
