@@ -75,3 +75,6 @@
 # application.properties
 spring.servlet.multipart.max-file-size=128KB
 spring.servlet.multipart.max-request-size=128KB
+
+# schema-@@platform@@.sql
+- -all is the default for all platforms.
