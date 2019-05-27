@@ -26,7 +26,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 //            System.out.println(e);
 //        }
 //        path = path.replace("src/main/resources","docs");
-        registry.addResourceHandler("/**").addResourceLocations("file://"+path).addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/myspringblog/**").addResourceLocations("file://"+path).addResourceLocations("classpath:/static/");
         super.addResourceHandlers(registry);//file:D://User/
         System.out.println(path);
         System.out.println(classes);
