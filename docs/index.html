@@ -45,7 +45,7 @@
             <div id="container"></div>
             <div style="clear: both;"></div>
         </main>
-        <div style="text-align:left;width: 32%;padding-left:30px;display:inline-block;vertical-align: top;">
+        <div id="sidebar" style="text-align:left;width: 32%;padding-left:30px;display:inline-block;vertical-align: top;">
             <iframe class="about" style="padding-bottom: 15px" width="100%" scrolling="no" height="70" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=2&icon=1&num=3&site=12"></iframe>
             <div id="calendar" style="margin-bottom:15px;" onload="fest();">
             </div>
@@ -56,16 +56,35 @@
     <!--  </div>-->
 </div>
 <script>
-    $("#aside").load("/myspringblog/aside.html");
-</script>
-<script>
+    var toload = true;
+    asideload();
+    function asideload(){
+        if(toload)
+            $("#aside").load("/myspringblog/aside.html");
+        toload = false;
+    }
     function aside(blogtagslist) {
-        var cloud = document.getElementById("tag");
-        if(cloud) {
-            blogtagslist.forEach(function (element, index, array) {
-                cloud.innerHTML += '<a href="#" onclick="tagClick(\'' + element + '\');">' + element + '</a>';
-            });
-        }
+        window.wblogtagslist = blogtagslist;
+        // $(document).ready(function () {
+        setTimeout(function () {
+            var cloud = document.getElementById("cloud");
+            // $("#sidebar").attr("style","display:inline-block;");
+            // if(!cloud) asideload();
+            if(!toload) {
+                // var tag = document.getElementById("tag");
+                var count = 0;
+                window.wblogtagslist.forEach(function (currentValue, key, array) {
+                    count++;
+                    cloud.innerHTML += '<a href="#" onclick="tagClick(\'' + currentValue + '\');">' + currentValue + '</a>';
+                    if(count == array.size) {
+                        cloud.innerHTML = '<h2 class="hometitle">标签</h2>\n' +
+                            '        <ul id="tag">'+cloud.innerHTML+ "</ul>";
+                    }
+                });
+                $("#cloud").load();
+            }
+        },5000);
+        // });
     }
 </script>
 <script>
@@ -84,8 +103,8 @@
         var tag = decodeURI(dengyu);//从=号后面的内容
     else if(loc.indexOf("?url=") != -1)
         var url = decodeURI(dengyu);
-    if(url) urlClick(url);
-    else tagClick();
+    tagClick();
+    if(url){urlClick(url);}
     function githubblog() {
         $.ajax({
             url: "https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog",
@@ -112,6 +131,7 @@
         });
     }
     function urlClick(url) {
+        // $("#sidebar").hide();//show() = display:block
         var list = document.getElementsByClassName("bloglist");
         list[0].style.display = "none";
 
@@ -144,8 +164,7 @@
         var list = document.getElementsByClassName("bloglist");
         var ul = document.getElementById("bloglistul");
         var li = ul.getElementsByTagName("li");
-        // if(!tag && )
-        if(li.length == 0){githubblog();}
+        if(li.length == 0){ githubblog();}
         var arr = [];
         for (var i = 0; i < li.length; i++) {
             arr.push(li[i]);
