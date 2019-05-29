@@ -503,7 +503,7 @@
             addRobFestival(Y, y, M, m, d, rest, nextt.getDay());
 
             if (addAutoFestivalFlag == true) {
-                console.log("addAutoFestivalFlag" + addAutoFestivalFlag);
+                // console.log("addAutoFestivalFlag" + addAutoFestivalFlag);
                 //国庆start
                 var flag = ((m == 9) && (d == 29) && (w == 6)) ||//1
                     ((m == 9) && (d == 30) && (w == 0)) ||
@@ -583,7 +583,7 @@
             }
             // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
         }
-        // console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
+        console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
     }
 
     function addRestFestival(Y, y, M, m, d, rest, w) {
@@ -599,7 +599,7 @@
         rest = rest.replace("休", "");
         if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1) {
             addRemindFestival(Y, y, M, m, d, rest);
-            if (rest.indexOf("抢") != -1) addAutoFestival(Y, y, Y, m, d, rest, w);
+            if (rest.indexOf("抢") != -1) addAutoFestival(Y, y, M, m, d, rest, w);
         }
     }
 

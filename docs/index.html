@@ -185,7 +185,7 @@
             return;
         }
         arr.sort(function(a,b){
-            console.log(getDate(a.getAttribute('timer'))+getDate(b.getAttribute('timer'))+(getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))));
+            // console.log(getDate(a.getAttribute('timer'))+getDate(b.getAttribute('timer'))+(getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))));
             return getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))?1:-1;
         });
         ul.innerHTML = "";
