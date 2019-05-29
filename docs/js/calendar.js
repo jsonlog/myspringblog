@@ -347,7 +347,7 @@
         // alert(date);
         $.ajax(//TODO ajax order
             {
-                url: "../fest",
+                url: "/fest",
                 async: false,//time
                 data: {"date": date},
                 type: "get",
@@ -389,7 +389,7 @@
             });
             $.ajax(
                 {
-                    url: "../foreveryear",
+                    url: "/foreveryear",
                     async: false,//time
                     type: "get",
                     dataType: "json",

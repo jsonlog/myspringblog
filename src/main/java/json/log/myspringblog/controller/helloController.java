@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 public class helloController {
-//    @GetMapping("/myspringblog")
-//    public String myspringblog(){
-//        System.out.println("myspringblog-----------------");
-//        return index();
-//    }
+    @GetMapping("/myspringblog")
+    public String myspringblog(){
+        System.out.println("myspringblog-----------------");
+        return "myspringblog/index";
+    }
 //    @GetMapping("/myspringblog/{url}")
 //    public String hello(@PathVariable String url){
 //        System.out.println("helloController-----------------"+url);
@@ -30,9 +30,9 @@ public class helloController {
 //        System.out.println("jsonlog/index-----------------");
 //        return "jsonlog/index";
 //    }
-    @GetMapping({"","/","/index","/home","/myspringblog","/jsonlog/home"})
+    @GetMapping({"","/","/index","/home","/jsonlog/home"})
     public String index(){
         System.out.println("index-----------------");
-        return "redirect:/myspringblog/index.html";
+        return "redirect:/myspringblog";
     }
 }

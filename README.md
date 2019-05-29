@@ -16,8 +16,8 @@
 # 部署
 - 动态版:修改自己的数据库用户名密码,参考mybatis/import.sql生成你的数据库
 - [index](docs/index.html)里面这个[地址](https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog)替换你的id/你的repo
-- 新文章列表是从github网站读取的哦,所以要push到github才能看到新文章,或者可以自己修改上一步涉及的函数进行测试
-- 请参照[gitment说明](https://github.com/imsun/gitment)把代码中client_secret等多个参数修改为自己的,gitment不能在本地测试哦,如果还是有问题,可以考虑gitalk
+- 新文章列表是从github网站读取的哦,所以要push到github才能看到新文章,或者可以自己修改上一步涉及的函数进行**本地测试**
+- 请参照[gitment说明](https://github.com/imsun/gitment)把代码中client_secret等多个参数修改为自己的,gitment不能在**本地测试**哦,如果还是有问题,可以考虑gitalk
 - [settings](https://github.com/jsonlog/myspringblog/settings) -> master banch /docs folder for Github pages
 
 # 感谢
@@ -37,7 +37,7 @@
 # 2
 |博客|动态|静态|
 |---|---|---|
-|我的博客|[~~heroku~~](https://myspringblog.herokuapp.com/)|[Github Pages](https://jsonlog.github.io/myspringblog)|
+|我的博客|[~~服务器~~](https://myspringblog.herokuapp.com/)|[Github Pages](https://jsonlog.github.io/myspringblog)|
 |数据|json,ajax|x|
 |数据库|mysql,mybatis|x|
 |抢票日历|blog.fest|根据放假规律自动计算抢票日期|
@@ -50,8 +50,8 @@
 |文章标签|支持|同左|
 |评论系统|gitment|同左|
 |other|天气,音乐|同左|
-|todo|布局,倒序,权限|同左|
-|缺点|外观:模板扒过来时觉得还可以,现在觉得难看,对前端也不熟||
+|todo|外观,倒序,权限|同左|
+|缺点|布局:模板扒过来时觉得还可以,现在觉得难看,对前端也不熟||
 
 
 ## 请我喝一杯奶茶吧!

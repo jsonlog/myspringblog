@@ -28,8 +28,8 @@ public class YearController {
     @Autowired
     private YearService yearService;
 
-    @RequestMapping("/getyear")
-    public Foreveryear getyear(){ return yearService.getYear();}
+//    @RequestMapping("/getyear")
+//    public Foreveryear getyear(){ return yearService.getYear();}
 
     @RequestMapping("/foreveryear")
     @ResponseBody
