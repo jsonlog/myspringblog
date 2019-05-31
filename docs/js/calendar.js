@@ -405,8 +405,7 @@
                                     if(servergregorianFestival[m + "-" + d].indexOf("~") != -1) {
                                         addRemindFestival(Y, y, M, m, d, servergregorianFestival[m + "-" + d]);
                                         servergregorianFestival[m + "-" + d] = data[i].timing + servergregorianFestival[m + "-" + d];
-                                    }
-                                    else {
+                                    }else {
                                         addRemindFestival(Y, y, M, m, d, data[i].timing);
                                         servergregorianFestival[m + "-" + d] += data[i].timing;
                                     }
@@ -482,9 +481,9 @@
                 calendar.gregorianFestival[m + "-" + d] += "历母亲节~";
             }
             if (M == 6 && w == 0 && d >= 15 && d <= 21) {
-                for (var j = 15; j <= 21; j++) {
-                    delete calendar.gregorianFestival[m + "-" + j];
-                }
+                // for (var j = 15; j <= 21; j++) {
+                //     delete calendar.gregorianFestival[m + "-" + j];
+                // }
                 calendar.gregorianFestival[m + "-" + d] += "历父亲节~";
             }
             addRestFestival(Y, y, M, m, d, xiu + calendar.gregorianFestival[m + "-" + d], w); //all
@@ -575,6 +574,7 @@
     }
 
     function addRemindFestival(Y, y, M, m, d, v) {
+        v = v.replace("temp", "");
         if (Y.toString() == y.toString() && M.toString() == m.toString()) {
             if (v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1) {//for undefine
                 if(v.indexOf("闰") == -1)
@@ -596,7 +596,7 @@
         if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
             rest = rest.replace("节", "休节");
 
-        rest = rest.replace("temp", "");
+        // rest = rest.replace("temp", "");
         addRemindFestival(Y, y, M, m, d, rest);
         if (rest.indexOf("休") != -1) addAutoFestival(Y, y, M, m, d, rest, w);
     }
@@ -747,13 +747,13 @@
 
     /* 获取对应的阴历日期 */
     DateTable.prototype.lunarDay = function () {
-        for (var j = 8; j <= 14; j++) {//TODO
-            delete calendar.gregorianFestival[5 + "-" + j];
-            delete calendar.gregorianFestival["6-" + (j + 7)];
-        }
-        delete calendar.gregorianFestival["4-4"];
-        delete calendar.gregorianFestival["4-5"];
-        delete calendar.gregorianFestival["4-6"];
+        // for (var j = 8; j <= 14; j++) {//TODO
+        //     delete calendar.gregorianFestival[5 + "-" + j];
+        //     delete calendar.gregorianFestival["6-" + (j + 7)];
+        // }
+        // delete calendar.gregorianFestival["4-4"];
+        // delete calendar.gregorianFestival["4-5"];
+        // delete calendar.gregorianFestival["4-6"];
         var lunar = calendar.calendarConvert(this.Y, this.M, 1);
         var info = calendar.getLunarYearDays(lunar[1]);
         var temp = "";
@@ -782,8 +782,12 @@
             var W = new Date(this.Y + "/" + this.M + "/" + (i + 1)).getDay();
             // if(this.M == 5 && W == 0 && (i+1) >=8 && (i+1) <=14) temp2 += "母亲节";
             // if(this.M == 6 && W == 0 && (i+1) >=15 && (i+1) <=21) temp2 += "父亲节";
-            if (calendar.lunarFestival[lunar[2] + "-" + lunar[3]] && lunar[0] == 0) temp2 += calendar.lunarFestival[lunar[2] + "-" + lunar[3]].replace("~", "").replace("班", "").replace("休", "");
             if (calendar.gregorianFestival[this.M + "-" + (i + 1)]) temp2 += calendar.gregorianFestival[this.M + "-" + (i + 1)].replace("~", "").replace(/^.*节[休班]/, "").replace("休", "");
+            if (calendar.lunarFestival[lunar[2] + "-" + lunar[3]]){ 
+                var show = calendar.lunarFestival[lunar[2] + "-" + lunar[3]].replace("~", "").replace("班", "").replace("休", "");
+                if(lunar[0] == 0 && temp2.indexOf(show) == -1)
+                temp2 += show;
+            }
 
             // console.log(temp2);
             if (solarTerms) temp2 += solarTerms;
