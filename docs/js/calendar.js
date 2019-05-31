@@ -582,10 +582,10 @@
 
     function addRemindFestival(Y, y, M, m, d, v) {
         console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
+        v = v.replace("temp", "");//.replace("undefined", "");
         if (Y.toString() == y.toString() && M.toString() == m.toString()) {
             // if (v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1) {//for undefine
-            if (v.indexOf("undefined") == -1){
-                v = v.replace("temp", "");//.replace("undefined", "");
+            if (v.indexOf("undefined") == -1 && v != ""){
                 if(v.indexOf("闰") == -1)
                     configDayM["D" + d] += v;
                 else if(v.indexOf("农历") != -1){
