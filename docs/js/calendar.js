@@ -1104,23 +1104,32 @@
             // this[0].myTitle = this[0].title;
             // this[0].title = "";
             var ClickDays= date.getDate();
-            var until = new Date(untilYear + "/" + untilMonth + "/" + untilDay);
-            var time = until.getTime() - date.getTime();
-            var year = until.getFullYear() - date.getFullYear(); //366
-            var day = parseInt(time / (1000 * 60 * 60 * 24));
-            var hour = parseInt(day*24);
-            var week = parseInt(day/7);
-            var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
-            //创建div元素
-            var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
-                + year + "次生日<br>"
-                + month + "月<br>"
-                + week + "周<br>"
-                + day + "天<br>"
-                + hour + "小时<br>"
-                + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
+            // var until = new Date(untilYear + "/" + untilMonth + "/" + untilDay);
+            // var time = until.getTime() - date.getTime();
+            // var day = parseInt(time / (1000 * 60 * 60 * 24));
+            // var year = until.getFullYear() - date.getFullYear(); //366
+            // var hour = parseInt(day*24);
+            // var week = parseInt(day/7);
+            // var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
+            try{
+                var daysClickDays = document.getElementById("days"+ClickDays);
+                var lunarclass = daysClickDays.getElementsByClassName("lunar")[0];
+                //创建div元素
+                // var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
+                //     + year + "次生日<br>"
+                //     + month + "月<br>"
+                //     + week + "周<br>"
+                //     + day + "天<br>"
+                //     + hour + "小时<br>"
+                //     + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
+                //     + "</div>"
+                var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
+                + lunarclass.innerText
                 + "</div>"
-            $("body").append(tooltip);
+                $("body").append(tooltip);
+            }catch(ex){
+
+            }
             $("#tooltip"+ClickDays).css({"top": (e.pageY + mousey) + "px", "left": (e.pageX + mousex) + "px"}).show('fast');
         }, "titleOut": function () {
             // this[0].title = this[0].myTitle;
