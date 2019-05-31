@@ -461,9 +461,9 @@
         calendar.gregorianFestival = gregorianFestivalGlobal;
         calendar.lunarFestival = lunarFestivalGlobal;
         // console.log(calendar.gregorianFestival);
+        addqingming(Y);
 
         getfest(Y, M);
-        addqingming(Y);
         var date = new Date(Y + "/" + M + "/" + 1);
         date.setDate(date.getDate() - 4);
         for (var D = 1; D < (days + 7); D++) {
@@ -476,9 +476,9 @@
             var lunar = calendar.calendarConvert(y, m, d);
 
             if (M == 5 && w == 0 && d >= 8 && d <= 14) {
-                for (var j = 8; j <= 14; j++) {
-                    delete calendar.gregorianFestival[m + "-" + j];
-                }
+                // for (var j = 8; j <= 14; j++) {
+                //     delete calendar.gregorianFestival[m + "-" + j];
+                // }
                 calendar.gregorianFestival[m + "-" + d] += "历母亲节~";
             }
             if (M == 6 && w == 0 && d >= 15 && d <= 21) {
@@ -488,7 +488,8 @@
                 calendar.gregorianFestival[m + "-" + d] += "历父亲节~";
             }
             addRestFestival(Y, y, M, m, d, xiu + calendar.gregorianFestival[m + "-" + d], w); //all
-            addRestFestival(Y, y, M, m, d, xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]], w); //all
+            // if(lunar[0] == 0)//闰
+            addRestFestival(Y, y, M, m, d, xiu + (lunar[0] == 1?"闰":"") + calendar.lunarFestival[lunar[2] + "-" + lunar[3]], w); //all
 
             var xiu = "抢";
             var nextt = new Date(y + "/" + m + "/" + d);
@@ -499,7 +500,7 @@
             nextt = new Date(y + "/" + m + "/" + d);
             nextt.setDate(nextt.getDate() + 29);
             lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
-            rest = xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
+            rest = xiu + (lunar[0] == 1?"闰":"") + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
             addRobFestival(Y, y, M, m, d, rest, nextt.getDay());
 
             if (addAutoFestivalFlag == true) {
@@ -539,7 +540,7 @@
                         nextt.setDate(nextt.getDate() - 1);
                     }
                     lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
-                    rest = xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
+                    rest = xiu + (lunar[0] == 1?"闰":"") + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
                     if (rest.indexOf("春节") != -1) {
                         addRemindFestival(Y, y, M, m, d, rest);//,nextt.getDay());
                     }
@@ -564,7 +565,7 @@
                     nextt.setDate(nextt.getDate() - 1);
                     if (k > 5 && k < 12) continue;
                     lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
-                    rest = xiu + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
+                    rest = xiu + (lunar[0] == 1?"闰":"") + calendar.lunarFestival[lunar[2] + "-" + lunar[3]];
                     if (rest.indexOf("春节") != -1) {
                         addRemindFestival(Y, y, M, m, d, rest);//,nextt.getDay());
                     }
@@ -576,7 +577,12 @@
     function addRemindFestival(Y, y, M, m, d, v) {
         if (Y.toString() == y.toString() && M.toString() == m.toString()) {
             if (v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1) {//for undefine
-                configDayM["D" + d] += v;
+                if(v.indexOf("闰") == -1)
+                    configDayM["D" + d] += v;
+                else if(v.indexOf("农历") != -1){
+                    configDayM["D" + d] += v;
+                    alert("闰月生日"+"Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);//2052 2071
+                }
                 if ((v.replace("休节", "节休").split("节休")).length > 2) {
                     alert("两个节假日重叠,请手动核实" + v);//TODO
                 }
@@ -741,7 +747,7 @@
 
     /* 获取对应的阴历日期 */
     DateTable.prototype.lunarDay = function () {
-        for (var j = 8; j <= 14; j++) {
+        for (var j = 8; j <= 14; j++) {//TODO
             delete calendar.gregorianFestival[5 + "-" + j];
             delete calendar.gregorianFestival["6-" + (j + 7)];
         }
@@ -776,7 +782,7 @@
             var W = new Date(this.Y + "/" + this.M + "/" + (i + 1)).getDay();
             // if(this.M == 5 && W == 0 && (i+1) >=8 && (i+1) <=14) temp2 += "母亲节";
             // if(this.M == 6 && W == 0 && (i+1) >=15 && (i+1) <=21) temp2 += "父亲节";
-            if (calendar.lunarFestival[lunar[2] + "-" + lunar[3]]) temp2 += calendar.lunarFestival[lunar[2] + "-" + lunar[3]].replace("~", "").replace("班", "").replace("休", "");
+            if (calendar.lunarFestival[lunar[2] + "-" + lunar[3]] && lunar[0] == 0) temp2 += calendar.lunarFestival[lunar[2] + "-" + lunar[3]].replace("~", "").replace("班", "").replace("休", "");
             if (calendar.gregorianFestival[this.M + "-" + (i + 1)]) temp2 += calendar.gregorianFestival[this.M + "-" + (i + 1)].replace("~", "").replace(/^.*节[休班]/, "").replace("休", "");
 
             // console.log(temp2);
