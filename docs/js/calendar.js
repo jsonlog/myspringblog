@@ -440,17 +440,18 @@
     [{"id":18,"timing":"rest","cal":"2019-05-01T00:00:00.000+0000"},{"id":19,"timing":"rest","cal":"2019-05-02T00:00:00.000+0000"}]
      */
     function addqingming(Y) {
+        var m = 4;
         var coefficient = [5.15, 5.37, 5.59, 4.82, 5.02, 5.26, 5.48, 4.70, 4.92, 5.135, 5.36, 4.60, 4.81, 5.04, 5.26];
         var cd = parseInt(Y / 100 - 17);
         var mod = parseInt(Y % 100);
         var qingming = parseInt(mod * 0.2422 + coefficient[cd] - parseInt(mod / 4));
-        // delete calendar.gregorianFestival["4-4"];
-        // delete calendar.gregorianFestival["4-5"];
-        // delete calendar.gregorianFestival["4-6"];
-        if(calendar.gregorianFestival[4 + "-" + qingming] && calendar.gregorianFestival[4 + "-" + qingming].indexOf("清明节") == -1)
-            calendar.gregorianFestival[4 + "-" + qingming] += "清明节";//TODO
-        if(!calendar.gregorianFestival[4 + "-" + qingming])
-            calendar.gregorianFestival[4 + "-" + qingming] = "清明节";
+        for (var j = 4; j <= 6; j++) {
+            if(calendar.gregorianFestival[m + "-" + j])
+                calendar.gregorianFestival[m + "-" + j] = calendar.gregorianFestival[m + "-" + j].replace("清明节","");
+        }
+        if(!calendar.gregorianFestival[m + "-" + qingming])
+            calendar.gregorianFestival[m + "-" + qingming] = "";
+        calendar.gregorianFestival[m + "-" + qingming] += "清明节";//TODO
         // alert(qingming+""+calendar.gregorianFestival[4+"-"+qingming]);
     }
 
@@ -475,15 +476,21 @@
             var lunar = calendar.calendarConvert(y, m, d);
 
             if (M == 5 && w == 0 && d >= 8 && d <= 14) {
-                // for (var j = 8; j <= 14; j++) {
-                //     delete calendar.gregorianFestival[m + "-" + j];
-                // }
+                for (var j = 8; j <= 14; j++) {
+                    if(calendar.gregorianFestival[m + "-" + j])
+                        calendar.gregorianFestival[m + "-" + j] = calendar.gregorianFestival[m + "-" + j].replace("历母亲节~","");
+                }
+                if(!calendar.gregorianFestival[m + "-" + d])
+                    calendar.gregorianFestival[m + "-" + d] = "";
                 calendar.gregorianFestival[m + "-" + d] += "历母亲节~";
             }
             if (M == 6 && w == 0 && d >= 15 && d <= 21) {
-                // for (var j = 15; j <= 21; j++) {
-                //     delete calendar.gregorianFestival[m + "-" + j];
-                // }
+                for (var j = 15; j <= 21; j++) {
+                    if(calendar.gregorianFestival[m + "-" + j])
+                        calendar.gregorianFestival[m + "-" + j] = calendar.gregorianFestival[m + "-" + j].replace("历父亲节~","");
+                }
+                if(!calendar.gregorianFestival[m + "-" + d])
+                    calendar.gregorianFestival[m + "-" + d] = "";
                 calendar.gregorianFestival[m + "-" + d] += "历父亲节~";
             }
             addRestFestival(Y, y, M, m, d, xiu + calendar.gregorianFestival[m + "-" + d], w); //all
@@ -574,9 +581,11 @@
     }
 
     function addRemindFestival(Y, y, M, m, d, v) {
-        v = v.replace("temp", "");
+        console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
         if (Y.toString() == y.toString() && M.toString() == m.toString()) {
-            if (v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1) {//for undefine
+            // if (v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1) {//for undefine
+            if (v.indexOf("undefined") == -1){
+                v = v.replace("temp", "");//.replace("undefined", "");
                 if(v.indexOf("闰") == -1)
                     configDayM["D" + d] += v;
                 else if(v.indexOf("农历") != -1){
@@ -589,7 +598,6 @@
             }
             // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
         }
-        console.log("Y" + Y + "y" + y + "M" + M + "m" + m + "D" + d + "v" + v);
     }
 
     function addRestFestival(Y, y, M, m, d, rest, w) {
