@@ -720,19 +720,19 @@
                 if (options.day) {
                     if (v.indexOf("历") != -1) {
                         $("#days" + D).append("<div class=\"xbgj\" xbgj=\"1\" style=\"position: absolute;\"><div class=\"day\" style=\"top:" +
-                            -parseInt((height - 16) / (count + 1) - 2 - 28) + "px;left:" + parseInt(0) + "px;background-color: #1E90FF\">生</div></div>");
+                        -parseInt((height - 16) / (count + 1) - 2 -28) + "px;background-color: #1E90FF\">生</div></div>");//28
                     }
                 }
                 if (options.fest) {
                     if (v.indexOf("~") != -1) {
                         $("#days" + D).append("<div class=\"xbgj\" xbgj=\"1\" style=\"position: absolute;\"><div class=\"fest\" style=\"top:" +
-                            -parseInt((height - 16) / (count + 1) - 2) + "px;left:" + parseInt(55) + "px;background-color: #ADFF2F\">节</div></div>");
+                            -parseInt((height - 16) / (count + 1) - 2) + "px;left:" + parseInt(37) + "px;background-color: #ADFF2F\">节</div></div>");//55
                     }
                 }
                 if (options.bypass) {
                     if (v.indexOf("抢") != -1) {
                         $("#days" + D).append("<div class=\"xbgj\" xbgj=\"1\" style=\"position: absolute;\"><div class=\"bypass\" style=\"top:" +
-                            -parseInt((height - 16) / (count + 1) - 2 - 28) + "px;left:" + parseInt(55) + "px;background-color: #0000FF\">抢</div></div>");
+                        -parseInt((height - 16) / (count + 1) - 2 -28) + "px;left:" + parseInt(37) + "px;background-color: #0000FF\">抢</div></div>");
                     }
                 }
             });
