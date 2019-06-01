@@ -268,9 +268,9 @@
     var isclick = false;
     var addAutoFestivalFlag = true;
     var foreveryearFlag = false;
-    var untilYear = 2049;
-    var untilMonth = 12;
-    var untilDay = 31;
+    var untilYear = 1990;
+    var untilMonth = 1;
+    var untilDay = 1;
     //默认鼠标坐标
     var mousex = 10;
     var mousey = 20;
@@ -567,7 +567,9 @@
                 }
                 nextt = new Date(y + "/" + m + "/" + d);
                 nextt.setDate(nextt.getDate() + 29 + 8); //比除夕放假前29天提前6天开抢
-                for (var k = 0; k < 15; k++) {//24(0) 25(1) 26(2) 27(3) 28(4) 29(5) ---初一(7)---  6(12) 7 8
+                for (var k = 0; k < 15; k++) {
+                    //23(0) 24(1) 25(2) 26(3) 27(4) 28(5) ---初一(6)---  6(29+1 -> 11+1) 7 8
+                    //24(0) 25(1) 26(2) 27(3) 28(4) 29(5) ---初一(7)---  6(12) 7 8
                     nextt.setDate(nextt.getDate() - 1);
                     if (k > 5 && k < 12) continue;
                     lunar = calendar.calendarConvert(nextt.getFullYear(), nextt.getMonth() + 1, nextt.getDate());
@@ -1104,27 +1106,29 @@
             // this[0].myTitle = this[0].title;
             // this[0].title = "";
             var ClickDays= date.getDate();
-            // var until = new Date(untilYear + "/" + untilMonth + "/" + untilDay);
-            // var time = until.getTime() - date.getTime();
-            // var day = parseInt(time / (1000 * 60 * 60 * 24));
-            // var year = until.getFullYear() - date.getFullYear(); //366
-            // var hour = parseInt(day*24);
-            // var week = parseInt(day/7);
-            // var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
+            var until = new Date(untilYear + "/" + untilMonth + "/" + untilDay);
+            var time = date.getTime() - until.getTime();
+            var day = parseInt(time / (1000 * 60 * 60 * 24));
+            var year = date.getFullYear() - until.getFullYear(); //366
+            var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
+            var week = parseInt(day/7);
+            var hour = parseInt(day*24);
+            var minute = parseInt(day*24*60);
             try{
                 var daysClickDays = document.getElementById("days"+ClickDays);
                 var lunarclass = daysClickDays.getElementsByClassName("lunar")[0];
                 //创建div元素
                 // var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
-                //     + year + "次生日<br>"
-                //     + month + "月<br>"
-                //     + week + "周<br>"
-                //     + day + "天<br>"
-                //     + hour + "小时<br>"
                 //     + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
                 //     + "</div>"
                 var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
-                + lunarclass.innerText
+                + lunarclass.innerText +"<br>"
+                + year + "次<br>"
+                + month + "月<br>"
+                + week + "周<br>"
+                + day + "天<br>"
+                + hour + "时<br>"
+                + minute + "分<br>"
                 + "</div>"
                 $("body").append(tooltip);
             }catch(ex){

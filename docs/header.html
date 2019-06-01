@@ -63,8 +63,8 @@
     <script type="text/javascript">
         displayTime();
         var untilYear = 2049;
-        var untilMonth = 12;
-        var untilDay = 31;
+        var untilMonth = 10;
+        var untilDay = 1;
         function displayTime(){
             //1.获取div元素
             var timeDiv=document.getElementById("time");
@@ -82,8 +82,8 @@
             var month = parseInt(time / (1000 * 60 * 60 * 24 * 30));
             var strNowTime=date.toString();//现在是Sat May 11 2019 19:21:30 GMT+0800 (China Standard Time)
             //3.将系统时间设置到div元素中
-            timeDiv.innerText="现在是"+formatDate(date)+" "+strNowTime.match("[0-9]{2}:[0-9]{2}:[0-9]{2}")
-                + "   距离"+untilYear+"年"+untilMonth+"月还有"//+untilDay+"日"
+            timeDiv.innerText="^_^现在是"+formatDate(date)+" "+strNowTime.match("[0-9]{2}:[0-9]{2}:[0-9]{2}")
+                + "   距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日还有"//+untilDay+"日"
                 + year + "年="
                 + month + "个月="
                 + week + "周="
