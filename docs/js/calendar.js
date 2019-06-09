@@ -13,7 +13,7 @@
         "11-1": "万圣节~",
         "11-11": "双11~",
         "12-12": "双12~",
-        "12-24": "平安夜~苹果",
+        "12-24": "平果安夜~",
         "12-25": "圣诞节~",
 
         "1-1": "元旦节",//TODO
@@ -588,14 +588,20 @@
         if (Y.toString() == y.toString() && M.toString() == m.toString()) {
             // if (v.indexOf("节") != -1 || v.indexOf("历") != -1 || v.indexOf("~") != -1 || v.indexOf("抢") != -1) {//for undefine
             if (v.indexOf("undefined") == -1 && v != ""){
-                if(v.indexOf("闰") == -1)
-                    configDayM["D" + d] += v;
-                else if(v.indexOf("农历") != -1){
-                    configDayM["D" + d] += v;
-                    alert("闰月生日"+"Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);//2052 2071
+                if(configDayM["D" + d] && (configDayM["D" + d].indexOf(v) != -1 || v.indexOf(configDayM["D" + d]) != -1)){}else{
+                    if(v.indexOf("闰") == -1)
+                        configDayM["D" + d] = configDayM["D" + d]?configDayM["D" + d]+v:v;
+                    else if(v.indexOf("农历") != -1){
+                        configDayM["D" + d] = configDayM["D" + d]?configDayM["D" + d]+v:v;
+                        alert("闰月生日"+"Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);//2052 2071
+                    }
                 }
-                if ((v.replace("休节", "节休").split("节休")).length > 2) {
-                    alert("两个节假日重叠,请手动核实" + v);//TODO
+                if(configDayM["D"+d]) {
+                    if ((configDayM["D" + d].split(/节[休班]/)).length > 2) {
+                //     if (configDayM["D" + d].replace(/休节/g, "节休").split("节休").length > 2) {//map(_.trim([string=''], [chars=whitespace]))
+                        if(addAutoFestivalFlag == true)
+                        console.log("两个节假日重叠,请人工核实自动计算的结果" + configDayM["D"+d]);//TODO
+                    }
                 }
             }
             // alert("Y"+Y+"y"+y+"M"+M+"m"+m+"D"+d+"v"+v);
@@ -603,8 +609,8 @@
     }
 
     function addRestFestival(Y, y, M, m, d, rest, w) {
-        if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1)
-            rest = rest.replace("节", "休节");
+        if (rest.indexOf("节") != -1 && rest.indexOf("~") == -1 && rest.indexOf("班") == -1 && rest.indexOf("节休") == -1)
+            rest = rest.replace("节", "节休");
 
         // rest = rest.replace("temp", "");
         addRemindFestival(Y, y, M, m, d, rest);
@@ -930,7 +936,7 @@
     //         temp += calendar.lunarDayStrFirst[parseInt(lunar[3] / 10)] + " " + calendar.lunarDayStrLast[lunar[3] % 10]
     //     }
     //     html += "<div class=\"uld\">" + temp + "</div>";
-    //     html += getLunrYMD(lunar, Y, M);
+    //     html += "<div class=\"ultd\">" + getLunarYMD(lunar, Y, M) + "</div>";
     //     html += getJR(lunar, Y, M);
     //     if (isclick) {
     //         html += "<input type=\"button\" style=\"width:100%;\" value=\"保  存\" class=\"saveChange\" />";
@@ -1004,7 +1010,7 @@
     }
 
     // 获取对应的阴历年月日
-    function getLunrYMD(lunar, Y, M) {
+    function getLunarYMD(lunar, Y, M) {
         var html = "";
         var tempY = Y;
         // 公元4年是甲子年  每年从立春更替   立春在2月
@@ -1020,10 +1026,17 @@
         var tempM = calendar.monthTD[calendar.Gan[(tempY - 4) % 10]];
         // 1900-01-01 是甲戌日  0,10
         var tempD = (calendar.gregorianCalendar(Y, M, ClickDays) + 30) % 60;
-        html += "<div class=\"ultd\">" + calendar.Gan[ganKey] + calendar.Zhi[zhiKey] + "年 【" + calendar.Animals[zhiKey] + "年】 " +
+        html += calendar.Gan[ganKey] + calendar.Zhi[zhiKey] + "年 【" + calendar.Animals[zhiKey] + "年】 " +
             calendar.Gan[(tgCount % 10 + tempM[0]) % 10] + calendar.Zhi[(tgCount % 12 + tempM[1]) % 12] + "月 " +
-            calendar.Gan[(tempD % 10) % 10] + calendar.Zhi[(tempD % 12 + 10) % 12] + "日</div>";
+            calendar.Gan[(tempD % 10) % 10] + calendar.Zhi[(tempD % 12 + 10) % 12] + "日";
         return html;
+    }
+    function getLunarYMDate(date) {
+        var Y = date.getFullYear();
+        var M = date.getMonth() + 1;
+        var ClickDays = date.getDate();
+        var lunar = calendar.calendarConvert(Y, M, ClickDays);
+        return getLunarYMD(lunar,Y,M);
     }
 
     // 右键菜单点击事件
@@ -1122,6 +1135,7 @@
                 //     + "距离"+untilYear+"年"+untilMonth+"月"+untilDay+"日"
                 //     + "</div>"
                 var tooltip = "<div id='tooltip"+ClickDays+"' style='border:1px solid #000000;width:auto;position:absolute;'>"
+                + getLunarYMDate(date) +"<br>"
                 + lunarclass.innerText +"<br>"
                 + year + "次<br>"
                 + month + "月<br>"

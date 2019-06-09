@@ -78,3 +78,9 @@ spring.servlet.multipart.max-request-size=128KB
 
 # schema-@@platform@@.sql
 - -all is the default for all platforms.
+
+# Web Services 
+基于REST的软件体系结构风格RESTful（Software Architecture Style）称之为面向资源体系架构（Resource-oriented Architecture，ROA）
+WSDL 指网络服务描述语言 (Web Services Description Language)。 WSDL 是一种使用 XML编写的文档.     
+SOAP 简单对象访问协议(Simple Object Access Protocol)一种简单的基于 XML 的协议，它使应用程序通过 HTTP 来交换信息。可以传递结构化的 数据,要进行xml解析.      
+XML-RPC
