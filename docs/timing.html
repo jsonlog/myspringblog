@@ -120,6 +120,7 @@
 We will create a family tree using just CSS(3)
 The markup will be simple nested lists
 -->
+<div id="alltree">
 <div class="tree">
     <ul>
         <li>
@@ -158,5 +159,29 @@ The markup will be simple nested lists
         </li>
     </ul>
 </div>
+</div>
+<script src="/myspringblog/js/jquery.min.js" ></script>
+<script>
+    var div = document.getElementById("alltree");
+    $.ajax({
+        url: "https://github.com/jsonlog/tomorrow/raw/master/timing.html",
+        async: false,//time
+        data: {},
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            if (data != null) {
+                console.log(data);
+                var start = data.indexOf("<body>");
+                var end  = data.indexOf("</body>");
+                var json = data.substring(start+6,end);
+                div.innerHTML = json;
+            }
+        },
+        error: function () {
+            console.log("timingerror");
+        }
+    });
+</script>
 </body>
 </html>
