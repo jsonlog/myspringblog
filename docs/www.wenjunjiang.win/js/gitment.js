@@ -3085,12 +3085,13 @@ function renderEditor(_ref3, instance) {
     if (!content) {
       preview.innerText = 'Nothing to preview';
       return;
+    }else {
+        preview.innerText = 'Loading preview...';
+        instance.markdown(content).then(function (html) {
+            return
+            preview.innerHTML = html;
+        });
     }
-
-    preview.innerText = 'Loading preview...';
-    instance.markdown(content).then(function (html) {
-      return preview.innerHTML = html;
-    });
   };
 
   var submitButton = container.querySelector('.gitment-editor-submit');

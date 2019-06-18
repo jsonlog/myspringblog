@@ -52,9 +52,3 @@
 |other|天气,音乐|同左|
 |todo|外观,倒序,权限|同左|
 |缺点|布局:模板扒过来时觉得还可以,现在觉得难看,对前端也不熟||
-
-
-## 请我喝一杯奶茶吧!
-|\>|_|<|
-|---|---|---|
-|![image](docs/images/payali.jpg)|![image](docs/images/paywechat.jpg)|![image](docs/images/payredpacket.jpg)|
