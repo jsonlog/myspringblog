@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" http-equiv="Access-Control-Allow-Origin" content="*" />
     <title>Family</title>
     <div style='white-space:nowrap;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>我不换行我不换行我不换行我不换行我不换行我不换行我不换行我不换行我不换行我不换行我不不换行我不换行我不换行我不换行我不不换行我不换行我不换行我不换行我不不换行我不换行我不换行我不换行我不不换行我不换行我不换行我不换行我不不换行我不换行我不换行我不换行我不换行</div>
     <div style='display: none'>
@@ -163,25 +163,42 @@ The markup will be simple nested lists
 <script src="/myspringblog/js/jquery.min.js" ></script>
 <script>
     var div = document.getElementById("alltree");
-    $.ajax({
-        url: "https://github.com/jsonlog/tomorrow/raw/master/timing.html",
-        async: false,//time
-        data: {},
-        type: "get",
-        dataType: "json",
-        success: function (data) {
-            if (data != null) {
-                console.log(data);
-                var start = data.indexOf("<body>");
-                var end  = data.indexOf("</body>");
-                var json = data.substring(start+6,end);
-                div.innerHTML = json;
+
+        $.ajax({
+            url: "https://api.github.com/repos/jsonlog/tomorrow/contents/timing.html?access_token=",
+            async: false,//time
+            data: {},
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                var blog = [];
+                if (data != null) {
+                    var download = data.download_url.toString();
+                    console.log(download);
+                    $.ajax({
+                        url: download,
+                        async: false,//time
+                        data: {},
+                        type: "get",
+                        success: function (data) {
+                            if (data != null) {
+                                console.log(data);
+                                var start = data.indexOf("<body>");
+                                var end  = data.indexOf("</body>");
+                                var json = data.substring(start+6,end);
+                                div.innerHTML = json;
+                            }
+                        },
+                        error: function () {
+                            console.log("timingerror");
+                        }
+                    });
+                }
+            },
+            error: function () {
+                console.log("download_urlTimingerror");
             }
-        },
-        error: function () {
-            console.log("timingerror");
-        }
-    });
+        });
 </script>
 </body>
 </html>
