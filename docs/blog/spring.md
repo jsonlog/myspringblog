@@ -213,11 +213,34 @@ If you do not want command line properties to be added to the Environment, you c
 If you do not want command line properties to be added to the Environment, you can disable them by using SpringApplication.setAddCommandLineProperties(false).
 ```
 ```
+spring.profiles.active
+app.name=MyApp
+app.description=${app.name} is a Spring Boot application
 24.3 Application Property Files
 $ java -jar myproject.jar --spring.config.name=myproject
 $ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
-
+spring.config.additional-location are searched before the default locations.Config locations are searched in reverse order. 
 ```
+
+```24.7.1 Loading YAML
+
+YAML lists are represented as property keys with [index] dereferencers. For example, consider the following YAML:
+
+my:
+servers:
+	- dev.example.com
+	- another.example.com
+The preceding example would be transformed into these properties:
+
+my.servers[0]=dev.example.com
+my.servers[1]=another.example.com
+```
+
+
+
+
+
+
 # [spring-boot-starter](https://github.com/spring-projects/spring-boot/tree/v2.1.6.RELEASE/spring-boot-project/spring-boot-starters)
 
 
@@ -243,7 +266,7 @@ $ java -jar myproject.jar --spring.config.location=classpath:/default.properties
 - @Repository
 - @Controller
 - @ConfigurationProperties
-- @PropertySource
+- @PropertySource(YAML files cannot be loaded by using the @PropertySource annotation.)
 - @TestPropertySource
 - @SpringBootTest
 - @Value("${name}")
