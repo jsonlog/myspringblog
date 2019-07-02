@@ -235,7 +235,102 @@ The preceding example would be transformed into these properties:
 my.servers[0]=dev.example.com
 my.servers[1]=another.example.com
 ```
+```
+24.8.2 Relaxed Binding
+acme:
+  map:
+    "[/key1]": value1
+    "[/key2]": value2
+    /key3: value3
+The properties above will bind to a Map with /key1, /key2 and key3 as the keys in the map.
 
+```
+```
+--trace flag (or trace=true)
+spring.output.ansi.enabled
+%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){yellow}
+logging.file.max-size
+logging.file.max-history
+logging.level.root=WARN
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate=ERROR
+logging.group.tomcat=org.apache.catalina, org.apache.coyote, org.apache.tomcat
+logging.level.tomcat=TRACE
+the LOG_LEVEL_PATTERN (or logging.pattern.level with Logback)
+
+26. Logging
+
+logback,Java Util Logging, Commons Logging, Log4J, or SLF4J 
+
+```
+```
+27. Internationalization
+
+spring.messages.basename=messages,config.i18n.messages
+spring.messages.fallback-to-system-locale=false
+```
+```
+28. JSON
+Spring Boot provides integration with three JSON mapping libraries:
+
+Gson
+Jackson
+JSON-B
+```
+```
+29.1.4 MessageCodesResolver
+Spring MVC has a strategy for generating error codes for rendering error messages from binding errors: MessageCodesResolver. If you set the spring.mvc.message-codes-resolver.format property PREFIX_ERROR_CODE or POSTFIX_ERROR_CODE, Spring Boot creates one for you (see the enumeration in DefaultMessageCodesResolver.Format).
+```
+```
+29.1.5 Static Content
+spring.mvc.static-path-pattern=/resources/**
+spring.resources.static-locations
+spring.resources.chain.strategy.content.enabled=true
+spring.resources.chain.strategy.content.paths=/**
+spring.resources.chain.strategy.fixed.enabled=true
+spring.resources.chain.strategy.fixed.paths=/js/lib/
+spring.resources.chain.strategy.fixed.version=v12
+```
+```
+29.1.8 Path Matching and Content Negotiation
+spring.mvc.contentnegotiation.favor-parameter=true
+
+# We can change the parameter name, which is "format" by default:
+# spring.mvc.contentnegotiation.parameter-name=myparam
+
+# We can also register additional file extensions/media types with:
+spring.mvc.contentnegotiation.media-types.markdown=text/markdown
+
+# You can also register additional file extensions/media types with:
+# spring.mvc.contentnegotiation.media-types.adoc=text/asciidoc
+```
+```
+30.3.1 Client
+spring.security.oauth2.client.registration.my-client-1.client-id=abcd
+spring.security.oauth2.client.registration.my-client-1.client-secret=password
+spring.security.oauth2.client.registration.my-client-1.client-name=Client for user scope
+spring.security.oauth2.client.registration.my-client-1.provider=my-oauth-provider
+spring.security.oauth2.client.registration.my-client-1.scope=user
+spring.security.oauth2.client.registration.my-client-1.redirect-uri-template=https://my-redirect-uri.com
+spring.security.oauth2.client.registration.my-client-1.client-authentication-method=basic
+spring.security.oauth2.client.registration.my-client-1.authorization-grant-type=authorization_code
+
+spring.security.oauth2.client.registration.my-client-2.client-id=abcd
+spring.security.oauth2.client.registration.my-client-2.client-secret=password
+spring.security.oauth2.client.registration.my-client-2.client-name=Client for email scope
+spring.security.oauth2.client.registration.my-client-2.provider=my-oauth-provider
+spring.security.oauth2.client.registration.my-client-2.scope=email
+spring.security.oauth2.client.registration.my-client-2.redirect-uri-template=https://my-redirect-uri.com
+spring.security.oauth2.client.registration.my-client-2.client-authentication-method=basic
+spring.security.oauth2.client.registration.my-client-2.authorization-grant-type=authorization_code
+
+spring.security.oauth2.client.provider.my-oauth-provider.authorization-uri=http://my-auth-server/oauth/authorize
+spring.security.oauth2.client.provider.my-oauth-provider.token-uri=http://my-auth-server/oauth/token
+spring.security.oauth2.client.provider.my-oauth-provider.user-info-uri=http://my-auth-server/userinfo
+spring.security.oauth2.client.provider.my-oauth-provider.user-info-authentication-method=header
+spring.security.oauth2.client.provider.my-oauth-provider.jwk-set-uri=http://my-auth-server/token_keys
+spring.security.oauth2.client.provider.my-oauth-provider.user-name-attribute=name
+```
 
 
 
@@ -257,6 +352,7 @@ my.servers[1]=another.example.com
 - @RequestMapping("/")
 - @GetMapping
 - @PostMapping
+- @DeleteMapping
 - @ComponentScan = @Component +
 - @Import({ MyConfig.class, MyAnotherConfig.class }) = @Component
 - @ImportResource xml
@@ -265,11 +361,33 @@ my.servers[1]=another.example.com
 - @Service
 - @Repository
 - @Controller
-- @ConfigurationProperties
+- @Bean
+- @ConfigurationProperties(prefix="acme") @ConfigurationProperties("acme")
+- @Validated
+- @Valid
+- @NotNull
+- @NotEmpty
+- @Profile("production") --spring.profiles.active=dev,hsqldb
+- @EnableConfigurationProperties(AcmeProperties.class)
 - @PropertySource(YAML files cannot be loaded by using the @PropertySource annotation.)
 - @TestPropertySource
 - @SpringBootTest
 - @Value("${name}")
+- @PostConstruct
+- @DurationUnit(ChronoUnit.SECONDS) private Duration sessionTimeout = Duration.ofSeconds(30);
+- @DataSizeUnit(DataUnit.MEGABYTES)	private DataSize bufferSize = DataSize.ofMegabytes(2);
+- @JsonComponent //jackson JsonSerializer
+- @ControllerAdvice(basePackageClasses = AcmeController.class)
+- @ExceptionHandler(YourException.class)
+- @EnableHypermediaSupport
+- @EnableWebFlux //spring.webflux.static-path-pattern=/resources/**
+- @Order
+- @Path("/hello")
+- @ApplicationPath
+- @WebServlet, @WebFilter, and @WebListener can be enabled by using @ServletComponentScan.
+- @EnableGlobalMethodSecurity //org.springframework.boot.autoconfigure.security  spring.security.user.name and spring.security.user.password.
+
+
 
 - @EnableScheduling
 - @Scheduled(fixedRate = 5000)
