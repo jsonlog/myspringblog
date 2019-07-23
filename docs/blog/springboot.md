@@ -331,19 +331,441 @@ spring.security.oauth2.client.provider.my-oauth-provider.user-info-authenticatio
 spring.security.oauth2.client.provider.my-oauth-provider.jwk-set-uri=http://my-auth-server/token_keys
 spring.security.oauth2.client.provider.my-oauth-provider.user-name-attribute=name
 ```
+```
+33.1.2 JCache (JSR-107)
+spring.cache.jcache.provider=com.acme.MyCachingProvider
+spring.cache.jcache.config=classpath:acme.xml
+
+33.1.3 EhCache 2.x
+spring.cache.ehcache.config=classpath:config/another-config.xml
+```
+```
+47. Web
+<dependency>
+	<groupId>javax.websocket</groupId>
+	<artifactId>javax.websocket-api</artifactId>
+</dependency>
+spring.webservices.wsdl-locations=classpath:/wsdl
+```
+```
+49.2 Locating Auto-configuration Candidates
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.mycorp.libx.autoconfigure.LibXAutoConfiguration,\
+com.mycorp.libx.autoconfigure.LibXWebAutoConfiguration
+```
+```
+49.4 Testing your Auto-configuration
+private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+		.withConfiguration(AutoConfigurations.of(UserServiceAutoConfiguration.class));
+```
+```
+49.5.2 autoconfigure Module
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-autoconfigure-processor</artifactId>
+	<optional>true</optional>
+</dependency>
+dependencies {
+	annotationProcessor "org.springframework.boot:spring-boot-autoconfigure-processor"
+}
+```
+```
+50.3.1 runApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+
+@SpringBootApplication
+class MyApplication
+
+fun main(args: Array<String>) {
+	runApplication<MyApplication>(*args)
+}
+//It also allows customization of the application as shown in the following example:
+runApplication<MyApplication>(*args) {
+	setBannerMode(OFF)
+}
+```
+
+# Part V. Spring Boot Actuator: Production-ready features
+```
+<dependencies>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+</dependencies>
+```
+```
+53.1 Enabling Endpoints
+management.endpoints.enabled-by-default=false
+management.endpoint.info.enabled=true
+
+53.7 Implementing Custom Endpoints
+If you add a @Bean annotated with @Endpoint, any methods annotated with @ReadOperation, @WriteOperation, or @DeleteOperation are automatically exposed over JMX and, in a web application, over HTTP as well. Endpoints can be exposed over HTTP using Jersey, Spring MVC, or Spring WebFlux.
+
+You can also write technology-specific endpoints by using @JmxEndpoint or @WebEndpoint. These endpoints are restricted to their respective technologies. For example, @WebEndpoint is exposed only over HTTP and not over JMX.
+
+You can write technology-specific extensions by using @EndpointWebExtension and @EndpointJmxExtension. These annotations let you provide technology-specific operations to augment an existing endpoint.
+53.7.2 Custom Web Endpoints
+Operations on an @Endpoint, @WebEndpoint, or @EndpointWebExtension are automatically exposed over HTTP using Jersey, Spring MVC, or Spring WebFlux.
+
+@ControllerEndpoint and @RestControllerEndpoint can be used to implement an endpoint that is only exposed by Spring MVC or Spring WebFlux. 
+```
+```
+54.3 Configuring Management-specific SSL
+When configured to use a custom port, the management server can also be configured with its own SSL by using the various management.server.ssl.* properties. For example, doing so lets a management server be available over HTTP while the main application uses HTTPS, as shown in the following property settings:
+
+server.port=8443
+server.ssl.enabled=true
+server.ssl.key-store=classpath:store.jks
+server.ssl.key-password=secret
+management.server.port=8080
+management.server.ssl.enabled=false
+Alternatively, both the main server and the management server can use SSL but with different key stores, as follows:
+
+server.port=8443
+server.ssl.enabled=true
+server.ssl.key-store=classpath:main.jks
+server.ssl.key-password=secret
+management.server.port=8080
+management.server.ssl.enabled=true
+management.server.ssl.key-store=classpath:management.jks
+management.server.ssl.key-password=secret
+```
+
+```
+mvn package
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- ... -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>2.1.6.RELEASE</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+
+---
+mvn package spring-boot:repackage
+
+---
+If you use a milestone or snapshot release, you also need to add the appropriate pluginRepository elements, as shown in the following listing:
+
+<pluginRepositories>
+	<pluginRepository>
+		<id>spring-snapshots</id>
+		<url>https://repo.spring.io/snapshot</url>
+	</pluginRepository>
+	<pluginRepository>
+		<id>spring-milestones</id>
+		<url>https://repo.spring.io/milestone</url>
+	</pluginRepository>
+</pluginRepositories>
+
+---
+To build a war file that is both executable and deployable into an external container, you need to mark the embedded container dependencies as “provided”, as shown in the following example:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<!-- ... -->
+	<packaging>war</packaging>
+	<!-- ... -->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- ... -->
+	</dependencies>
+</project>
+```
+```
+78.1 Use Another Web Server
+<properties>
+	<servlet-api.version>3.1.0</servlet-api.version>
+</properties>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+	<exclusions>
+		<!-- Exclude the Tomcat dependency -->
+		<exclusion>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<!-- Use Jetty instead -->
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+
+---
+
+configurations {
+	// exclude Reactor Netty
+	compile.exclude module: 'spring-boot-starter-reactor-netty'
+}
+
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-webflux'
+	// Use Undertow instead
+	compile 'org.springframework.boot:spring-boot-starter-undertow'
+	// ...
+}
+```
+```
+79.2 Write an XML REST Service
+If you have the Jackson XML extension (jackson-dataformat-xml) on the classpath, you can use it to render XML responses. The previous example that we used for JSON would work. To use the Jackson XML renderer, add the following dependency to your project:
+
+<dependency>
+	<groupId>com.fasterxml.jackson.dataformat</groupId>
+	<artifactId>jackson-dataformat-xml</artifactId>
+</dependency>
+If Jackson’s XML extension is not available and JAXB is available, XML can be rendered with the additional requirement of having MyThing annotated as @XmlRootElement, as shown in the following example:
+
+@XmlRootElement
+public class MyThing {
+	private String name;
+	// .. getters and setters
+}
+JAXB is only available out of the box with Java 8. If you’re using a more recent Java generation, add the following dependency to your project:
+
+<dependency>
+	<groupId>org.glassfish.jaxb</groupId>
+	<artifactId>jaxb-runtime</artifactId>
+</dependency>
+```
+```
+83. Logging
+
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate=ERROR
+```
+```
+83.1 Configure Logback for Logging
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+	<logger name="org.springframework.web" level="DEBUG"/>
+</configuration>
+```
+```
+83.1.1 Configure Logback for File-only Output
+If you want to disable console logging and write output only to a file, you need a custom logback-spring.xml that imports file-appender.xml but not console-appender.xml, as shown in the following example:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
+You also need to add logging.file to your application.properties, as shown in the following example:
+
+logging.file=myapplication.log
+```
+```
+83.2 Configure Log4j for Logging
+Spring Boot supports Log4j 2 for logging configuration if it is on the classpath. If you use the starters for assembling dependencies, you have to exclude Logback and then include log4j 2 instead. If you do not use the starters, you need to provide (at least) spring-jcl in addition to Log4j 2.
+
+The simplest path is probably through the starters, even though it requires some jiggling with excludes. The following example shows how to set up the starters in Maven:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter</artifactId>
+	<exclusions>
+		<exclusion>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
+And the following example shows one way to set up the starters in Gradle:
+
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.springframework.boot:spring-boot-starter-log4j2'
+}
+
+configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+}
+```
+```
+yyyy-MM-dd’T’HH:mm:ssZ
+91.2 Generate Git Information
+Both Maven and Gradle allow generating a git.properties file containing information about the state of your git source code repository when the project was built.
+
+For Maven users, the spring-boot-starter-parent POM includes a pre-configured plugin to generate a git.properties file. To use it, add the following declaration to your POM:
+
+<build>
+	<plugins>
+		<plugin>
+			<groupId>pl.project13.maven</groupId>
+			<artifactId>git-commit-id-plugin</artifactId>
+		</plugin>
+	</plugins>
+</build>
+Gradle users can achieve the same result by using the gradle-git-properties plugin, as shown in the following example:
+
+plugins {
+	id "com.gorylenko.gradle-git-properties" version "1.5.1"
+}
+```
+```
+91.5 Use a Spring Boot Application as a Dependency
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+			<configuration>
+				<classifier>exec</classifier>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
+```
+```
+91.7 Create a Non-executable JAR with Exclusions
+Often, if you have an executable and a non-executable jar as two separate build products, the executable version has additional configuration files that are not needed in a library jar. For example, the application.yml configuration file might by excluded from the non-executable JAR.
+
+In Maven, the executable jar must be the main artifact and you can add a classified jar for the library, as follows:
+
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+		<plugin>
+			<artifactId>maven-jar-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>lib</id>
+					<phase>package</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+					<configuration>
+						<classifier>lib</classifier>
+						<excludes>
+							<exclude>application.yml</exclude>
+						</excludes>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+```
+```
+92.1 Create a Deployable War File
+[Warning]
+Because Spring WebFlux does not strictly depend on the Servlet API and applications are deployed by default on an embedded Reactor Netty server, War deployment is not supported for WebFlux applications.
+
+The first step in producing a deployable war file is to provide a SpringBootServletInitializer subclass and override its configure method. Doing so makes use of Spring Framework’s Servlet 3.0 support and lets you configure your application when it is launched by the servlet container. Typically, you should update your application’s main class to extend SpringBootServletInitializer, as shown in the following example:
+
+@SpringBootApplication
+public class Application extends SpringBootServletInitializer {
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(Application.class);
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+}
+The next step is to update your build configuration such that your project produces a war file rather than a jar file. If you use Maven and spring-boot-starter-parent (which configures Maven’s war plugin for you), all you need to do is to modify pom.xml to change the packaging to war, as follows:
+
+<packaging>war</packaging>
+If you use Gradle, you need to modify build.gradle to apply the war plugin to the project, as follows:
+
+apply plugin: 'war'
+The final step in the process is to ensure that the embedded servlet container does not interfere with the servlet container to which the war file is deployed. To do so, you need to mark the embedded servlet container dependency as being provided.
+
+If you use Maven, the following example marks the servlet container (Tomcat, in this case) as being provided:
+
+<dependencies>
+	<!-- … -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-tomcat</artifactId>
+		<scope>provided</scope>
+	</dependency>
+	<!-- … -->
+</dependencies>
+If you use Gradle, the following example marks the servlet container (Tomcat, in this case) as being provided:
+
+dependencies {
+	// …
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	// …
+}
+//providedRuntime is preferred to Gradle’s compileOnly configuration. Among other limitations, compileOnly dependencies are not on the test classpath, so any web-based integration tests fail.
+```
+```
+92.2 Convert an Existing Application to Spring Boot
+For a non-web application, it should be easy to convert an existing Spring application to a Spring Boot application. To do so, throw away the code that creates your ApplicationContext and replace it with calls to SpringApplication or SpringApplicationBuilder. Spring MVC web applications are generally amenable to first creating a deployable war application and then migrating it later to an executable war or jar. See the Getting Started Guide on Converting a jar to a [war](https://spring.io/guides/gs/convert-jar-to-war/).
+
+To create a deployable war by extending SpringBootServletInitializer (for example, in a class called Application) and adding the Spring Boot @SpringBootApplication annotation, use code similar to that shown in the following example:
+
+@SpringBootApplication
+public class Application extends SpringBootServletInitializer {
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		// Customize the application or call application.sources(...) to add sources
+		// Since our example is itself a @Configuration class (via @SpringBootApplication)
+		// we actually don't need to override this method.
+		return application;
+	}
+
+}
+```
+
 
 
 
 
 
 # [spring-boot-starter](https://github.com/spring-projects/spring-boot/tree/v2.1.6.RELEASE/spring-boot-project/spring-boot-starters)
-
-
-# ejb
-
-# aop
-
-# ioc
 
 # guides 
 - @SpringBootApplication = @EnableAutoConfiguration @EnableWebMvc @ComponentScan(controller)  @Configuration(bean)
@@ -386,6 +808,75 @@ spring.security.oauth2.client.provider.my-oauth-provider.user-name-attribute=nam
 - @ApplicationPath
 - @WebServlet, @WebFilter, and @WebListener can be enabled by using @ServletComponentScan.
 - @EnableGlobalMethodSecurity //org.springframework.boot.autoconfigure.security  spring.security.user.name and spring.security.user.password.
+- @EntityScan
+- @Entity 
+- @Embeddable 
+- @MappedSuperclass
+- @Id
+- @GeneratedValue //spring.jpa.hibernate.ddl-auto=create-drop //spring.jpa.properties.hibernate.globally_quoted_identifiers=true
+- @Column(nullable = false)
+- @Query
+- @EnableJdbcRepositories
+- @NodeEntity Neo4j OGM 
+- @EnableGemfireRepositories.
+- @SolrDocument 
+- @Document
+- @EnableCaching //org.springframework.cache.CacheManager
+- @CacheResult
+- @JmsListener(destination = "someQueue")
+- @EnableJms 
+- @Qualifier()
+- @EnableAsync
+- @EnableScheduling
+- @EnableIntegration //spring.integration.jdbc.initialize-schema=always
+- @RunWith(SpringRunner.class)
+- @ExtendWith(SpringExtension.class)
+- @ContextConfiguration(classes=…​)
+@TestConfiguration
+@AutoConfigureMockMvc
+@LocalServerPort
+@MockBean
+@SpyBean
+@Cacheable 
+@ImportAutoConfiguration#exclude
+@…​Test annotations provide an excludeAutoConfiguration attribute
+@JsonTest
+@JsonComponent
+@WebMvcTest
+@AutoConfigureWebTestClient
+@DataJpaTest
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@AutoConfigureTestDatabase(replace=Replace.NONE)
+@JdbcTest
+@DataJdbcTest
+@DataNeo4jTest
+@AutoConfigureRestDocs
+@EnableBatchProcessing
+@Rule //JUnit
+@Conditional
+@ConditionalOnResource
+@ConditionalOnClass
+@ConditionalOnMissingBean
+@AutoConfigureBefore
+@AutoConfigureAfter
+@AutoConfigureOrder
+@ConditionalOnProperty
+@ConditionalOnWebApplication
+@ConditionalOnNotWebApplication
+@ConditionalOnExpression
+@RequestParam
+@Primary
+@EnableBatchProcessing
+@DeprecatedConfigurationProperty(replacement = "app.acme.name")
+@Deprecated
+
+
+@WithMockUser(roles="ADMIN")
+WebMvcAutoConfiguration
+ThymeleafAutoConfiguration
+FreeMarkerAutoConfiguration
+GroovyTemplateAutoConfiguration
+
 
 
 
@@ -464,5 +955,17 @@ WSDL 指网络服务描述语言 (Web Services Description Language)。 WSDL 是
 SOAP 简单对象访问协议(Simple Object Access Protocol)一种简单的基于 XML 的协议，它使应用程序通过 HTTP 来交换信息。可以传递结构化的 数据,要进行xml解析.      
 XML-RPC
 
-#other
+# other
 Collections.singletonMap("message", "Hello World")
+
+# LDAP
+o：organization（组织-公司）
+ou：organization unit（组织单元-部门）
+inetOrgPerson
+c：countryName（国家）
+dc：domainComponent（域名）
+sn：surname（姓氏）
+cn：common name（常用名称）
+DN （Distinguished Name）是用来引用条目的
+uid : user id
+条目 表
