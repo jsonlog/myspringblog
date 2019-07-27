@@ -1,6 +1,7 @@
 <!-- 个人博客模板《蓝色的畅想》个人博客模板《早安》-->
 # 博客文件系统
-搭建自用的支持markdown文件和html的[github pages](https://jsonlog.github.io/myspringblog)静态博客(包含生日&抢票[日历](#日历),天气,音乐),支持springboot部署到服务器,同时[动态版](https://myspringblog.herokuapp.com/)(服务器版)的日历整合了spring+ibatis;
+- 搭建自用的支持markdown文件和html的[github pages](https://jsonlog.github.io/myspringblog)静态博客(包含生日&抢票[日历](#日历),天气,音乐)
+- [动态版](https://myspringblog.herokuapp.com/)(服务器版)支持springboot部署到服务器,同时日历部分整合了spring+ibatis;
 
 # 特点
 该博客文件系统不同于其它博客直接在线上写博客并且通过存入数据库的方式,具体如下:
