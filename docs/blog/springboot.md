@@ -869,6 +869,9 @@ public class Application extends SpringBootServletInitializer {
 @EnableBatchProcessing
 @DeprecatedConfigurationProperty(replacement = "app.acme.name")
 @Deprecated
+@Description("Provides a basic example of a bean")
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 
 
 @WithMockUser(roles="ADMIN")

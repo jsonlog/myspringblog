@@ -28,7 +28,7 @@ CGLIB实现的AOP称为面向子类的动态增强;
 
 # ejb
 
-# core container
+# 1. The IoC Container
 ApplicationContext is a sub-interface of BeanFactory
 FileSystemXmlApplicationContext
 
@@ -1169,7 +1169,1619 @@ With Gradle 4.6 and later, the dependency should be declared in the annotationPr
 dependencies {
     annotationProcessor "org.springframework:spring-context-indexer:5.1.8.RELEASE"
 }
+That process generates a META-INF/spring.components file that is included in the jar file.
 ```
+# 1.11. Using JSR 330 Standard Annotations
+```
+<dependency>
+    <groupId>javax.inject</groupId>
+    <artifactId>javax.inject</artifactId>
+    <version>1</version>
+</dependency>
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@Named("movieListener")  // @ManagedBean("movieListener") could be used as well
+public class SimpleMovieLister {
+
+    private MovieFinder movieFinder;
+
+    @Inject
+    public void setMovieFinder(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // ...
+}
+```
+# 1.12. Java-based Container Configuration
+```
+public static void main(String[] args) {
+    AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+    ctx.register(AppConfig.class, OtherConfig.class);
+    ctx.register(AdditionalConfig.class);
+    ctx.refresh();
+    MyService myService = ctx.getBean(MyService.class);
+    myService.doStuff();
+}
+```
+```
+<web-app>
+    <!-- Configure ContextLoaderListener to use AnnotationConfigWebApplicationContext
+        instead of the default XmlWebApplicationContext -->
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>
+            org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        </param-value>
+    </context-param>
+
+    <!-- Configuration locations must consist of one or more comma- or space-delimited
+        fully-qualified @Configuration classes. Fully-qualified packages may also be
+        specified for component-scanning -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>com.acme.AppConfig</param-value>
+    </context-param>
+
+    <!-- Bootstrap the root application context as usual using ContextLoaderListener -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Declare a Spring MVC DispatcherServlet as usual -->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- Configure DispatcherServlet to use AnnotationConfigWebApplicationContext
+            instead of the default XmlWebApplicationContext -->
+        <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>
+                org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+            </param-value>
+        </init-param>
+        <!-- Again, config locations must consist of one or more comma- or space-delimited
+            and fully-qualified @Configuration classes -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>com.acme.web.MvcConfig</param-value>
+        </init-param>
+    </servlet>
+
+    <!-- map all requests for /app/* to the dispatcher servlet -->
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
+```
+org.springframework.context.annotation
+Interface Condition @Conditional
+
+@Override
+public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    if (context.getEnvironment() != null) {
+        // Read the @Profile annotation attributes
+        MultiValueMap<String, Object> attrs = metadata.getAllAnnotationAttributes(Profile.class.getName());
+        if (attrs != null) {
+            for (Object value : attrs.get("value")) {
+                if (context.getEnvironment().acceptsProfiles(((String[]) value))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    return true;
+}
+```
+# Combining Java and XML Configuration
+
+```
+<beans>
+    <!-- enable processing of annotations such as @Autowired and @Configuration -->
+    <context:annotation-config/>
+    <context:property-placeholder location="classpath:/com/acme/jdbc.properties"/>
+
+    <bean class="com.acme.AppConfig"/>
+
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+</beans>
+The following example shows a possible jdbc.properties file:
+
+jdbc.url=jdbc:hsqldb:hsql://localhost/xdb
+jdbc.username=sa
+jdbc.password=
+public static void main(String[] args) {
+    ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:/com/acme/system-test-config.xml");
+    TransferService transferService = ctx.getBean(TransferService.class);
+    // ...
+}
+```
+```
+Using <context:component-scan/> to pick up @Configuration classes
+Because @Configuration is meta-annotated with @Component, @Configuration-annotated classes are automatically candidates for component scanning. Using the same scenario as describe in the previous example, we can redefine system-test-config.xml to take advantage of component-scanning. Note that, in this case, we need not explicitly declare <context:annotation-config/>, because <context:component-scan/> enables the same functionality.
+
+The following example shows the modified system-test-config.xml file:
+
+<beans>
+    <!-- picks up and registers AppConfig as a bean definition -->
+    <context:component-scan base-package="com.acme"/>
+    <context:property-placeholder location="classpath:/com/acme/jdbc.properties"/>
+
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+</beans>
+@Configuration Class-centric Use of XML with @ImportResource
+In applications where @Configuration classes are the primary mechanism for configuring the container, it is still likely necessary to use at least some XML. In these scenarios, you can use @ImportResource and define only as much XML as you need. Doing so achieves a “Java-centric” approach to configuring the container and keeps XML to a bare minimum. The following example (which includes a configuration class, an XML file that defines a bean, a properties file, and the main class) shows how to use the @ImportResource annotation to achieve “Java-centric” configuration that uses XML as needed:
+
+@Configuration
+@ImportResource("classpath:/com/acme/properties-config.xml")
+public class AppConfig {
+
+    @Value("${jdbc.url}")
+    private String url;
+
+    @Value("${jdbc.username}")
+    private String username;
+
+    @Value("${jdbc.password}")
+    private String password;
+
+    @Bean
+    public DataSource dataSource() {
+        return new DriverManagerDataSource(url, username, password);
+    }
+}
+properties-config.xml
+<beans>
+    <context:property-placeholder location="classpath:/com/acme/jdbc.properties"/>
+</beans>
+jdbc.properties
+jdbc.url=jdbc:hsqldb:hsql://localhost/xdb
+jdbc.username=sa
+jdbc.password=
+public static void main(String[] args) {
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+    TransferService transferService = ctx.getBean(TransferService.class);
+    // ...
+}
+```
+# 1.13. Environment Abstraction
+```
+@Bean
+public DataSource dataSource() {
+    return new EmbeddedDatabaseBuilder()
+        .setType(EmbeddedDatabaseType.HSQL)
+        .addScript("my-schema.sql")
+        .addScript("my-test-data.sql")
+        .build();
+}
+Now consider how this application can be deployed into a QA or production environment, assuming that the datasource for the application is registered with the production application server’s JNDI directory. Our dataSource bean now looks like the following listing:
+
+@Bean(destroyMethod="")
+public DataSource dataSource() throws Exception {
+    Context ctx = new InitialContext();
+    return (DataSource) ctx.lookup("java:comp/env/jdbc/datasource");
+}
+```
+```
+@Configuration
+@Profile("development")
+public class StandaloneDataConfig {
+
+    @Bean
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder()
+            .setType(EmbeddedDatabaseType.HSQL)
+            .addScript("classpath:com/bank/config/sql/schema.sql")
+            .addScript("classpath:com/bank/config/sql/test-data.sql")
+            .build();
+    }
+}
+
+@Configuration
+@Profile("production")
+public class JndiDataConfig {
+
+    @Bean(destroyMethod="")
+    public DataSource dataSource() throws Exception {
+        Context ctx = new InitialContext();
+        return (DataSource) ctx.lookup("java:comp/env/jdbc/datasource");
+    }
+}
+```
+# XML Bean Definition Profiles
+```
+<beans profile="development"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xsi:schemaLocation="...">
+
+    <jdbc:embedded-database id="dataSource">
+        <jdbc:script location="classpath:com/bank/config/sql/schema.sql"/>
+        <jdbc:script location="classpath:com/bank/config/sql/test-data.sql"/>
+    </jdbc:embedded-database>
+</beans>
+<beans profile="production"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="...">
+
+    <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/datasource"/>
+</beans>
+
+It is also possible to avoid that split and nest <beans/> elements within the same file, as the following example shows:
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="...">
+
+    <!-- other bean definitions -->
+
+    <beans profile="development">
+        <jdbc:embedded-database id="dataSource">
+            <jdbc:script location="classpath:com/bank/config/sql/schema.sql"/>
+            <jdbc:script location="classpath:com/bank/config/sql/test-data.sql"/>
+        </jdbc:embedded-database>
+    </beans>
+
+    <beans profile="production">
+        <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/datasource"/>
+    </beans>
+</beans>
+```
+# Activating a Profile
+```
+AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+ctx.getEnvironment().setActiveProfiles("development");
+ctx.register(SomeConfig.class, StandaloneDataConfig.class, JndiDataConfig.class);
+ctx.refresh();
+//ctx.getEnvironment().setActiveProfiles("profile1", "profile2");
+//-Dspring.profiles.active="profile1,profile2"
+```
+```
+@Configuration
+@Profile("default")
+public class DefaultDataConfig {
+
+    @Bean
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder()
+            .setType(EmbeddedDatabaseType.HSQL)
+            .addScript("classpath:com/bank/config/sql/schema.sql")
+            .build();
+    }
+}
+```
+
+# 1.13.2. PropertySource Abstraction
+```
+ApplicationContext ctx = new GenericApplicationContext();
+Environment env = ctx.getEnvironment();
+boolean containsMyProperty = env.containsProperty("my-property");
+System.out.println("Does my environment contain the 'my-property' property? " + containsMyProperty);
+```
+```
+ConfigurableApplicationContext ctx = new GenericApplicationContext();
+MutablePropertySources sources = ctx.getEnvironment().getPropertySources();
+sources.addFirst(new MyPropertySource());
+```
+
+# 1.13.3. Using @PropertySource
+```
+@Configuration
+@PropertySource("classpath:/com/myco/app.properties")
+public class AppConfig {
+
+    @Autowired
+    Environment env;
+
+    @Bean
+    public TestBean testBean() {
+        TestBean testBean = new TestBean();
+        testBean.setName(env.getProperty("testbean.name"));
+        return testBean;
+    }
+}
+Any ${…​} placeholders present in a @PropertySource resource location are resolved against the set of property sources already registered against the environment, as the following example shows:
+
+@Configuration
+@PropertySource("classpath:/com/${my.placeholder:default/path}/app.properties")
+public class AppConfig {
+
+    @Autowired
+    Environment env;
+
+    @Bean
+    public TestBean testBean() {
+        TestBean testBean = new TestBean();
+        testBean.setName(env.getProperty("testbean.name"));
+        return testBean;
+    }
+}
+```
+
+# 1.13.4. Placeholder Resolution in Statements
+```
+<beans>
+    <import resource="com/bank/service/${customer}-config.xml"/>
+</beans>
+```
+# 1.14. Registering a LoadTimeWeaver
+```
+@Configuration
+@EnableLoadTimeWeaving
+public class AppConfig {
+}
+Alternatively, for XML configuration, you can use the context:load-time-weaver element:
+
+<beans>
+    <context:load-time-weaver/>
+</beans>
+```
+#1.15. Additional Capabilities of the ApplicationContext
+```
+<beans>
+    <bean id="messageSource"
+            class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>format</value>
+                <value>exceptions</value>
+                <value>windows</value>
+            </list>
+        </property>
+    </bean>
+</beans>
+```
+```
+<beans>
+
+    <!-- this MessageSource is being used in a web application -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="exceptions"/>
+    </bean>
+
+    <!-- lets inject the above MessageSource into this POJO -->
+    <bean id="example" class="com.something.Example">
+        <property name="messages" ref="messageSource"/>
+    </bean>
+
+</beans>
+public class Example {
+
+    private MessageSource messages;
+
+    public void setMessages(MessageSource messages) {
+        this.messages = messages;
+    }
+
+    public void execute() {
+        String message = this.messages.getMessage("argument.required",
+            new Object [] {"userDao"}, "Required", null);
+        System.out.println(message);
+    }
+}
+```
+```
+# in exceptions_en_GB.properties
+argument.required=Ebagum lad, the {0} argument is required, I say, required.
+public static void main(final String[] args) {
+    MessageSource resources = new ClassPathXmlApplicationContext("beans.xml");
+    String message = resources.getMessage("argument.required",
+        new Object [] {"userDao"}, "Required", Locale.UK);
+    System.out.println(message);
+}
+The resulting output from the running of the above program is as follows:
+
+Ebagum lad, the 'userDao' argument is required, I say, required.
+```
+# 1.15.2. Standard and Custom Events
+```
+public class BlackListEvent extends ApplicationEvent {
+
+    private final String address;
+    private final String content;
+
+    public BlackListEvent(Object source, String address, String content) {
+        super(source);
+        this.address = address;
+        this.content = content;
+    }
+
+    // accessor and other methods...
+}
+```
+```
+public class EmailService implements ApplicationEventPublisherAware {
+
+    private List<String> blackList;
+    private ApplicationEventPublisher publisher;
+
+    public void setBlackList(List<String> blackList) {
+        this.blackList = blackList;
+    }
+
+    public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
+        this.publisher = publisher;
+    }
+
+    public void sendEmail(String address, String content) {
+        if (blackList.contains(address)) {
+            publisher.publishEvent(new BlackListEvent(this, address, content));
+            return;
+        }
+        // send email...
+    }
+}
+```
+```
+public class BlackListNotifier implements ApplicationListener<BlackListEvent> {
+
+    private String notificationAddress;
+
+    public void setNotificationAddress(String notificationAddress) {
+        this.notificationAddress = notificationAddress;
+    }
+
+    public void onApplicationEvent(BlackListEvent event) {
+        // notify appropriate parties via notificationAddress...
+    }
+}
+```
+```
+<bean id="emailService" class="example.EmailService">
+    <property name="blackList">
+        <list>
+            <value>known.spammer@example.org</value>
+            <value>known.hacker@example.org</value>
+            <value>john.doe@example.org</value>
+        </list>
+    </property>
+</bean>
+
+<bean id="blackListNotifier" class="example.BlackListNotifier">
+    <property name="notificationAddress" value="blacklist@example.org"/>
+</bean>
+```
+```
+public class EntityCreatedEvent<T> extends ApplicationEvent implements ResolvableTypeProvider {
+
+    public EntityCreatedEvent(T entity) {
+        super(entity);
+    }
+
+    @Override
+    public ResolvableType getResolvableType() {
+        return ResolvableType.forClassWithGenerics(getClass(), ResolvableType.forInstance(getSource()));
+    }
+}
+```
+# 1.15.3. Convenient Access to Low-level Resources
+```
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/daoContext.xml /WEB-INF/applicationContext.xml</param-value>
+</context-param>
+
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+```
+```
+DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+// populate the factory with bean definitions
+
+// now register any needed BeanPostProcessor instances
+factory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+factory.addBeanPostProcessor(new MyBeanPostProcessor());
+
+// now start using the factory
+```
+```
+DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+reader.loadBeanDefinitions(new FileSystemResource("beans.xml"));
+
+// bring in some property values from a Properties file
+PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
+cfg.setLocation(new FileSystemResource("jdbc.properties"));
+
+// now actually do the replacement
+cfg.postProcessBeanFactory(factory);
+```
+
+# 2. Resources
+
+```Interface
+public interface Resource extends InputStreamSource {
+
+    boolean exists();
+
+    boolean isOpen();
+
+    URL getURL() throws IOException;
+
+    File getFile() throws IOException;
+
+    Resource createRelative(String relativePath) throws IOException;
+
+    String getFilename();
+
+    String getDescription();
+
+}
+```
+# 2.3. Built-in Resource Implementations
+Spring includes the following Resource implementations:
+
+- UrlResource
+
+- ClassPathResource
+
+- FileSystemResource
+
+- ServletContextResource
+
+- InputStreamResource
+
+- ByteArrayResource
+
+# 2.4. The ResourceLoader
+```
+public interface ResourceLoader {
+
+    Resource getResource(String location);
+
+}
+Resource template = ctx.getResource("classpath:some/resource/path/myTemplate.txt");
+Resource template = ctx.getResource("file:///some/resource/path/myTemplate.txt");
+Resource template = ctx.getResource("https://myhost.com/resource/path/myTemplate.txt");
+```
+# 2.5. The ResourceLoaderAware interface
+```
+public interface ResourceLoaderAware {
+
+    void setResourceLoader(ResourceLoader resourceLoader);
+}
+```
+# 2.6. Resources as Dependencies
+```xml
+<bean id="myBean" class="...">
+    <property name="template" value="classpath:some/resource/path/myTemplate.txt">
+</bean>
+```
+# 2.7. Application Contexts and Resource Paths
+```
+ApplicationContext ctx = new ClassPathXmlApplicationContext(
+    new String[] {"services.xml", "daos.xml"}, MessengerService.class);
+```
+```
+ApplicationContext ctx =
+    new ClassPathXmlApplicationContext("classpath*:conf/appContext.xml");
+```
+```
+// force this FileSystemXmlApplicationContext to load its definition via a UrlResource
+ApplicationContext ctx = new FileSystemXmlApplicationContext("file:///conf/context.xml");
+<!-- ctx.getResource("/some/resource/path/myTemplate.txt"); -->
+```
+# 3. Validation, Data Binding, and Type Conversion
+```
+public class CustomerValidator implements Validator {
+
+    private final Validator addressValidator;
+
+    public CustomerValidator(Validator addressValidator) {
+        if (addressValidator == null) {
+            throw new IllegalArgumentException("The supplied [Validator] is " +
+                "required and must not be null.");
+        }
+        if (!addressValidator.supports(Address.class)) {
+            throw new IllegalArgumentException("The supplied [Validator] must " +
+                "support the validation of [Address] instances.");
+        }
+        this.addressValidator = addressValidator;
+    }
+
+    /**
+     * This Validator validates Customer instances, and any subclasses of Customer too
+     */
+    public boolean supports(Class clazz) {
+        return Customer.class.isAssignableFrom(clazz);
+    }
+
+    public void validate(Object target, Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "field.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "surname", "field.required");
+        Customer customer = (Customer) target;
+        try {
+            errors.pushNestedPath("address");
+            ValidationUtils.invokeValidator(this.addressValidator, customer.getAddress(), errors);
+        } finally {
+            errors.popNestedPath();
+        }
+    }
+}
+```
+# 3.3.2. Built-in PropertyEditor Implementations
+```
+package example;
+
+public class ExoticType {
+
+    private String name;
+
+    public ExoticType(String name) {
+        this.name = name;
+    }
+}
+
+public class DependsOnExoticType {
+
+    private ExoticType type;
+
+    public void setType(ExoticType type) {
+        this.type = type;
+    }
+}
+```
+```
+<bean id="sample" class="example.DependsOnExoticType">
+    <property name="type" value="aNameForExoticType"/>
+</bean>
+The PropertyEditor implementation could look similar to the following:
+
+// converts string representation to ExoticType object
+package example;
+
+public class ExoticTypeEditor extends PropertyEditorSupport {
+
+    public void setAsText(String text) {
+        setValue(new ExoticType(text.toUpperCase()));
+    }
+}
+Finally, the following example shows how to use CustomEditorConfigurer to register the new PropertyEditor with the ApplicationContext, which will then be able to use it as needed:
+
+<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+    <property name="customEditors">
+        <map>
+            <entry key="example.ExoticType" value="example.ExoticTypeEditor"/>
+        </map>
+    </property>
+</bean>
+```
+```
+The following example shows how to create your own PropertyEditorRegistrar implementation:
+
+package com.foo.editors.spring;
+
+public final class CustomPropertyEditorRegistrar implements PropertyEditorRegistrar {
+
+    public void registerCustomEditors(PropertyEditorRegistry registry) {
+
+        // it is expected that new PropertyEditor instances are created
+        registry.registerCustomEditor(ExoticType.class, new ExoticTypeEditor());
+
+        // you could register as many custom property editors as are required here...
+    }
+}
+See also the org.springframework.beans.support.ResourceEditorRegistrar for an example PropertyEditorRegistrar implementation. Notice how in its implementation of the registerCustomEditors(..) method ,it creates new instances of each property editor.
+
+The next example shows how to configure a CustomEditorConfigurer and inject an instance of our CustomPropertyEditorRegistrar into it:
+
+<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+    <property name="propertyEditorRegistrars">
+        <list>
+            <ref bean="customPropertyEditorRegistrar"/>
+        </list>
+    </property>
+</bean>
+
+<bean id="customPropertyEditorRegistrar"
+    class="com.foo.editors.spring.CustomPropertyEditorRegistrar"/>
+Finally (and in a bit of a departure from the focus of this chapter for those of you using Spring’s MVC web framework), using PropertyEditorRegistrars in conjunction with data-binding Controllers (such as SimpleFormController) can be very convenient. The following example uses a PropertyEditorRegistrar in the implementation of an initBinder(..) method:
+
+public final class RegisterUserController extends SimpleFormController {
+
+    private final PropertyEditorRegistrar customPropertyEditorRegistrar;
+
+    public RegisterUserController(PropertyEditorRegistrar propertyEditorRegistrar) {
+        this.customPropertyEditorRegistrar = propertyEditorRegistrar;
+    }
+
+    protected void initBinder(HttpServletRequest request,
+            ServletRequestDataBinder binder) throws Exception {
+        this.customPropertyEditorRegistrar.registerCustomEditors(binder);
+    }
+
+    // other methods to do with registering a User
+}
+This style of PropertyEditor registration can lead to concise code (the implementation of initBinder(..) is only one line long) and lets common PropertyEditor registration code be encapsulated in a class and then shared amongst as many Controllers as needed.
+```
+# 3.4. Spring Type Conversion
+```
+package org.springframework.core.convert.converter;
+
+public interface Converter<S, T> {
+
+    T convert(S source);
+}
+
+package org.springframework.core.convert.support;
+
+final class StringToInteger implements Converter<String, Integer> {
+
+    public Integer convert(String source) {
+        return Integer.valueOf(source);
+    }
+}
+```
+```
+package org.springframework.core.convert.converter;
+
+public interface ConverterFactory<S, R> {
+
+    <T extends R> Converter<S, T> getConverter(Class<T> targetType);
+}
+---
+package org.springframework.core.convert.support;
+
+final class StringToEnumConverterFactory implements ConverterFactory<String, Enum> {
+
+    public <T extends Enum> Converter<String, T> getConverter(Class<T> targetType) {
+        return new StringToEnumConverter(targetType);
+    }
+
+    private final class StringToEnumConverter<T extends Enum> implements Converter<String, T> {
+
+        private Class<T> enumType;
+
+        public StringToEnumConverter(Class<T> enumType) {
+            this.enumType = enumType;
+        }
+
+        public T convert(String source) {
+            return (T) Enum.valueOf(this.enumType, source.trim());
+        }
+    }
+}
+```
+```
+package org.springframework.core.convert.converter;
+
+public interface GenericConverter {
+
+    public Set<ConvertiblePair> getConvertibleTypes();
+
+    Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType);
+}
+```
+```
+public interface ConditionalConverter {
+
+    boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType);
+}
+
+public interface ConditionalGenericConverter extends GenericConverter, ConditionalConverter {
+}
+```
+```
+package org.springframework.core.convert;
+
+public interface ConversionService {
+
+    boolean canConvert(Class<?> sourceType, Class<?> targetType);
+
+    <T> T convert(Object source, Class<T> targetType);
+
+    boolean canConvert(TypeDescriptor sourceType, TypeDescriptor targetType);
+
+    Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType);
+
+}
+```
+# 3.4.5. Configuring a ConversionService
+```
+<bean id="conversionService"
+    class="org.springframework.context.support.ConversionServiceFactoryBean"/>
+A default ConversionService can convert between strings, numbers, enums, collections, maps, and other common types. To supplement or override the default converters with your own custom converters, set the converters property. Property values can implement any of the Converter, ConverterFactory, or GenericConverter interfaces.
+
+<bean id="conversionService"
+        class="org.springframework.context.support.ConversionServiceFactoryBean">
+    <property name="converters">
+        <set>
+            <bean class="example.MyCustomConverter"/>
+        </set>
+    </property>
+</bean>
+```
+```
+DefaultConversionService cs = new DefaultConversionService();
+
+List<Integer> input = ....
+cs.convert(input,
+    TypeDescriptor.forObject(input), // List<Integer> type descriptor
+    TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(String.class)));
+```
+# 3.5. Spring Field Formatting
+```
+package org.springframework.format;
+
+public interface Formatter<T> extends Printer<T>, Parser<T> {
+}
+
+Formatter extends from the Printer and Parser building-block interfaces. The following listing shows the definitions of those two interfaces:
+
+public interface Printer<T> {
+
+    String print(T fieldValue, Locale locale);
+}
+---
+import java.text.ParseException;
+
+public interface Parser<T> {
+
+    T parse(String clientValue, Locale locale) throws ParseException;
+}
+```
+```
+package org.springframework.format.datetime;
+
+public final class DateFormatter implements Formatter<Date> {
+
+    private String pattern;
+
+    public DateFormatter(String pattern) {
+        this.pattern = pattern;
+    }
+
+    public String print(Date date, Locale locale) {
+        if (date == null) {
+            return "";
+        }
+        return getDateFormat(locale).format(date);
+    }
+
+    public Date parse(String formatted, Locale locale) throws ParseException {
+        if (formatted.length() == 0) {
+            return null;
+        }
+        return getDateFormat(locale).parse(formatted);
+    }
+
+    protected DateFormat getDateFormat(Locale locale) {
+        DateFormat dateFormat = new SimpleDateFormat(this.pattern, locale);
+        dateFormat.setLenient(false);
+        return dateFormat;
+    }
+}
+```
+# 3.5.2. Annotation-driven Formatting
+``` definition
+package org.springframework.format;
+
+public interface AnnotationFormatterFactory<A extends Annotation> {
+
+    Set<Class<?>> getFieldTypes();
+
+    Printer<?> getPrinter(A annotation, Class<?> fieldType);
+
+    Parser<?> getParser(A annotation, Class<?> fieldType);
+}
+```
+```
+public final class NumberFormatAnnotationFormatterFactory
+        implements AnnotationFormatterFactory<NumberFormat> {
+
+    public Set<Class<?>> getFieldTypes() {
+        return new HashSet<Class<?>>(asList(new Class<?>[] {
+            Short.class, Integer.class, Long.class, Float.class,
+            Double.class, BigDecimal.class, BigInteger.class }));
+    }
+
+    public Printer<Number> getPrinter(NumberFormat annotation, Class<?> fieldType) {
+        return configureFormatterFrom(annotation, fieldType);
+    }
+
+    public Parser<Number> getParser(NumberFormat annotation, Class<?> fieldType) {
+        return configureFormatterFrom(annotation, fieldType);
+    }
+
+    private Formatter<Number> configureFormatterFrom(NumberFormat annotation, Class<?> fieldType) {
+        if (!annotation.pattern().isEmpty()) {
+            return new NumberStyleFormatter(annotation.pattern());
+        } else {
+            Style style = annotation.style();
+            if (style == Style.PERCENT) {
+                return new PercentStyleFormatter();
+            } else if (style == Style.CURRENCY) {
+                return new CurrencyStyleFormatter();
+            } else {
+                return new NumberStyleFormatter();
+            }
+        }
+    }
+}
+```
+```
+public class MyModel {
+
+    @NumberFormat(style=Style.CURRENCY)
+    private BigDecimal decimal;
+
+    @DateTimeFormat(iso=ISO.DATE)
+    private Date date;
+}
+```
+# 3.5.3. The FormatterRegistry SPI
+```
+package org.springframework.format;
+
+public interface FormatterRegistry extends ConverterRegistry {
+
+    void addFormatterForFieldType(Class<?> fieldType, Printer<?> printer, Parser<?> parser);
+
+    void addFormatterForFieldType(Class<?> fieldType, Formatter<?> formatter);
+
+    void addFormatterForFieldType(Formatter<?> formatter);
+
+    void addFormatterForAnnotation(AnnotationFormatterFactory<?, ?> factory);
+}
+```
+# 3.5.4. The FormatterRegistrar SPI
+```
+package org.springframework.format;
+
+public interface FormatterRegistrar {
+
+    void registerFormatters(FormatterRegistry registry);
+}
+```
+# 3.6. Configuring a Global Date and Time Format
+```
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public FormattingConversionService conversionService() {
+
+        // Use the DefaultFormattingConversionService but do not register defaults
+        DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService(false);
+
+        // Ensure @NumberFormat is still supported
+        conversionService.addFormatterForFieldAnnotation(new NumberFormatAnnotationFormatterFactory());
+
+        // Register date conversion with a specific global format
+        DateFormatterRegistrar registrar = new DateFormatterRegistrar();
+        registrar.setFormatter(new DateFormatter("yyyyMMdd"));
+        registrar.registerFormatters(conversionService);
+
+        return conversionService;
+    }
+}
+```
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd>
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="registerDefaultFormatters" value="false" />
+        <property name="formatters">
+            <set>
+                <bean class="org.springframework.format.number.NumberFormatAnnotationFormatterFactory" />
+            </set>
+        </property>
+        <property name="formatterRegistrars">
+            <set>
+                <bean class="org.springframework.format.datetime.joda.JodaTimeFormatterRegistrar">
+                    <property name="dateFormatter">
+                        <bean class="org.springframework.format.datetime.joda.DateTimeFormatterFactoryBean">
+                            <property name="pattern" value="yyyyMMdd"/>
+                        </bean>
+                    </property>
+                </bean>
+            </set>
+        </property>
+    </bean>
+</beans>
+```
+# 3.7. Spring Validation
+```
+public class PersonForm {
+
+    @NotNull
+    @Size(max=64)
+    private String name;
+
+    @Min(0)
+    private int age;
+}
+```
+# 3.7.2. Configuring a Bean Validation Provider
+```
+<bean id="validator"
+    class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+```
+```
+You can inject a reference to javax.validation.Validator if you prefer to work with the Bean Validation API directly, as the following example shows:
+
+import javax.validation.Validator;
+
+@Service
+public class MyService {
+
+    @Autowired
+    private Validator validator;
+You can inject a reference to org.springframework.validation.Validator if your bean requires the Spring Validation API, as the following example shows:
+
+import org.springframework.validation.Validator;
+
+@Service
+public class MyService {
+
+    @Autowired
+    private Validator validator;
+}
+```
+```
+The following example shows a custom @Constraint declaration followed by an associated ConstraintValidator implementation that uses Spring for dependency injection:
+
+@Target({ElementType.METHOD, ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy=MyConstraintValidator.class)
+public @interface MyConstraint {
+}
+import javax.validation.ConstraintValidator;
+
+public class MyConstraintValidator implements ConstraintValidator {
+
+    @Autowired;
+    private Foo aDependency;
+
+    ...
+}
+As the preceding example shows, a ConstraintValidator implementation can have its dependencies @Autowired as any other Spring bean.
+
+Spring-driven Method Validation
+You can integrate the method validation feature supported by Bean Validation 1.1 (and, as a custom extension, also by Hibernate Validator 4.3) into a Spring context through a MethodValidationPostProcessor bean definition, as follows:
+
+<bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
+```
+# 3.7.3. Configuring a DataBinder
+```
+Foo target = new Foo();
+DataBinder binder = new DataBinder(target);
+binder.setValidator(new FooValidator());
+
+// bind to the target object
+binder.bind(propertyValues);
+
+// validate the target object
+binder.validate();
+
+// get BindingResult that includes any validation errors
+BindingResult results = binder.getBindingResult();
+```
+
+# 4. Spring Expression Language (SpEL)
+
+The expression language supports the following functionality:
+
+Literal expressions
+
+Boolean and relational operators
+
+Regular expressions
+
+Class expressions
+
+Accessing properties, arrays, lists, and maps
+
+Method invocation
+
+Relational operators
+
+Assignment
+
+Calling constructors
+
+Bean references
+
+Array construction
+
+Inline lists
+
+Inline maps
+
+Ternary operator
+
+Variables
+
+User-defined functions
+
+Collection projection
+
+Collection selection
+
+Templated expressions
+
+# 4.1. Evaluation
+```
+ExpressionParser parser = new SpelExpressionParser();
+Expression exp = parser.parseExpression("'Hello World'.concat('!')"); 
+String message = (String) exp.getValue();
+```
+```
+// invokes 'getBytes()'
+Expression exp = parser.parseExpression("'Hello World'.bytes"); 
+byte[] bytes = (byte[]) exp.getValue();
+```
+```
+// invokes 'getBytes().length'
+Expression exp = parser.parseExpression("'Hello World'.bytes.length"); 
+int length = (Integer) exp.getValue();
+```
+```
+Expression exp = parser.parseExpression("new String('hello world').toUpperCase()"); 
+String message = exp.getValue(String.class);
+```
+```
+// Create and set a calendar
+GregorianCalendar c = new GregorianCalendar();
+c.set(1856, 7, 9);
+
+// The constructor arguments are name, birthday, and nationality.
+Inventor tesla = new Inventor("Nikola Tesla", c.getTime(), "Serbian");
+
+ExpressionParser parser = new SpelExpressionParser();
+
+Expression exp = parser.parseExpression("name"); 
+String name = (String) exp.getValue(tesla);
+// name == "Nikola Tesla"
+
+exp = parser.parseExpression("name == 'Nikola Tesla'");
+boolean result = exp.getValue(tesla, Boolean.class);
+// result == true
+```
+# 4.1.1. Understanding EvaluationContext
+```
+class Simple {
+    public List<Boolean> booleanList = new ArrayList<Boolean>();
+}
+
+Simple simple = new Simple();
+simple.booleanList.add(true);
+
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+// "false" is passed in here as a String. SpEL and the conversion service
+// will recognize that it needs to be a Boolean and convert it accordingly.
+parser.parseExpression("booleanList[0]").setValue(context, simple, "false");
+
+// b is false
+Boolean b = simple.booleanList.get(0);
+```
+# 4.1.2. Parser Configuration
+```
+class Demo {
+    public List<String> list;
+}
+
+// Turn on:
+// - auto null reference initialization
+// - auto collection growing
+SpelParserConfiguration config = new SpelParserConfiguration(true,true);
+
+ExpressionParser parser = new SpelExpressionParser(config);
+
+Expression expression = parser.parseExpression("list[3]");
+
+Demo demo = new Demo();
+
+Object o = expression.getValue(demo);
+
+// demo.list will now be a real collection of 4 entries
+// Each entry is a new empty String
+```
+# 4.1.3. SpEL Compilation
+```
+SpelParserConfiguration config = new SpelParserConfiguration(SpelCompilerMode.IMMEDIATE,
+    this.getClass().getClassLoader());
+
+SpelExpressionParser parser = new SpelExpressionParser(config);
+
+Expression expr = parser.parseExpression("payload");
+
+MyMessage message = new MyMessage();
+
+Object payload = expr.getValue(message);
+```
+# 4.2. Expressions in Bean Definitions
+4.2.1. XML Configuration
+```
+A property or constructor argument value can be set by using expressions, as the following example shows:
+
+<bean id="numberGuess" class="org.spring.samples.NumberGuess">
+    <property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
+
+    <!-- other properties -->
+</bean>
+The systemProperties variable is predefined, so you can use it in your expressions, as the following example shows:
+
+<bean id="taxCalculator" class="org.spring.samples.TaxCalculator">
+    <property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
+
+    <!-- other properties -->
+</bean>
+Note that you do not have to prefix the predefined variable with the # symbol in this context.
+
+You can also refer to other bean properties by name, as the following example shows:
+
+<bean id="numberGuess" class="org.spring.samples.NumberGuess">
+    <property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
+
+    <!-- other properties -->
+</bean>
+
+<bean id="shapeGuess" class="org.spring.samples.ShapeGuess">
+    <property name="initialShapeSeed" value="#{ numberGuess.randomNumber }"/>
+
+    <!-- other properties -->
+</bean>
+```
+# 4.2.2. Annotation Configuration
+```
+The following example sets the default value of a field variable:
+
+public static class FieldValueTestBean
+
+    @Value("#{ systemProperties['user.region'] }")
+    private String defaultLocale;
+
+    public void setDefaultLocale(String defaultLocale) {
+        this.defaultLocale = defaultLocale;
+    }
+
+    public String getDefaultLocale() {
+        return this.defaultLocale;
+    }
+
+}
+The following example shows the equivalent but on a property setter method:
+
+public static class PropertyValueTestBean
+
+    private String defaultLocale;
+
+    @Value("#{ systemProperties['user.region'] }")
+    public void setDefaultLocale(String defaultLocale) {
+        this.defaultLocale = defaultLocale;
+    }
+
+    public String getDefaultLocale() {
+        return this.defaultLocale;
+    }
+
+}
+Autowired methods and constructors can also use the @Value annotation, as the following examples show:
+
+public class SimpleMovieLister {
+
+    private MovieFinder movieFinder;
+    private String defaultLocale;
+
+    @Autowired
+    public void configure(MovieFinder movieFinder,
+            @Value("#{ systemProperties['user.region'] }") String defaultLocale) {
+        this.movieFinder = movieFinder;
+        this.defaultLocale = defaultLocale;
+    }
+
+    // ...
+}
+public class MovieRecommender {
+
+    private String defaultLocale;
+
+    private CustomerPreferenceDao customerPreferenceDao;
+
+    @Autowired
+    public MovieRecommender(CustomerPreferenceDao customerPreferenceDao,
+            @Value("#{systemProperties['user.country']}") String defaultLocale) {
+        this.customerPreferenceDao = customerPreferenceDao;
+        this.defaultLocale = defaultLocale;
+    }
+
+    // ...
+}
+```
+# 4.3. Language Reference
+This section describes how the Spring Expression Language works. It covers the following topics:
+
+Literal Expressions
+
+Properties, Arrays, Lists, Maps, and Indexers
+
+Inline Lists
+
+Inline Maps
+
+Array Construction
+
+Methods
+
+Operators
+
+Types
+
+Constructors
+
+Variables
+
+Functions
+
+Bean References
+
+Ternary Operator (If-Then-Else)
+
+The Elvis Operator
+
+Safe Navigation Operator
+# 4.3.1. Literal Expressions
+```
+ExpressionParser parser = new SpelExpressionParser();
+
+// evals to "Hello World"
+String helloWorld = (String) parser.parseExpression("'Hello World'").getValue();
+
+double avogadrosNumber = (Double) parser.parseExpression("6.0221415E+23").getValue();
+
+// evals to 2147483647
+int maxValue = (Integer) parser.parseExpression("0x7FFFFFFF").getValue();
+
+boolean trueValue = (Boolean) parser.parseExpression("true").getValue();
+
+Object nullValue = parser.parseExpression("null").getValue();
+```
+4.3.2. Properties, Arrays, Lists, Maps, and Indexers
+```
+// evals to 1856
+int year = (Integer) parser.parseExpression("Birthdate.Year + 1900").getValue(context);
+
+String city = (String) parser.parseExpression("placeOfBirth.City").getValue(context);
+Case insensitivity is allowed for the first letter of property names. The contents of arrays and lists are obtained by using square bracket notation, as the following example shows:
+
+ExpressionParser parser = new SpelExpressionParser();
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+// Inventions Array
+
+// evaluates to "Induction motor"
+String invention = parser.parseExpression("inventions[3]").getValue(
+        context, tesla, String.class);
+
+// Members List
+
+// evaluates to "Nikola Tesla"
+String name = parser.parseExpression("Members[0].Name").getValue(
+        context, ieee, String.class);
+
+// List and Array navigation
+// evaluates to "Wireless communication"
+String invention = parser.parseExpression("Members[0].Inventions[6]").getValue(
+        context, ieee, String.class);
+The contents of maps are obtained by specifying the literal key value within the brackets. In the following example, because keys for the Officers map are strings, we can specify string literals:
+
+// Officer's Dictionary
+
+Inventor pupin = parser.parseExpression("Officers['president']").getValue(
+        societyContext, Inventor.class);
+
+// evaluates to "Idvor"
+String city = parser.parseExpression("Officers['president'].PlaceOfBirth.City").getValue(
+        societyContext, String.class);
+
+// setting values
+parser.parseExpression("Officers['advisors'][0].PlaceOfBirth.Country").setValue(
+        societyContext, "Croatia");
+```
+# 4.3.3. Inline Lists
+```
+// evaluates to a Java list containing the four numbers
+List numbers = (List) parser.parseExpression("{1,2,3,4}").getValue(context);
+
+List listOfLists = (List) parser.parseExpression("{{'a','b'},{'x','y'}}").getValue(context);
+```
+# 4.3.4. Inline Maps
+```
+// evaluates to a Java map containing the two entries
+Map inventorInfo = (Map) parser.parseExpression("{name:'Nikola',dob:'10-July-1856'}").getValue(context);
+
+Map mapOfMaps = (Map) parser.parseExpression("{name:{first:'Nikola',last:'Tesla'},dob:{day:10,month:'July',year:1856}}").getValue(context);
+```
+# 4.3.5. Array Construction
+```
+int[] numbers1 = (int[]) parser.parseExpression("new int[4]").getValue(context);
+
+// Array with initializer
+int[] numbers2 = (int[]) parser.parseExpression("new int[]{1,2,3}").getValue(context);
+
+// Multi dimensional array
+int[][] numbers3 = (int[][]) parser.parseExpression("new int[4][5]").getValue(context);
+```
+# 4.3.6. Methods
+```
+// string literal, evaluates to "bc"
+String bc = parser.parseExpression("'abc'.substring(1, 3)").getValue(String.class);
+
+// evaluates to true
+boolean isMember = parser.parseExpression("isMember('Mihajlo Pupin')").getValue(
+        societyContext, Boolean.class);
+```
+# 4.3.7. Operators
+```
+// evaluates to true
+boolean trueValue = parser.parseExpression("2 == 2").getValue(Boolean.class);
+
+// evaluates to false
+boolean falseValue = parser.parseExpression("2 < -5.0").getValue(Boolean.class);
+
+// evaluates to true
+boolean trueValue = parser.parseExpression("'black' < 'block'").getValue(Boolean.class);
+```
+```
+// evaluates to false
+boolean falseValue = parser.parseExpression(
+        "'xyz' instanceof T(Integer)").getValue(Boolean.class);
+
+// evaluates to true
+boolean trueValue = parser.parseExpression(
+        "'5.00' matches '^-?\\d+(\\.\\d{2})?$'").getValue(Boolean.class);
+
+//evaluates to false
+boolean falseValue = parser.parseExpression(
+        "'5.0067' matches '^-?\\d+(\\.\\d{2})?$'").getValue(Boolean.class);
+```
+lt (<) gt (>) le (<=) ge (>=) eq (==) ne (!=) div (/) mod (%) not (!) and or not
+```
+// -- AND --
+
+// evaluates to false
+boolean falseValue = parser.parseExpression("true and false").getValue(Boolean.class);
+
+// evaluates to true
+String expression = "isMember('Nikola Tesla') and isMember('Mihajlo Pupin')";
+boolean trueValue = parser.parseExpression(expression).getValue(societyContext, Boolean.class);
+
+// -- OR --
+
+// evaluates to true
+boolean trueValue = parser.parseExpression("true or false").getValue(Boolean.class);
+
+// evaluates to true
+String expression = "isMember('Nikola Tesla') or isMember('Albert Einstein')";
+boolean trueValue = parser.parseExpression(expression).getValue(societyContext, Boolean.class);
+
+// -- NOT --
+
+// evaluates to false
+boolean falseValue = parser.parseExpression("!true").getValue(Boolean.class);
+
+// -- AND and NOT --
+String expression = "isMember('Nikola Tesla') and !isMember('Mihajlo Pupin')";
+boolean falseValue = parser.parseExpression(expression).getValue(societyContext, Boolean.class);
+```
+# Mathematical Operators
+```
+// Addition
+int two = parser.parseExpression("1 + 1").getValue(Integer.class);  // 2
+
+String testString = parser.parseExpression(
+        "'test' + ' ' + 'string'").getValue(String.class);  // 'test string'
+
+// Subtraction
+int four = parser.parseExpression("1 - -3").getValue(Integer.class);  // 4
+
+double d = parser.parseExpression("1000.00 - 1e4").getValue(Double.class);  // -9000
+
+// Multiplication
+int six = parser.parseExpression("-2 * -3").getValue(Integer.class);  // 6
+
+double twentyFour = parser.parseExpression("2.0 * 3e0 * 4").getValue(Double.class);  // 24.0
+
+// Division
+int minusTwo = parser.parseExpression("6 / -3").getValue(Integer.class);  // -2
+
+double one = parser.parseExpression("8.0 / 4e0 / 2").getValue(Double.class);  // 1.0
+
+// Modulus
+int three = parser.parseExpression("7 % 4").getValue(Integer.class);  // 3
+
+int one = parser.parseExpression("8 / 5 % 2").getValue(Integer.class);  // 1
+
+// Operator precedence
+int minusTwentyOne = parser.parseExpression("1+2-3*8").getValue(Integer.class);  // -21
+```
+```
+Inventor inventor = new Inventor();
+EvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+
+parser.parseExpression("Name").setValue(context, inventor, "Aleksandar Seovic");
+
+// alternatively
+String aleks = parser.parseExpression(
+        "Name = 'Aleksandar Seovic'").getValue(context, inventor, String.class);
+```
+# 4.3.8. Types
+```
+Class dateClass = parser.parseExpression("T(java.util.Date)").getValue(Class.class);
+
+Class stringClass = parser.parseExpression("T(String)").getValue(Class.class);
+
+boolean trueValue = parser.parseExpression(
+        "T(java.math.RoundingMode).CEILING < T(java.math.RoundingMode).FLOOR")
+        .getValue(Boolean.class);
+```
+# 4.3.9. Constructors
+```
+Inventor einstein = p.parseExpression(
+        "new org.spring.samples.spel.inventor.Inventor('Albert Einstein', 'German')")
+        .getValue(Inventor.class);
+
+//create new inventor instance within add method of List
+p.parseExpression(
+        "Members.add(new org.spring.samples.spel.inventor.Inventor(
+            'Albert Einstein', 'German'))").getValue(societyContext);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
