@@ -2751,27 +2751,1117 @@ p.parseExpression(
         "Members.add(new org.spring.samples.spel.inventor.Inventor(
             'Albert Einstein', 'German'))").getValue(societyContext);
 ```
+# 4.3.10. Variables
+```
+Inventor tesla = new Inventor("Nikola Tesla", "Serbian");
 
+EvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+context.setVariable("newName", "Mike Tesla");
 
+parser.parseExpression("Name = #newName").getValue(context, tesla);
+System.out.println(tesla.getName())  // "Mike Tesla"
+```
+```
+// create an array of integers
+List<Integer> primes = new ArrayList<Integer>();
+primes.addAll(Arrays.asList(2,3,5,7,11,13,17));
 
+// create parser and set variable 'primes' as the array of integers
+ExpressionParser parser = new SpelExpressionParser();
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataAccess();
+context.setVariable("primes", primes);
 
+// all prime numbers > 10 from the list (using selection ?{...})
+// evaluates to [11, 13, 17]
+List<Integer> primesGreaterThanTen = (List<Integer>) parser.parseExpression(
+        "#primes.?[#this>10]").getValue(context);
+```
+# 4.3.11. Functions
+```
+Method method = ...;
 
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+context.setVariable("myFunction", method);
+For example, consider the following utility method that reverses a string:
 
+public abstract class StringUtils {
 
+    public static String reverseString(String input) {
+        StringBuilder backwards = new StringBuilder(input.length());
+        for (int i = 0; i < input.length(); i++)
+            backwards.append(input.charAt(input.length() - 1 - i));
+        }
+        return backwards.toString();
+    }
+}
+You can then register and use the preceding method, as the following example shows:
 
+ExpressionParser parser = new SpelExpressionParser();
 
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+context.setVariable("reverseString",
+        StringUtils.class.getDeclaredMethod("reverseString", String.class));
 
+String helloWorldReversed = parser.parseExpression(
+        "#reverseString('hello')").getValue(context, String.class);
 
+```
+# 4.3.12. Bean References
+```
+If the evaluation context has been configured with a bean resolver, you can look up beans from an expression by using the @ symbol. The following example shows how to do so:
 
+ExpressionParser parser = new SpelExpressionParser();
+StandardEvaluationContext context = new StandardEvaluationContext();
+context.setBeanResolver(new MyBeanResolver());
 
+// This will end up calling resolve(context,"something") on MyBeanResolver during evaluation
+Object bean = parser.parseExpression("@something").getValue(context);
+To access a factory bean itself, you should instead prefix the bean name with an & symbol. The following example shows how to do so:
 
+ExpressionParser parser = new SpelExpressionParser();
+StandardEvaluationContext context = new StandardEvaluationContext();
+context.setBeanResolver(new MyBeanResolver());
 
+// This will end up calling resolve(context,"&foo") on MyBeanResolver during evaluation
+Object bean = parser.parseExpression("&foo").getValue(context);
+```
+# 4.3.13. Ternary Operator (If-Then-Else)
+```
+String falseString = parser.parseExpression(
+        "false ? 'trueExp' : 'falseExp'").getValue(String.class);
+In this case, the boolean false results in returning the string value 'falseExp'. A more realistic example follows:
 
+parser.parseExpression("Name").setValue(societyContext, "IEEE");
+societyContext.setVariable("queryName", "Nikola Tesla");
 
+expression = "isMember(#queryName)? #queryName + ' is a member of the ' " +
+        "+ Name + ' Society' : #queryName + ' is not a member of the ' + Name + ' Society'";
 
+String queryResultString = parser.parseExpression(expression)
+        .getValue(societyContext, String.class);
+// queryResultString = "Nikola Tesla is a member of the IEEE Society"
+```
+# 4.3.14. The Elvis Operator
+```
+String name = "Elvis Presley";
+String displayName = (name != null ? name : "Unknown");
+Instead, you can use the Elvis operator (named for the resemblance to Elvis' hair style). The following example shows how to use the Elvis operator:
 
+ExpressionParser parser = new SpelExpressionParser();
 
+String name = parser.parseExpression("name?:'Unknown'").getValue(String.class);
+System.out.println(name);  // 'Unknown'
+The following listing shows a more complex example:
 
+ExpressionParser parser = new SpelExpressionParser();
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+Inventor tesla = new Inventor("Nikola Tesla", "Serbian");
+String name = parser.parseExpression("Name?:'Elvis Presley'").getValue(context, tesla, String.class);
+System.out.println(name);  // Nikola Tesla
+
+tesla.setName(null);
+name = parser.parseExpression("Name?:'Elvis Presley'").getValue(context, tesla, String.class);
+System.out.println(name);  // Elvis Presley
+//@Value("#{systemProperties['pop3.port'] ?: 25}")
+```
+# 4.3.15. Safe Navigation Operator
+```
+ExpressionParser parser = new SpelExpressionParser();
+EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+Inventor tesla = new Inventor("Nikola Tesla", "Serbian");
+tesla.setPlaceOfBirth(new PlaceOfBirth("Smiljan"));
+
+String city = parser.parseExpression("PlaceOfBirth?.City").getValue(context, tesla, String.class);
+System.out.println(city);  // Smiljan
+
+tesla.setPlaceOfBirth(null);
+city = parser.parseExpression("PlaceOfBirth?.City").getValue(context, tesla, String.class);
+System.out.println(city);  // null - does not throw NullPointerException!!!
+```
+# 4.3.16. Collection Selection
+```
+List<Inventor> list = (List<Inventor>) parser.parseExpression(
+        "Members.?[Nationality == 'Serbian']").getValue(societyContext);
+
+Map newMap = parser.parseExpression("map.?[value<27]").getValue();
+In addition to returning all the selected elements, you can retrieve only the first or the last value. To obtain the first entry matching the selection, the syntax is .^[selectionExpression]. To obtain the last matching selection, the syntax is .$[selectionExpression].
+```
+# 4.3.17. Collection Projection
+```
+// returns ['Smiljan', 'Idvor' ]
+List placesOfBirth = (List)parser.parseExpression("Members.![placeOfBirth.city]");
+```
+# 4.3.18. Expression templating
+```
+String randomPhrase = parser.parseExpression(
+        "random number is #{T(java.lang.Math).random()}",
+        new TemplateParserContext()).getValue(String.class);
+// evaluates to "random number is 0.7038186818312008"
+
+public class TemplateParserContext implements ParserContext {
+
+    public String getExpressionPrefix() {
+        return "#{";
+    }
+
+    public String getExpressionSuffix() {
+        return "}";
+    }
+
+    public boolean isTemplate() {
+        return true;
+    }
+}
+```
+# 4.4. Classes Used in the Examples
+```
+Example 1. Inventor.java
+package org.spring.samples.spel.inventor;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+public class Inventor {
+
+    private String name;
+    private String nationality;
+    private String[] inventions;
+    private Date birthdate;
+    private PlaceOfBirth placeOfBirth;
+
+    public Inventor(String name, String nationality) {
+        GregorianCalendar c= new GregorianCalendar();
+        this.name = name;
+        this.nationality = nationality;
+        this.birthdate = c.getTime();
+    }
+
+    public Inventor(String name, Date birthdate, String nationality) {
+        this.name = name;
+        this.nationality = nationality;
+        this.birthdate = birthdate;
+    }
+
+    public Inventor() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public PlaceOfBirth getPlaceOfBirth() {
+        return placeOfBirth;
+    }
+
+    public void setPlaceOfBirth(PlaceOfBirth placeOfBirth) {
+        this.placeOfBirth = placeOfBirth;
+    }
+
+    public void setInventions(String[] inventions) {
+        this.inventions = inventions;
+    }
+
+    public String[] getInventions() {
+        return inventions;
+    }
+}
+```
+```
+Example 2. PlaceOfBirth.java
+package org.spring.samples.spel.inventor;
+
+public class PlaceOfBirth {
+
+    private String city;
+    private String country;
+
+    public PlaceOfBirth(String city) {
+        this.city=city;
+    }
+
+    public PlaceOfBirth(String city, String country) {
+        this(city);
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String s) {
+        this.city = s;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+}
+```
+```
+Example 3. Society.java
+package org.spring.samples.spel.inventor;
+
+import java.util.*;
+
+public class Society {
+
+    private String name;
+
+    public static String Advisors = "advisors";
+    public static String President = "president";
+
+    private List<Inventor> members = new ArrayList<Inventor>();
+    private Map officers = new HashMap();
+
+    public List getMembers() {
+        return members;
+    }
+
+    public Map getOfficers() {
+        return officers;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isMember(String name) {
+        for (Inventor inventor : members) {
+            if (inventor.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+```
+
+# 5. Aspect Oriented Programming with Spring
+
+```
+@EnableAspectJAutoProxy
+<aop:aspectj-autoproxy/>
+```
+# 5.4.2. Declaring an Aspect
+```
+<bean id="myAspect" class="org.xyz.NotVeryUsefulAspect">
+    <!-- configure properties of the aspect here -->
+</bean>
+
+import org.aspectj.lang.annotation.Aspect;
+
+@Aspect
+public class NotVeryUsefulAspect {
+
+}
+```
+# 5.4.3. Declaring a Pointcut
+```
+@Pointcut("execution(* transfer(..))")// the pointcut expression
+private void anyOldTransfer() {}// the pointcut signature
+```
+Spring AOP supports the following AspectJ pointcut designators (PCD) for use in pointcut expressions:
+execution this within target args @within @target @args @annotation
+
+The full AspectJ pointcut language supports additional pointcut designators that are not supported in Spring: call, get, set, preinitialization, staticinitialization, initialization, handler, adviceexecution, withincode, cflow, cflowbelow, if, @this, and @withincode. Use of these pointcut designators in pointcut expressions interpreted by Spring AOP results in an IllegalArgumentException being thrown.
+
+```
+Combining Pointcut Expressions
+@Pointcut("execution(public * *(..))")
+private void anyPublicOperation() {} 
+
+@Pointcut("within(com.xyz.someapp.trading..*)")
+private void inTrading() {} 
+
+@Pointcut("anyPublicOperation() && inTrading()")
+private void tradingOperation() {} 
+
+anyPublicOperation matches if a method execution join point represents the execution of any public method.
+inTrading matches if a method execution is in the trading module.
+tradingOperation matches if a method execution represents any public method in the trading module.
+```
+# Sharing Common Pointcut Definitions
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+@Aspect
+public class SystemArchitecture {
+
+    /**
+     * A join point is in the web layer if the method is defined
+     * in a type in the com.xyz.someapp.web package or any sub-package
+     * under that.
+     */
+    @Pointcut("within(com.xyz.someapp.web..*)")
+    public void inWebLayer() {}
+
+    /**
+     * A join point is in the service layer if the method is defined
+     * in a type in the com.xyz.someapp.service package or any sub-package
+     * under that.
+     */
+    @Pointcut("within(com.xyz.someapp.service..*)")
+    public void inServiceLayer() {}
+
+    /**
+     * A join point is in the data access layer if the method is defined
+     * in a type in the com.xyz.someapp.dao package or any sub-package
+     * under that.
+     */
+    @Pointcut("within(com.xyz.someapp.dao..*)")
+    public void inDataAccessLayer() {}
+
+    /**
+     * A business service is the execution of any method defined on a service
+     * interface. This definition assumes that interfaces are placed in the
+     * "service" package, and that implementation types are in sub-packages.
+     *
+     * If you group service interfaces by functional area (for example,
+     * in packages com.xyz.someapp.abc.service and com.xyz.someapp.def.service) then
+     * the pointcut expression "execution(* com.xyz.someapp..service.*.*(..))"
+     * could be used instead.
+     *
+     * Alternatively, you can write the expression using the 'bean'
+     * PCD, like so "bean(*Service)". (This assumes that you have
+     * named your Spring service beans in a consistent fashion.)
+     */
+    @Pointcut("execution(* com.xyz.someapp..service.*.*(..))")
+    public void businessService() {}
+
+    /**
+     * A data access operation is the execution of any method defined on a
+     * dao interface. This definition assumes that interfaces are placed in the
+     * "dao" package, and that implementation types are in sub-packages.
+     */
+    @Pointcut("execution(* com.xyz.someapp.dao.*.*(..))")
+    public void dataAccessOperation() {}
+
+}
+You can refer to the pointcuts defined in such an aspect anywhere you need a pointcut expression. For example, to make the service layer transactional, you could write the following:
+
+<aop:config>
+    <aop:advisor
+        pointcut="com.xyz.someapp.SystemArchitecture.businessService()"
+        advice-ref="tx-advice"/>
+</aop:config>
+
+<tx:advice id="tx-advice">
+    <tx:attributes>
+        <tx:method name="*" propagation="REQUIRED"/>
+    </tx:attributes>
+</tx:advice>
+```
+# Examples
+```
+execution(modifiers-pattern? ret-type-pattern declaring-type-pattern?name-pattern(param-pattern)
+            throws-pattern?)
+The execution of any public method:
+
+execution(public * *(..))
+The execution of any method with a name that begins with set:
+
+execution(* set*(..))
+The execution of any method defined by the AccountService interface:
+
+execution(* com.xyz.service.AccountService.*(..))
+The execution of any method defined in the service package:
+
+execution(* com.xyz.service.*.*(..))
+The execution of any method defined in the service package or one of its sub-packages:
+
+execution(* com.xyz.service..*.*(..))
+Any join point (method execution only in Spring AOP) within the service package:
+
+within(com.xyz.service.*)
+Any join point (method execution only in Spring AOP) within the service package or one of its sub-packages:
+
+within(com.xyz.service..*)
+Any join point (method execution only in Spring AOP) where the proxy implements the AccountService interface:
+
+this(com.xyz.service.AccountService)
+Any join point (method execution only in Spring AOP) where the target object implements the AccountService interface:
+
+target(com.xyz.service.AccountService)
+
+Any join point (method execution only in Spring AOP) that takes a single parameter and where the argument passed at runtime is Serializable:
+
+args(java.io.Serializable)
+
+Any join point (method execution only in Spring AOP) where the target object has a @Transactional annotation:
+
+@target(org.springframework.transaction.annotation.Transactional)
+
+Any join point (method execution only in Spring AOP) where the declared type of the target object has an @Transactional annotation:
+
+@within(org.springframework.transaction.annotation.Transactional)
+
+Any join point (method execution only in Spring AOP) where the executing method has an @Transactional annotation:
+
+@annotation(org.springframework.transaction.annotation.Transactional)
+
+Any join point (method execution only in Spring AOP) which takes a single parameter, and where the runtime type of the argument passed has the @Classified annotation:
+
+@args(com.xyz.security.Classified)
+
+Any join point (method execution only in Spring AOP) on a Spring bean named tradeService:
+
+bean(tradeService)
+
+Any join point (method execution only in Spring AOP) on Spring beans having names that match the wildcard expression *Service:
+
+bean(*Service)
+```
+# 5.4.4. Declaring Advice
+```
+Before Advice
+You can declare before advice in an aspect by using the @Before annotation:
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect
+public class BeforeExample {
+
+    @Before("com.xyz.myapp.SystemArchitecture.dataAccessOperation()")
+    public void doAccessCheck() {
+        // ...
+    }
+
+}
+If we use an in-place pointcut expression, we could rewrite the preceding example as the following example:
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect
+public class BeforeExample {
+
+    @Before("execution(* com.xyz.myapp.dao.*.*(..))")
+    public void doAccessCheck() {
+        // ...
+    }
+
+}
+```
+# After Returning Advice
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.AfterReturning;
+
+@Aspect
+public class AfterReturningExample {
+
+    @AfterReturning("com.xyz.myapp.SystemArchitecture.dataAccessOperation()")
+    public void doAccessCheck() {
+        // ...
+    }
+
+}
+```
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.AfterReturning;
+
+@Aspect
+public class AfterReturningExample {
+
+    @AfterReturning(
+        pointcut="com.xyz.myapp.SystemArchitecture.dataAccessOperation()",
+        returning="retVal")
+    public void doAccessCheck(Object retVal) {
+        // ...
+    }
+
+}
+```
+# After Throwing Advice
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.AfterThrowing;
+
+@Aspect
+public class AfterThrowingExample {
+
+    @AfterThrowing("com.xyz.myapp.SystemArchitecture.dataAccessOperation()")
+    public void doRecoveryActions() {
+        // ...
+    }
+
+}
+```
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.AfterThrowing;
+
+@Aspect
+public class AfterThrowingExample {
+
+    @AfterThrowing(
+        pointcut="com.xyz.myapp.SystemArchitecture.dataAccessOperation()",
+        throwing="ex")
+    public void doRecoveryActions(DataAccessException ex) {
+        // ...
+    }
+
+}
+```
+# After (Finally) Advice
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.After;
+
+@Aspect
+public class AfterFinallyExample {
+
+    @After("com.xyz.myapp.SystemArchitecture.dataAccessOperation()")
+    public void doReleaseLock() {
+        // ...
+    }
+
+}
+```
+# Around Advice
+```
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.ProceedingJoinPoint;
+
+@Aspect
+public class AroundExample {
+
+    @Around("com.xyz.myapp.SystemArchitecture.businessService()")
+    public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
+        // start stopwatch
+        Object retVal = pjp.proceed();
+        // stop stopwatch
+        return retVal;
+    }
+
+}
+```
+# Advice Parameters
+getArgs(): Returns the method arguments.
+
+getThis(): Returns the proxy object.
+
+getTarget(): Returns the target object.
+
+getSignature(): Returns a description of the method that is being advised.
+
+toString(): Prints a useful description of the method being advised.
+
+# Passing Parameters to Advice
+```
+@Before("com.xyz.myapp.SystemArchitecture.dataAccessOperation() && args(account,..)")
+public void validateAccount(Account account) {
+    // ...
+}
+```
+```
+@Pointcut("com.xyz.myapp.SystemArchitecture.dataAccessOperation() && args(account,..)")
+private void accountDataAccessOperation(Account account) {}
+
+@Before("accountDataAccessOperation(account)")
+public void validateAccount(Account account) {
+    // ...
+}
+```
+# See the AspectJ programming guide for more details.
+```
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Auditable {
+    AuditCode value();
+}
+```
+```
+@Before("com.xyz.lib.Pointcuts.anyPublicMethod() && @annotation(auditable)")
+public void audit(Auditable auditable) {
+    AuditCode code = auditable.value();
+    // ...
+}
+```
+# Advice Parameters and Generics
+```
+Spring AOP can handle generics used in class declarations and method parameters. Suppose you have a generic type like the following:
+
+public interface Sample<T> {
+    void sampleGenericMethod(T param);
+    void sampleGenericCollectionMethod(Collection<T> param);
+}
+You can restrict interception of method types to certain parameter types by typing the advice parameter to the parameter type for which you want to intercept the method:
+
+@Before("execution(* ..Sample+.sampleGenericMethod(*)) && args(param)")
+public void beforeSampleMethod(MyType param) {
+    // Advice implementation
+}
+This approach does not work for generic collections. So you cannot define a pointcut as follows:
+
+@Before("execution(* ..Sample+.sampleGenericCollectionMethod(*)) && args(param)")
+public void beforeSampleMethod(Collection<MyType> param) {
+    // Advice implementation
+}
+```
+# Determining Argument Names
+```
+@Before(value="com.xyz.lib.Pointcuts.anyPublicMethod() && target(bean) && @annotation(auditable)",
+        argNames="bean,auditable")
+public void audit(Object bean, Auditable auditable) {
+    AuditCode code = auditable.value();
+    // ... use code and bean
+}
+```
+```
+@Before(value="com.xyz.lib.Pointcuts.anyPublicMethod() && target(bean) && @annotation(auditable)",
+        argNames="bean,auditable")
+public void audit(JoinPoint jp, Object bean, Auditable auditable) {
+    AuditCode code = auditable.value();
+    // ... use code, bean, and jp
+}
+```
+```
+@Before("com.xyz.lib.Pointcuts.anyPublicMethod()")
+public void audit(JoinPoint jp) {
+    // ... use jp
+}
+```
+# Proceeding with Arguments
+```
+@Around("execution(List<Account> find*(..)) && " +
+        "com.xyz.myapp.SystemArchitecture.inDataAccessLayer() && " +
+        "args(accountHolderNamePattern)")
+public Object preProcessQueryPattern(ProceedingJoinPoint pjp,
+        String accountHolderNamePattern) throws Throwable {
+    String newPattern = preProcess(accountHolderNamePattern);
+    return pjp.proceed(new Object[] {newPattern});
+}
+```
+# 5.4.5. Introductions
+```
+@Aspect
+public class UsageTracking {
+
+    @DeclareParents(value="com.xzy.myapp.service.*+", defaultImpl=DefaultUsageTracked.class)
+    public static UsageTracked mixin;
+
+    @Before("com.xyz.myapp.SystemArchitecture.businessService() && this(usageTracked)")
+    public void recordUsage(UsageTracked usageTracked) {
+        usageTracked.incrementUseCount();
+    }
+
+}
+
+UsageTracked usageTracked = (UsageTracked) context.getBean("myService");
+```
+# 5.4.6. Aspect Instantiation Models
+```
+@Aspect("perthis(com.xyz.myapp.SystemArchitecture.businessService())")
+public class MyAspect {
+
+    private int someState;
+
+    @Before(com.xyz.myapp.SystemArchitecture.businessService())
+    public void recordServiceUsage() {
+        // ...
+    }
+
+}
+```
+# 5.4.7. An AOP Example
+```
+@Aspect
+public class ConcurrentOperationExecutor implements Ordered {
+
+    private static final int DEFAULT_MAX_RETRIES = 2;
+
+    private int maxRetries = DEFAULT_MAX_RETRIES;
+    private int order = 1;
+
+    public void setMaxRetries(int maxRetries) {
+        this.maxRetries = maxRetries;
+    }
+
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    @Around("com.xyz.myapp.SystemArchitecture.businessService()")
+    public Object doConcurrentOperation(ProceedingJoinPoint pjp) throws Throwable {
+        int numAttempts = 0;
+        PessimisticLockingFailureException lockFailureException;
+        do {
+            numAttempts++;
+            try {
+                return pjp.proceed();
+            }
+            catch(PessimisticLockingFailureException ex) {
+                lockFailureException = ex;
+            }
+        } while(numAttempts <= this.maxRetries);
+        throw lockFailureException;
+    }
+
+}
+```
+```
+The corresponding Spring configuration follows:
+
+<aop:aspectj-autoproxy/>
+
+<bean id="concurrentOperationExecutor" class="com.xyz.myapp.service.impl.ConcurrentOperationExecutor">
+    <property name="maxRetries" value="3"/>
+    <property name="order" value="100"/>
+</bean>
+To refine the aspect so that it retries only idempotent operations, we might define the following Idempotent annotation:
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Idempotent {
+    // marker annotation
+}
+We can then use the annotation to annotate the implementation of service operations. The change to the aspect to retry only idempotent operations involves refining the pointcut expression so that only @Idempotent operations match, as follows:
+
+@Around("com.xyz.myapp.SystemArchitecture.businessService() && " +
+        "@annotation(com.xyz.myapp.service.Idempotent)")
+public Object doConcurrentOperation(ProceedingJoinPoint pjp) throws Throwable {
+    ...
+}
+```
+# 5.5. Schema-based AOP Support
+```
+5.5.1. Declaring an Aspect
+<aop:config>
+    <aop:aspect id="myAspect" ref="aBean">
+        ...
+    </aop:aspect>
+</aop:config>
+
+<bean id="aBean" class="...">
+    ...
+</bean>
+```
+# 5.5.2. Declaring a Pointcut
+```
+After returning advice runs when a matched method execution completes normally. It is declared inside an <aop:aspect> in the same way as before advice. The following example shows how to declare it:
+
+<aop:aspect id="afterReturningExample" ref="aBean">
+
+    <aop:after-returning
+        pointcut-ref="dataAccessOperation"
+        method="doAccessCheck"/>
+
+    ...
+
+</aop:aspect>
+As in the @AspectJ style, you can get the return value within the advice body. To do so, use the returning attribute to specify the name of the parameter to which the return value should be passed, as the following example shows:
+
+<aop:aspect id="afterReturningExample" ref="aBean">
+
+    <aop:after-returning
+        pointcut-ref="dataAccessOperation"
+        returning="retVal"
+        method="doAccessCheck"/>
+
+    ...
+
+</aop:aspect>
+The doAccessCheck method must declare a parameter named retVal. The type of this parameter constrains matching in the same way as described for @AfterReturning. For example, you can declare the method signature as follows:
+
+public void doAccessCheck(Object retVal) {...
+After Throwing Advice
+After throwing advice executes when a matched method execution exits by throwing an exception. It is declared inside an <aop:aspect> by using the after-throwing element, as the following example shows:
+
+<aop:aspect id="afterThrowingExample" ref="aBean">
+
+    <aop:after-throwing
+        pointcut-ref="dataAccessOperation"
+        method="doRecoveryActions"/>
+
+    ...
+
+</aop:aspect>
+As in the @AspectJ style, you can get the thrown exception within the advice body. To do so, use the throwing attribute to specify the name of the parameter to which the exception should be passed as the following example shows:
+
+<aop:aspect id="afterThrowingExample" ref="aBean">
+
+    <aop:after-throwing
+        pointcut-ref="dataAccessOperation"
+        throwing="dataAccessEx"
+        method="doRecoveryActions"/>
+
+    ...
+
+</aop:aspect>
+The doRecoveryActions method must declare a parameter named dataAccessEx. The type of this parameter constrains matching in the same way as described for @AfterThrowing. For example, the method signature may be declared as follows:
+
+public void doRecoveryActions(DataAccessException dataAccessEx) {...
+```
+# Around Advice
+```
+<aop:aspect id="aroundExample" ref="aBean">
+
+    <aop:around
+        pointcut-ref="businessService"
+        method="doBasicProfiling"/>
+
+    ...
+
+</aop:aspect>
+The implementation of the doBasicProfiling advice can be exactly the same as in the @AspectJ example (minus the annotation, of course), as the following example shows:
+
+public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
+    // start stopwatch
+    Object retVal = pjp.proceed();
+    // stop stopwatch
+    return retVal;
+}
+```
+# Advice Parameters
+```
+<aop:before
+    pointcut="com.xyz.lib.Pointcuts.anyPublicMethod() and @annotation(auditable)"
+    method="audit"
+    arg-names="auditable"/>
+The arg-names attribute accepts a comma-delimited list of parameter names.
+
+The following slightly more involved example of the XSD-based approach shows some around advice used in conjunction with a number of strongly typed parameters:
+
+package x.y.service;
+
+public interface PersonService {
+
+    Person getPerson(String personName, int age);
+}
+
+public class DefaultFooService implements FooService {
+
+    public Person getPerson(String name, int age) {
+        return new Person(name, age);
+    }
+}
+Next up is the aspect. Notice the fact that the profile(..) method accepts a number of strongly-typed parameters, the first of which happens to be the join point used to proceed with the method call. The presence of this parameter is an indication that the profile(..) is to be used as around advice, as the following example shows:
+
+package x.y;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.util.StopWatch;
+
+public class SimpleProfiler {
+
+    public Object profile(ProceedingJoinPoint call, String name, int age) throws Throwable {
+        StopWatch clock = new StopWatch("Profiling for '" + name + "' and '" + age + "'");
+        try {
+            clock.start(call.toShortString());
+            return call.proceed();
+        } finally {
+            clock.stop();
+            System.out.println(clock.prettyPrint());
+        }
+    }
+}
+Finally, the following example XML configuration effects the execution of the preceding advice for a particular join point:
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- this is the object that will be proxied by Spring's AOP infrastructure -->
+    <bean id="personService" class="x.y.service.DefaultPersonService"/>
+
+    <!-- this is the actual advice itself -->
+    <bean id="profiler" class="x.y.SimpleProfiler"/>
+
+    <aop:config>
+        <aop:aspect ref="profiler">
+
+            <aop:pointcut id="theExecutionOfSomePersonServiceMethod"
+                expression="execution(* x.y.service.PersonService.getPerson(String,int))
+                and args(name, age)"/>
+
+            <aop:around pointcut-ref="theExecutionOfSomePersonServiceMethod"
+                method="profile"/>
+
+        </aop:aspect>
+    </aop:config>
+
+</beans>
+Consider the following driver script:
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import x.y.service.PersonService;
+
+public final class Boot {
+
+    public static void main(final String[] args) throws Exception {
+        BeanFactory ctx = new ClassPathXmlApplicationContext("x/y/plain.xml");
+        PersonService person = (PersonService) ctx.getBean("personService");
+        person.getPerson("Pengo", 12);
+    }
+}
+With such a Boot class, we would get output similar to the following on standard output:
+
+StopWatch 'Profiling for 'Pengo' and '12'': running time (millis) = 0
+-----------------------------------------
+ms     %     Task name
+-----------------------------------------
+00000  ?  execution(getFoo)
+```
+# 5.5.4. Introductions
+```
+<aop:aspect id="usageTrackerAspect" ref="usageTracking">
+
+    <aop:declare-parents
+        types-matching="com.xzy.myapp.service.*+"
+        implement-interface="com.xyz.myapp.service.tracking.UsageTracked"
+        default-impl="com.xyz.myapp.service.tracking.DefaultUsageTracked"/>
+
+    <aop:before
+        pointcut="com.xyz.myapp.SystemArchitecture.businessService()
+            and this(usageTracked)"
+            method="recordUsage"/>
+
+</aop:aspect>
+The class that backs the usageTracking bean would then contain the following method:
+
+public void recordUsage(UsageTracked usageTracked) {
+    usageTracked.incrementUseCount();
+}
+The interface to be implemented is determined by the implement-interface attribute. The value of the types-matching attribute is an AspectJ type pattern. Any bean of a matching type implements the UsageTracked interface. Note that, in the before advice of the preceding example, service beans can be directly used as implementations of the UsageTracked interface. To access a bean programmatically, you could write the following:
+
+UsageTracked usageTracked = (UsageTracked) context.getBean("myService");
+```
+# 5.5.6. Advisors
+```
+<aop:config>
+
+    <aop:pointcut id="businessService"
+        expression="execution(* com.xyz.myapp.service.*.*(..))"/>
+
+    <aop:advisor
+        pointcut-ref="businessService"
+        advice-ref="tx-advice"/>
+
+</aop:config>
+
+<tx:advice id="tx-advice">
+    <tx:attributes>
+        <tx:method name="*" propagation="REQUIRED"/>
+    </tx:attributes>
+</tx:advice>
+```
+# 5.5.7. An AOP Schema Example
+```
+public class ConcurrentOperationExecutor implements Ordered {
+
+    private static final int DEFAULT_MAX_RETRIES = 2;
+
+    private int maxRetries = DEFAULT_MAX_RETRIES;
+    private int order = 1;
+
+    public void setMaxRetries(int maxRetries) {
+        this.maxRetries = maxRetries;
+    }
+
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public Object doConcurrentOperation(ProceedingJoinPoint pjp) throws Throwable {
+        int numAttempts = 0;
+        PessimisticLockingFailureException lockFailureException;
+        do {
+            numAttempts++;
+            try {
+                return pjp.proceed();
+            }
+            catch(PessimisticLockingFailureException ex) {
+                lockFailureException = ex;
+            }
+        } while(numAttempts <= this.maxRetries);
+        throw lockFailureException;
+    }
+
+}
+```
+```
+The corresponding Spring configuration is as follows:
+
+<aop:config>
+
+    <aop:aspect id="concurrentOperationRetry" ref="concurrentOperationExecutor">
+
+        <aop:pointcut id="idempotentOperation"
+            expression="execution(* com.xyz.myapp.service.*.*(..))"/>
+
+        <aop:around
+            pointcut-ref="idempotentOperation"
+            method="doConcurrentOperation"/>
+
+    </aop:aspect>
+
+</aop:config>
+
+<bean id="concurrentOperationExecutor"
+    class="com.xyz.myapp.service.impl.ConcurrentOperationExecutor">
+        <property name="maxRetries" value="3"/>
+        <property name="order" value="100"/>
+</bean>
+Notice that, for the time, being we assume that all business services are idempotent. If this is not the case, we can refine the aspect so that it retries only genuinely idempotent operations, by introducing an Idempotent annotation and using the annotation to annotate the implementation of service operations, as the following example shows:
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Idempotent {
+    // marker annotation
+}
+The change to the aspect to retry only idempotent operations involves refining the pointcut expression so that only @Idempotent operations match, as follows:
+
+<aop:pointcut id="idempotentOperation"
+        expression="execution(* com.xyz.myapp.service.*.*(..)) and
+        @annotation(com.xyz.myapp.service.Idempotent)"/>
+```
 
 
 
