@@ -940,6 +940,8 @@ GroovyTemplateAutoConfiguration
 - @Slf4j is a Lombok annotation to autocreate an Slf4j-based LoggerFactory as log, allowing us to log these newly created "employees".
 - @Data is a Lombok annotation to create all the getters, setters, equals, hash, and toString methods, based on the fields.
 
+这个注释类型本省也被注释了，这种注释叫做元注释。第一个注释 (@Retention(RetentionPolicy.RUNTIME))表示这种类型的注释被VM保留从而使其能够通过反射在运行时读取；第二个注释@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})表示该标签可以用于构造函数、方法、参数、标签上
+
 # gradle 
 - apply plugin: 'java'
 - apply plugin: 'io.spring.dependency-management'

@@ -11,6 +11,8 @@
 
 框架原理介绍框架环境搭建快速入门创建Bean的方式及实现原理Bean种类Bean生命周期Bean的作用域Bean的注值方式SpEL整合Junit测试Web项目集成Spring注解装配BeanAOP思想、原理解剖传统方式实现AOP开发AspectJ介绍及实现AOP开发
 
+Core Container 由Spring-core, spring-beans, spring-context, spring-context-support和spring-expression几大部分组成
+
 # ioc
 控制反转 (Inversion of Control，IoC)，这是spring的核心；
 IoC的一个重点是在系统运行中，动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）来实现的。对象的创建不再通过new，而是交给spring配置创建类对象
