@@ -2610,7 +2610,7 @@ parser.parseExpression("Officers['advisors'][0].PlaceOfBirth.Country").setValue(
 // evaluates to a Java list containing the four numbers
 List numbers = (List) parser.parseExpression("{1,2,3,4}").getValue(context);
 
-List listOfLists = (List) parser.parseExpression("{{'a','b'},{'x','y'}}").getValue(context);
+List listOfLists = (List) parser.parseExpression("{{'a','b'}}").getValue(context);
 ```
 # 4.3.4. Inline Maps
 ```
