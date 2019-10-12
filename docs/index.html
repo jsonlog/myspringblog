@@ -229,12 +229,14 @@
                 var classname = Div.getElementsByTagName("a");
 
                 for(var j=0;j< classname.length;j++){
+                    // console.log(classname[j].valueOf())
                     if(bloglist[classname[j].href]) {
-                        console.log("duplicatehref",classname[j].href,bloglist[classname[j].href])
+                        // console.log("duplicatehref",classname[j].href,bloglist[classname[j].href])
                         continue;
                     }
                     // var a = classname[j];
-                    bloglistli = bloglist[classname[j].href] = {};
+                    bloglistli = {};
+                    bloglist[classname[j].href] = classname[j].outerHTML;
                     var oDiv = document.createElement('div');
                     bloglistul.appendChild(oDiv);
 
@@ -245,8 +247,9 @@
                     if(blog[i].match("[0-9]{4}-[0-9]{2}-[0-9]{2}")) bloglistli.timer = blog[i].match("[0-9]{4}-[0-9]{2}-[0-9]{2}");
                     if(classname[j].getAttribute("add_date")) {
                         var add_date = classname[j].getAttribute("add_date");
-                        if(add_date > 0)
-                        bloglistli.timer = dateFormat(add_date*1000);
+                        if(add_date > 0 && add_date < 10000000000){//TODO Bookmark.
+                            bloglistli.timer = dateFormat(add_date * 1000);
+                        }
                     }
                     if(classname[j].type) bloglistli.timer = classname[j].type;//
 
@@ -302,12 +305,16 @@
                     '          </dl>\n' +
                     '        </li>'
             }else{
-                console.log("duplicatelink",blog[i],bloglist[blog[i]])
+                // console.log("duplicatelink",blog[i],bloglist[blog[i]])
             }
             if(i == blog.length - 1) {//.md; *.txt; *.rst; *.adoc
                 aside(blogtagslist);
                 // tagClick();
                 console.log("total:"+Object.keys(bloglist).length);
+                // console.log(Object.values(bloglist).sort());
+                // Object.values(bloglist).sort().forEach(function(item,index){
+                //     console.log((item));
+                // })
             }
         }
     }

@@ -1,7 +1,7 @@
 <!--{
     "news_title" : "Web Servlet", 
     "timer" : "2019-07-28", 
-    "tagslist" : "spring,springmvc,source"
+    "tagslist" : "springmvc,source"
 }-->
 <!-- Spring MVC, WebSocket, SockJS, STOMP Messaging. -->
 # 1. Spring Web MVC

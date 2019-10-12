@@ -2,7 +2,7 @@
 <!--{
     "news_title" : "spring", 
     "timer" : "2019-07-23", 
-    "tagslist" : "spring,spring-framework,source"
+    "tagslist" : "spring,framework,source"
 }-->
 
 - 面向过程编程(Procedure Oriented Programming，POP)

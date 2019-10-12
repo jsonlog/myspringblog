@@ -1,7 +1,7 @@
 <!--{
     "news_title" : "springboot", 
     "timer" : "2019-05-19", 
-    "tagslist" : "spring,spring-boot,source"
+    "tagslist" : "spring-boot,source"
 }-->
 # [spring](https://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/htmlsingle/)
 brew tap pivotal/tap
