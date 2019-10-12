@@ -205,6 +205,18 @@
         }
         list[0].style.display = "";
     }
+    function dateFormat(longTypeDate){
+        var dateTypeDate = "";
+        var date = new Date();
+        date.setTime(longTypeDate);
+
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        return y + '-' + m + '-' + d;
+    }
     function githubblogAdd(blog) {
         var bloglist = {};
         var blogtagslist = new Set();
@@ -231,6 +243,11 @@
 
                     bloglistli.timer = '2011-11-11';
                     if(blog[i].match("[0-9]{4}-[0-9]{2}-[0-9]{2}")) bloglistli.timer = blog[i].match("[0-9]{4}-[0-9]{2}-[0-9]{2}");
+                    if(classname[j].getAttribute("add_date")) {
+                        var add_date = classname[j].getAttribute("add_date");
+                        if(add_date > 0)
+                        bloglistli.timer = dateFormat(add_date*1000);
+                    }
                     if(classname[j].type) bloglistli.timer = classname[j].type;//
 
                     index = classname[j].origin.indexOf("//");
@@ -290,6 +307,7 @@
             if(i == blog.length - 1) {//.md; *.txt; *.rst; *.adoc
                 aside(blogtagslist);
                 // tagClick();
+                console.log("total:"+Object.keys(bloglist).length);
             }
         }
     }
