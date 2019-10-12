@@ -171,7 +171,7 @@
             if(li[i].getAttribute('timer')) {//fix other li
                 arr.push(li[i]);
                 var ids = "," + li[i].getAttribute("tagslist") + ",";
-                if (ids.indexOf("," + tag + ",") != -1) {
+                if (ids.indexOf("," + tag) != -1) {//contains + ","
                     li[i].style.display = '';
                     count.push(li[i]);
                 } else {
@@ -182,7 +182,7 @@
         if(count.length == 1){
             // urlClick(count[0].title); //只有一篇文章直接打开,不显示列表
             var readmore = count[0].getElementsByClassName("read")[0];
-            count[0].style.display = 'none';
+            // count[0].style.display = 'none';//TODO empty
             readmore.click();
             // window.location.href += "?url="+count[0].title;
             return;
@@ -217,7 +217,11 @@
                 var classname = Div.getElementsByTagName("a");
 
                 for(var j=0;j< classname.length;j++){
-                    var a = classname[j];
+                    if(bloglist[classname[j].href]) {
+                        console.log("duplicatehref",classname[j].href,bloglist[classname[j].href])
+                        continue;
+                    }
+                    // var a = classname[j];
                     bloglistli = bloglist[classname[j].href] = {};
                     var oDiv = document.createElement('div');
                     bloglistul.appendChild(oDiv);
@@ -233,7 +237,7 @@
                     domain = classname[j].origin.substring(index+2).split(".");
                     if(domain.length > 2) bloglistli.tagslist = domain[1];
                     else bloglistli.tagslist = domain[0];
-                    if(classname[j].id) bloglistli.tagslist += classname[j].id;//
+                    if(classname[j].id) bloglistli.tagslist += ","+classname[j].id;//
 
                     tagslist = bloglistli.tagslist.split(",");
                     bloglistli.tags = "";
@@ -254,7 +258,7 @@
                         '          </dl>\n' +
                         '        </li>'
                 }
-            }else {
+            }else if(!bloglist[blog[i]]){
                 bloglistli = bloglist[blog[i]] = {};
                 var oDiv = document.createElement('div');
                 bloglistul.appendChild(oDiv);
@@ -280,6 +284,8 @@
                     '            </dd>\n' +
                     '          </dl>\n' +
                     '        </li>'
+            }else{
+                console.log("duplicatelink",blog[i],bloglist[blog[i]])
             }
             if(i == blog.length - 1) {//.md; *.txt; *.rst; *.adoc
                 aside(blogtagslist);

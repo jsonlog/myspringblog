@@ -1,7 +1,7 @@
 <!--{
     "news_title" : "标题", 
     "timer" : "2017-12-05", 
-    "tagslist" : "sample,示例,samplemd"
+    "tagslist" : "示例,sample"
 }-->
 # 博客系统
 同时支持静态网站和动态网站,两开花才是好花~_~
