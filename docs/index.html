@@ -168,13 +168,15 @@
         if(li.length == 0){ githubblog();}
         var arr = [];
         for (var i = 0; i < li.length; i++) {
-            arr.push(li[i]);
-            var ids = "," + li[i].getAttribute("tagslist") + ",";
-            if (ids.indexOf("," + tag + ",") != -1) {
-                li[i].style.display = '';
-                count.push(li[i]);
-            } else {
-                li[i].style.display = tag?'none':"";
+            if(li[i].getAttribute('timer')) {//fix other li
+                arr.push(li[i]);
+                var ids = "," + li[i].getAttribute("tagslist") + ",";
+                if (ids.indexOf("," + tag + ",") != -1) {
+                    li[i].style.display = '';
+                    count.push(li[i]);
+                } else {
+                    li[i].style.display = tag ? 'none' : "";
+                }
             }
         }
         if(count.length == 1){
@@ -187,6 +189,7 @@
         }
         arr.sort(function(a,b){
             // console.log(getDate(a.getAttribute('timer'))+getDate(b.getAttribute('timer'))+(getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))));
+            // console.log(a,b);
             return getDate(a.getAttribute('timer')) < getDate(b.getAttribute('timer'))?1:-1;
         });
         ul.innerHTML = "";
@@ -207,33 +210,57 @@
         var bloglist = {};
         var blogtagslist = new Set();
         for(var i = 0,len = blog.length; i < len; i++){
-            // if(blog[i].indexOf(".md") != -1)
-            //   bloglistli.innerHTML = markdown(blog[i]);
             bloglistli = bloglist[blog[i]] = {};
             var bloglistul = document.getElementById('bloglistul');
-            var oDiv = document.createElement('div');
-            bloglistul.appendChild(oDiv);
-            html(blog[i],$(oDiv))
-            // console.log(oDiv.innerHTML);
-            var classname = oDiv.getElementsByClassName("news_title");
-            bloglistli.news_title = classname[0].innerHTML;
-            classname = oDiv.getElementsByClassName("timer");
-            bloglistli.timer = classname[0].innerHTML;
-            classname = oDiv.getElementsByClassName("news_con");
-            bloglistli.news_con = classname[0].innerText;
-            tagtolist(oDiv,bloglistli,blogtagslist);
-            oDiv.innerHTML =
-                '        <li timer="'+bloglistli.timer+'" title="'+blog[i]+'" tagslist="'+bloglistli.tagslist+'"> <i class="blogpic"><a><img src="/myspringblog/images/9.jpg" alt=""> </a></i>\n' +
-                '          <dl>\n' +
-                '            <dt><a>'+bloglistli.news_title+'</a></dt>\n' +
-                '            <dd>\n' +
-                '                <span class="bloginfo">'+bloglistli.news_con+'</span>\n' +
-                '                <p class="timeinfo"><span class="tags">'+bloglistli.tags +'</span><span class="date">'+ bloglistli.timer+'</span></p>\n' +
-                //              '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' +
-                '                <a class="read" href="?url='+blog[i]+'">阅读更多</a> \n' +
-                '            </dd>\n' +
-                '          </dl>\n' +
-                '        </li>';
+
+            if(blog[i].toLowerCase().indexOf("bookmark") != -1){
+                var Div = document.createElement('div');
+                $(Div).load("/myspringblog/"+blog[i]+" DL");//TODO
+                var classname = Div.getElementsByTagName("a");
+                for(var j=0;j< classname.length;j++){
+                    var oDiv = document.createElement('div');
+                    bloglistul.appendChild(oDiv);
+
+                    var a = classname[j];
+                    oDiv.innerHTML =
+                        '        <li timer="'+bloglistli.timer+'" title="'+a.href+'" tagslist="'+bloglistli.tagslist+'">\n' +
+                        '          <dl>\n' +
+                        '            <dt><a>'+a.innerText+'</a></dt>\n' +
+                        '            <dd>\n' +
+                        '                <span class="bloginfo">'+a.origin+'</span>\n' +
+                        '                <p class="timeinfo"><span class="tags">'+bloglistli.tags +'</span><span class="date">'+ bloglistli.timer+'</span></p>\n' +
+                        //            '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' + TODO
+                        '                <a class="read" target="_blank" href="'+a.href+'">阅读更多</a> \n' +
+                        '            </dd>\n' +
+                        '          </dl>\n' +
+                        '        </li>'
+                }
+            }else {
+                var oDiv = document.createElement('div');
+                bloglistul.appendChild(oDiv);
+                html(blog[i], $(oDiv))
+                // console.log(oDiv.innerHTML);
+                var classname = oDiv.getElementsByClassName("news_title");
+                bloglistli.news_title = classname[0].innerHTML;
+                classname = oDiv.getElementsByClassName("timer");
+                bloglistli.timer = classname[0].innerHTML;
+                classname = oDiv.getElementsByClassName("news_con");
+                bloglistli.news_con = classname[0].innerText;
+                tagtolist(oDiv, bloglistli, blogtagslist);
+                oDiv.innerHTML = bloglistli.news_con;//.replace('<a extends="" annotation="">','');//FIXME
+                oDiv.innerHTML =
+                    '        <li timer="' + bloglistli.timer + '" title="' + blog[i] + '" tagslist="' + bloglistli.tagslist + '"> <i class="blogpic"><a><img src="/myspringblog/images/9.jpg" alt=""> </a></i>\n' +
+                    '          <dl>\n' +
+                    '            <dt><a>' + bloglistli.news_title + '</a></dt>\n' +
+                    '            <dd>\n' +
+                    '                <span class="bloginfo">' + oDiv.innerHTML + '</span>\n' +
+                    '                <p class="timeinfo"><span class="tags">' + bloglistli.tags + '</span><span class="date">' + bloglistli.timer + '</span></p>\n' +
+                    //            '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' + TODO
+                    '                <a class="read" href="?url=' + blog[i] + '">阅读更多</a> \n' +
+                    '            </dd>\n' +
+                    '          </dl>\n' +
+                    '        </li>'
+            }
             if(i == blog.length - 1) {//.md; *.txt; *.rst; *.adoc
                 aside(blogtagslist);
                 // tagClick();
@@ -305,8 +332,10 @@
         }
     }
     function getDate(strDate){
+        // console.log(strDate)
         var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
             function (d) { return parseInt(d, 10) - 1; }).match(/\d+/g) + ')');
+        // console.log(date)
         return date;
     }
 </script>

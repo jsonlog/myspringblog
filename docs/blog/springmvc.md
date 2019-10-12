@@ -919,6 +919,8 @@ public class BookingController {
     @GetMapping("/bookings/{booking}")
     public ModelAndView getBooking(@PathVariable Long booking) {
         // ...
+		//model.addAttribute("list", list);
+		//return new ModelAndView("/admins/index", "model", model);//FIXME
     }
 }
 ```

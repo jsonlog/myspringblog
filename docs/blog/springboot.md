@@ -760,129 +760,43 @@ public class Application extends SpringBootServletInitializer {
 }
 ```
 
-
-
-
-
-
 # [spring-boot-starter](https://github.com/spring-projects/spring-boot/tree/v2.1.6.RELEASE/spring-boot-project/spring-boot-starters)
 
 # guides 
-- @SpringBootApplication = @EnableAutoConfiguration @EnableWebMvc @ComponentScan(controller)  @Configuration(bean)
-- @RestController = @Controller and @ResponseBody
-- @EnableAutoConfiguration(exclude={*.class}) //excludeName //spring.autoconfigure.exclude
-- @RequestMapping("/")
-- @GetMapping
-- @PostMapping
-- @DeleteMapping
-- @ComponentScan = @Component +
-- @Import({ MyConfig.class, MyAnotherConfig.class }) = @Component
-- @ImportResource xml
-- @Autowired(constructor injection)(If a bean has one constructor, you can omit)
-- @Component = other
-- @Service
-- @Repository
-- @Controller
-- @Bean
-- @ConfigurationProperties(prefix="acme") @ConfigurationProperties("acme")
-- @Validated
-- @Valid
-- @NotNull
-- @NotEmpty
-- @Profile("production") --spring.profiles.active=dev,hsqldb
-- @EnableConfigurationProperties(AcmeProperties.class)
-- @PropertySource(YAML files cannot be loaded by using the @PropertySource annotation.)
-- @TestPropertySource
-- @SpringBootTest
-- @Value("${name}")
-- @PostConstruct
-- @DurationUnit(ChronoUnit.SECONDS) private Duration sessionTimeout = Duration.ofSeconds(30);
-- @DataSizeUnit(DataUnit.MEGABYTES)	private DataSize bufferSize = DataSize.ofMegabytes(2);
-- @JsonComponent //jackson JsonSerializer
-- @ControllerAdvice(basePackageClasses = AcmeController.class)
-- @ExceptionHandler(YourException.class)
-- @EnableHypermediaSupport
-- @EnableWebFlux //spring.webflux.static-path-pattern=/resources/**
-- @Order
-- @Path("/hello")
-- @ApplicationPath
-- @WebServlet, @WebFilter, and @WebListener can be enabled by using @ServletComponentScan.
-- @EnableGlobalMethodSecurity //org.springframework.boot.autoconfigure.security  spring.security.user.name and spring.security.user.password.
-- @EntityScan
-- @Entity 
-- @Embeddable 
-- @MappedSuperclass
-- @Id
-- @GeneratedValue //spring.jpa.hibernate.ddl-auto=create-drop //spring.jpa.properties.hibernate.globally_quoted_identifiers=true
-- @Column(nullable = false)
-- @Query
-- @EnableJdbcRepositories
-- @NodeEntity Neo4j OGM 
-- @EnableGemfireRepositories.
-- @SolrDocument 
-- @Document
-- @EnableCaching //org.springframework.cache.CacheManager
-- @CacheResult
-- @JmsListener(destination = "someQueue")
-- @EnableJms 
-- @Qualifier()
-- @EnableAsync
-- @EnableScheduling
-- @EnableIntegration //spring.integration.jdbc.initialize-schema=always
-- @RunWith(SpringRunner.class)
-- @ExtendWith(SpringExtension.class)
-- @ContextConfiguration(classes=…​)
-@TestConfiguration
+@PageableDefault(page = 0, size = 1000, sort = {"id"}, direction = Sort.Direction.DESC)
+@EnableHypermediaSupport
+@EnableWebFlux //spring.webflux.static-path-pattern=/resources/**
+@Path("/hello")
+@ApplicationPath
+@EnableGlobalMethodSecurity //org.springframework.boot.autoconfigure.security  spring.security.user.name and spring.security.user.password.
+@Embeddable
+@MappedSuperclass
+@Query
+@EnableJdbcRepositories
+@NodeEntity Neo4j OGM
+@EnableGemfireRepositories.
+@SolrDocument
+@CacheResult
+@JmsListener(destination = "someQueue")
+@EnableJms
+@EnableIntegration //spring.integration.jdbc.initialize-schema=always
+@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
-@LocalServerPort
 @MockBean
 @SpyBean
-@Cacheable 
-@ImportAutoConfiguration#exclude
-@…​Test annotations provide an excludeAutoConfiguration attribute
-@JsonTest
-@JsonComponent
-@WebMvcTest
-@AutoConfigureWebTestClient
-@DataJpaTest
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-@AutoConfigureTestDatabase(replace=Replace.NONE)
-@JdbcTest
-@DataJdbcTest
-@DataNeo4jTest
 @AutoConfigureRestDocs
 @EnableBatchProcessing
 @Rule //JUnit
-@Conditional
-@ConditionalOnResource
-@ConditionalOnClass
-@ConditionalOnMissingBean
-@AutoConfigureBefore
-@AutoConfigureAfter
-@AutoConfigureOrder
-@ConditionalOnProperty
-@ConditionalOnWebApplication
-@ConditionalOnNotWebApplication
-@ConditionalOnExpression
-@RequestParam
-@Primary
-@EnableBatchProcessing
-@DeprecatedConfigurationProperty(replacement = "app.acme.name")
-@Deprecated
-@Description("Provides a basic example of a bean")
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-
-
+@RefreshScope
 @WithMockUser(roles="ADMIN")
 WebMvcAutoConfiguration
 ThymeleafAutoConfiguration
 FreeMarkerAutoConfiguration
 GroovyTemplateAutoConfiguration
-
-
-
-
+@Slf4j is a Lombok annotation to autocreate an Slf4j-based LoggerFactory as log, allowing us to log these newly created "employees".
+@Data is a Lombok annotation to create all the getters, setters, equals, hash, and toString methods, based on the fields.
 - @EnableScheduling
 - @Scheduled(fixedRate = 5000)
 - @Scheduled(cron = "0 0/1 * * * ? ")
@@ -931,16 +845,6 @@ GroovyTemplateAutoConfiguration
      0 11 11 11 11 ? 每年的11月11号 11点11分触发
      参考网址：http://blog.csdn.net/irencewh/article/details/45332295（出处没找到）
      -->
-
-- @RunWith(SpringRunner.class)
-- @SpringBootTest
-- @Entity is a JPA annotation to make this object ready for storage in a JPA-based data store.
-
-
-- @Slf4j is a Lombok annotation to autocreate an Slf4j-based LoggerFactory as log, allowing us to log these newly created "employees".
-- @Data is a Lombok annotation to create all the getters, setters, equals, hash, and toString methods, based on the fields.
-
-这个注释类型本省也被注释了，这种注释叫做元注释。第一个注释 (@Retention(RetentionPolicy.RUNTIME))表示这种类型的注释被VM保留从而使其能够通过反射在运行时读取；第二个注释@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})表示该标签可以用于构造函数、方法、参数、标签上
 
 # gradle 
 - apply plugin: 'java'
