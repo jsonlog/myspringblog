@@ -206,36 +206,53 @@
         list[0].style.display = "";
     }
     function githubblogAdd(blog) {
-        // var blog;
         var bloglist = {};
         var blogtagslist = new Set();
         for(var i = 0,len = blog.length; i < len; i++){
-            bloglistli = bloglist[blog[i]] = {};
             var bloglistul = document.getElementById('bloglistul');
 
             if(blog[i].toLowerCase().indexOf("bookmark") != -1){
                 var Div = document.createElement('div');
                 $(Div).load("/myspringblog/"+blog[i]+" DL");//TODO
                 var classname = Div.getElementsByTagName("a");
+
                 for(var j=0;j< classname.length;j++){
+                    var a = classname[j];
+                    bloglistli = bloglist[classname[j].href] = {};
                     var oDiv = document.createElement('div');
                     bloglistul.appendChild(oDiv);
 
-                    var a = classname[j];
+                    bloglistli.news_title = classname[j].innerText;
+                    bloglistli.timer = '2019-10-12';//classname[0].innerHTML;
+                    bloglistli.news_con = classname[j].origin;
+
+                    bloglistli.tagslist = "third";
+                    index = classname[j].origin.indexOf("//");
+                    domain = classname[j].origin.substring(index+2).split(".");
+                    if(domain.length == 3) bloglistli.tagslist += ","+domain[1];
+                    else if(domain.length < 3) bloglistli.tagslist += ","+domain[0];
+
+                    tagslist = bloglistli.tagslist.split(",");
+                    bloglistli.tags = "";
+                    for(tags in tagslist){
+                        blogtagslist.add(tagslist[tags]);
+                        bloglistli.tags += "<a href='#' onclick='tagClick(\""+tagslist[tags]+"\")'>"+tagslist[tags]+"</a>";//'<a href="#" onclick="tagClick(tagslist[tags]);">'+tagslist[tags]+'</a>';
+                    }
+                    oDiv.innerHTML = bloglistli.news_con;
                     oDiv.innerHTML =
-                        '        <li timer="'+bloglistli.timer+'" title="'+a.href+'" tagslist="'+bloglistli.tagslist+'">\n' +
+                        '        <li timer="' + bloglistli.timer + '" title="' + blog[i] + '" tagslist="' + bloglistli.tagslist + '">\n' +
                         '          <dl>\n' +
-                        '            <dt><a>'+a.innerText+'</a></dt>\n' +
+                        '            <dt><a>' + bloglistli.news_title + '</a></dt>\n' +
                         '            <dd>\n' +
-                        '                <span class="bloginfo">'+a.origin+'</span>\n' +
-                        '                <p class="timeinfo"><span class="tags">'+bloglistli.tags +'</span><span class="date">'+ bloglistli.timer+'</span></p>\n' +
-                        //            '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' + TODO
-                        '                <a class="read" target="_blank" href="'+a.href+'">阅读更多</a> \n' +
+                        '                <span class="bloginfo">' + oDiv.innerHTML + '</span>\n' +
+                        '                <p class="timeinfo"><span class="tags">' + bloglistli.tags + '</span><span class="date">' + bloglistli.timer + '</span></p>\n' +
+                        '                <a class="read" target="_blank" href="'+classname[j].href+'">阅读更多</a> \n' +
                         '            </dd>\n' +
                         '          </dl>\n' +
                         '        </li>'
                 }
             }else {
+                bloglistli = bloglist[blog[i]] = {};
                 var oDiv = document.createElement('div');
                 bloglistul.appendChild(oDiv);
                 html(blog[i], $(oDiv))
