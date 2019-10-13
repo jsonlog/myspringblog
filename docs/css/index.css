@@ -1,4 +1,37 @@
  @charset "gb2312";
+ /*dt{*/
+ /*    float:left;*/
+ /*    margin-top:0px;*/
+ /*    margin-right:0px;*/
+ /*}*/
+ /*dl{*/
+ /*    float:left;*/
+ /*    margin-top:0px;*/
+ /*    margin-right:0px;*/
+ /*}*/
+
+/*dt a{*/
+/*    width: 200px;*/
+/*    height:auto;*/
+/*    max-height: 90px;*/
+/*    line-height: 25px;*/
+/*    !*font-size: 28px;*!*/
+/*    color: #FF0000;*/
+/*    letter-spacing: 2px;*/
+/*    overflow: hidden;*/
+/*    padding-bottom: 10px;*/
+/*    overflow: hidden;*/
+/*    white-space: nowrap;*/
+/*    text-overflow: ellipsis;*/
+/*    -o-text-overflow: ellipsis;*/
+
+/*    word-wrap:break-word;*/
+/*    word-break:break-all;*/
+/*    !*font-family: "微软雅黑";*!*/
+/* }*/
+/* dl{*/
+/*     width:100%;*/
+/* }*/
 .wrapper { width: 95%; margin: 130px auto 0; overflow: hidden }
 .main { width:60%}
 /*banner*/

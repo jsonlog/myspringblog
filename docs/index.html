@@ -37,7 +37,9 @@
     <div id="test-markdown-view" style="display: none;"></div>
     <form>
         <main id="main" style="width:65%;display:inline-block;vertical-align: top;">
-            <div class="bloglist">
+<!--            <div style="float:right;height:100px;border:1px solid #f00;width:100px;"></div>-->
+<!--            <div style="border:1px solid #0f0;height:100px;"></div>-->
+            <div class="bloglist" style="width:100%;overflow:hidden;">
                 <ul id="bloglistul">
                 </ul>
             </div>
@@ -65,7 +67,7 @@
         toload = false;
     }
     function aside(blogtagslist) {
-        window.wblogtagslist = blogtagslist;
+        window.wblogtagslist = Array.from(blogtagslist).sort();
         // $(document).ready(function () {
         setTimeout(function () {
             var cloud = document.getElementById("cloud");
@@ -77,7 +79,7 @@
                 window.wblogtagslist.forEach(function (currentValue, key, array) {
                     count++;
                     cloud.innerHTML += '<a href="#" onclick="tagClick(\'' + currentValue + '\');">' + currentValue + '</a>';
-                    if(count == array.size) {
+                    if(count == array.length) {
                         cloud.innerHTML = '<h2 class="hometitle">标签</h2>\n' +
                             '        <ul id="tag">'+cloud.innerHTML+ "</ul>";
                     }
@@ -171,7 +173,7 @@
             if(li[i].getAttribute('timer')) {//fix other li
                 arr.push(li[i]);
                 var ids = "," + li[i].getAttribute("tagslist") + ",";
-                if (ids.indexOf("," + tag) != -1) {//contains + ","
+                if (ids.indexOf("," + tag) != -1) {//contains + "," //TODO 子集
                     li[i].style.display = '';
                     count.push(li[i]);
                 } else {
@@ -182,8 +184,9 @@
         if(count.length == 1){
             // urlClick(count[0].title); //只有一篇文章直接打开,不显示列表
             var readmore = count[0].getElementsByClassName("read")[0];
-            // count[0].style.display = 'none';//TODO empty
+            // count[0].style.display = 'none';
             readmore.click();
+            tagClick();
             // window.location.href += "?url="+count[0].title;
             return;
         }
@@ -275,8 +278,8 @@
                     oDiv.innerHTML = bloglistli.news_con;
                     oDiv.innerHTML =
                         '        <li timer="' + bloglistli.timer + '" title="' + blog[i] + '" tagslist="' + bloglistli.tagslist + '">\n' +
-                        '          <dl>\n' +
-                        '            <dt><a>' + bloglistli.news_title + '</a></dt>\n' +
+                        '          <dl style="width:100%;overflow:hidden;">\n' +
+                        '            <dt><a>' + bloglistli.news_title + '</a></dt>\n' +//word-wrap:break-word;
                         '            <dd>\n' +
                         '                <span class="bloginfo">' + oDiv.innerHTML + '</span>\n' +
                         '                <p class="timeinfo"><span class="tags">' + bloglistli.tags + '</span><span class="date">' + bloglistli.timer + '</span></p>\n' +
@@ -300,13 +303,13 @@
                 tagtolist(oDiv, bloglistli, blogtagslist);
                 oDiv.innerHTML = bloglistli.news_con;//.replace('<a extends="" annotation="">','');//FIXME
                 oDiv.innerHTML =
-                    '        <li timer="' + bloglistli.timer + '" title="' + blog[i] + '" tagslist="' + bloglistli.tagslist + '"> <i class="blogpic"><a><img src="/myspringblog/images/9.jpg" alt=""> </a></i>\n' +
-                    '          <dl>\n' +
+                    '        <li timer="' + bloglistli.timer + '" title="' + blog[i] + '" tagslist="' + bloglistli.tagslist + '"> <i style="display: none;" class="blogpic"><a><img src="/myspringblog/images/9.jpg" alt=""> </a></i>\n' +
+                    '          <dl style="width:100%;overflow:hidden;">\n' +
                     '            <dt><a>' + bloglistli.news_title + '</a></dt>\n' +
                     '            <dd>\n' +
                     '                <span class="bloginfo">' + oDiv.innerHTML + '</span>\n' +
                     '                <p class="timeinfo"><span class="tags">' + bloglistli.tags + '</span><span class="date">' + bloglistli.timer + '</span></p>\n' +
-                    //            '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' + TODO
+                    //            '                <p class="timeinfo"><span class="date">'+bloglistli.timer +'</span><span class="tags">'+ bloglistli.tags+'</span></p>\n' +
                     '                <a class="read" href="?url=' + blog[i] + '">阅读更多</a> \n' +
                     '            </dd>\n' +
                     '          </dl>\n' +
