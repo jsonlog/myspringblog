@@ -217,6 +217,12 @@
         d = d < 10 ? ('0' + d) : d;
         return y + '-' + m + '-' + d;
     }
+    function sorthref(a,b) {
+        // console.log(a,b);//localeCompare
+        // if(!a) return true;
+        // if(!b) return false;
+        return a.toLowerCase().replace('http://','https://').replace("//www.","//").localeCompare(b.toLowerCase().replace('http://','https://').replace("//www.","//"));
+    }
     function githubblogAdd(blog) {
         var bloglist = {};
         var blogtagslist = new Set();
@@ -243,7 +249,7 @@
                     bloglistli.news_title = classname[j].innerText;
                     bloglistli.news_con = classname[j].origin;
 
-                    bloglistli.timer = '2011-11-11';
+                    bloglistli.timer = '2010-12-11';
                     if(blog[i].match("[0-9]{4}-[0-9]{2}-[0-9]{2}")) bloglistli.timer = blog[i].match("[0-9]{4}-[0-9]{2}-[0-9]{2}");
                     if(classname[j].getAttribute("add_date")) {
                         var add_date = classname[j].getAttribute("add_date");
@@ -251,19 +257,20 @@
                             bloglistli.timer = dateFormat(add_date * 1000);
                         }
                     }
-                    if(classname[j].type) bloglistli.timer = classname[j].type;//
+                    if(classname[j].getAttribute("time")) bloglistli.timer = classname[j].getAttribute("time");//
 
                     index = classname[j].origin.indexOf("//");
                     domain = classname[j].origin.substring(index+2).split(".");
-                    if(domain.length > 2) bloglistli.tagslist = domain[1];
-                    else bloglistli.tagslist = domain[0];
-                    if(classname[j].id) bloglistli.tagslist += ","+classname[j].id;//
+                    if(classname[j].outerHTML.toLowerCase().indexOf("android") != -1 || classname[j].outerHTML.indexOf("安卓") != -1) bloglistli.tagslist = "android";
+                    else if(domain.length > 2) bloglistli.tagslist = domain[1];
+                    else bloglistli.tagslist = domain[0];//TODO replace
+                    if(classname[j].getAttribute("tag")) bloglistli.tagslist += ","+classname[j].getAttribute("tag");//
 
                     tagslist = bloglistli.tagslist.split(",");
                     bloglistli.tags = "";
                     for(tags in tagslist){
                         blogtagslist.add(tagslist[tags]);
-                        bloglistli.tags += "<a href='#' onclick='tagClick(\""+tagslist[tags]+"\")'>"+tagslist[tags]+"</a>";//'<a href="#" onclick="tagClick(tagslist[tags]);">'+tagslist[tags]+'</a>';
+                        bloglistli.tags += "<a href='#' onclick='tagClick(\""+tagslist[tags]+"\")'>"+tagslist[tags]+"</a>";
                     }
                     oDiv.innerHTML = bloglistli.news_con;
                     oDiv.innerHTML =
@@ -279,7 +286,7 @@
                         '        </li>'
                 }
             }else if(!bloglist[blog[i]]){
-                bloglistli = bloglist[blog[i]] = {};
+                bloglistli = {};bloglist[blog[i]] = blog[i];
                 var oDiv = document.createElement('div');
                 bloglistul.appendChild(oDiv);
                 html(blog[i], $(oDiv))
@@ -311,10 +318,11 @@
                 aside(blogtagslist);
                 // tagClick();
                 console.log("total:"+Object.keys(bloglist).length);
-                // console.log(Object.values(bloglist).sort());
-                // Object.values(bloglist).sort().forEach(function(item,index){
-                //     console.log((item));
-                // })
+                // console.log(Object.values(bloglist).sort());//sort(compareFn?: (a: T, b: T) => number): this;
+                Object.values(bloglist).sort(sorthref).forEach(function(item,index){
+                    if(item.toLowerCase().indexOf('href="http') != -1)
+                    console.log((item));
+                })
             }
         }
     }
