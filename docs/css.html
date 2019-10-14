@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<base href="//www.w3cschool.cn/images/" target="_blank">   
+<title>W3Cschool教程(w3cschool.cn)</title>
+<style>
+h1
+{
+	color:orange;
+	text-align:center;
+}
+p
+{
+	font-family:"Times New Roman";
+	font-size:20px;
+}
+
+#para1
+{
+	text-align:center;
+	color:rgb(0,0,255);
+} 
+
+
+p.center
+{
+	text-align:center;
+}
+
+body
+{
+	background:#ffffff url('/statics/images/w3c/logo.png') no-repeat right top;
+	margin-right:200px;
+}
+h1{text-align:center}
+p.date{text-align:right}
+p.main{text-align:justify}
+a {text-decoration:none;}
+h1 {text-decoration:overline;} 
+h2 {text-decoration:line-through;} 
+h3 {text-decoration:underline;}
+p.uppercase {text-transform:uppercase;}
+p.lowercase {text-transform:lowercase;}
+p.capitalize {text-transform:capitalize;}
+p.serif{font-family:"Times New Roman",Times,serif;}
+p.sansserif{font-family:Arial,Helvetica,sans-serif;}
+body {font-size:100%;}
+h1 {font-size:2.5em;}
+h2 {font-size:1.875em;}
+p {font-size:0.875em;}
+a:link {color:#FF0000;}    /* unvisited link */
+a:visited {color:#00FF00;} /* visited link */
+a:hover {color:#FF00FF;}   /* mouse over link */
+a:active {color:#0000FF;}  /* selected link */
+ul.a {list-style-type:circle;}
+ul.b {list-style-type:square;}
+ol.c {list-style-type:upper-roman;}
+ol.d {list-style-type:lower-alpha;}
+ul.c 
+{
+	list-style-image:url('/statics/images/w3c/sqpurple.gif');
+}
+table,th,td
+{
+	border:1px solid black;
+}
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+div.ex
+{
+width:220px;
+padding:10px;
+border:5px solid gray;
+margin:0px;
+}
+p.none {border-style:none;}
+p.dotted {border-style:dotted;}
+p.dashed {border-style:dashed;}
+p.solid {border-style:solid;}
+p.double {border-style:double;}
+p.groove {border-style:groove;}
+p.ridge {border-style:ridge;}
+p.inset {border-style:inset;}
+p.outset {border-style:outset;}
+p.hidden {border-style:hidden;}
+
+p
+{
+	color:blue;
+	text-align:center;
+}
+.marked
+{
+	background-color:red;
+}
+.marked p
+{
+	color:white;
+}
+li{display:inline}
+span
+{
+	display:block;
+}
+p.pos_fixed
+{
+	position:fixed;
+	top:30px;
+	right:5px;
+}
+  a.red:visited {color:#FF0000;}       
+
+  div p   /* 后代选取器匹配所有指定元素的后代元素及子元素。 */
+  /* div>p 子元素选择器匹配所有指定元素的后代元素 */
+  /* div+p 相邻兄弟选择器可选择紧接在另一元素后的元素 */
+  /* div-p 普通兄弟选择器可选择紧接在另一元素后的所有元素。 */
+{
+	background-color:yellow;
+}
+
+ul
+{
+list-style-type:none;
+margin:0;
+padding:0;
+}
+li
+{
+display:inline;
+}
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+[title]
+{
+color:blue;
+}
+[title=w3cschool]
+{
+border:5px solid green;
+}
+[title~=hello]
+{
+color:blue;
+} 
+
+
+</style>
+</head>
+
+<body>
+<h1>CSS 实例!</h1>
+<p>这是一个段落。</p>
+<p id="para1">Hello World!!!</p>
+<p class="center">This paragraph will be center-aligned.</p> 
+<p class="date">2015 年 3 月 14 号</p>
+<p class="main">“当我年轻的时候，我梦想改变这个世界;当我成熟以后，我发现我不能够改变这个世界，我将目光缩短了些，决定只改变我的国家;当我进入暮年以后，我发现我不能够改变我们的国家，我的最后愿望仅仅是改变一下我的家庭，但是，这也不可能。当我现在躺在床上，行将就木时，我突然意识到：如果一开始我仅仅去改变我自己，然后，我可能改变我的家庭;在家人的帮助和鼓励下，我可能为国家做一些事情;然后，谁知道呢?我甚至可能改变这个世界。”</p>
+
+<p class="uppercase">This is some text.</p>
+<p class="lowercase">This is some text.</p>
+<p class="capitalize">This is some text.</p>
+
+<p class="serif">这一段的字体是 Times New Roman 。</p>
+<p class="sansserif">这一段的字体是 Arial 。</p>
+
+
+<h1>This is heading 1</h1>
+<h2>This is heading 2</h2>
+<p>This is a paragraph.</p>
+<p>Specifying the font-size in percent and em displays the same size in all 
+major browsers, and allows all browsers to resize the text!</p>
+
+<p><b><a href="/css/" target="_blank">这是一个链接</a></b></p>
+<p><b>注意：</b> a:hover 必须在 a:link 和 a:visited 之后，需要严格按顺序才能看到效果。</p>
+<p><b>注意：</b> a:active 必须在 a:hover 之后。</p>
+<p>无序列表实例:</p>
+
+<ul class="a">
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Coca Cola</li>
+</ul>
+
+<ul class="b">
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Coca Cola</li>
+</ul>
+
+<p>有序列表实例:</p>
+
+<ol class="c">
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Coca Cola</li>
+</ol>
+
+<ol class="d">
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Coca Cola</li>
+</ol>
+
+<ul class="c">
+<li>Coffee</li>
+<li>Tea</li>
+<li>Coca Cola</li>
+</ul>
+
+<table>
+        <tr>
+          <th>Firstname</th>
+          <th>Lastname</th>
+        </tr>
+        <tr>
+          <td>Peter</td>
+          <td>Griffin</td>
+        </tr>
+        <tr>
+          <td>Lois</td>
+          <td>Griffin</td>
+        </tr>
+      </table>
+      <img src="/attachments/cover/cover_cssref.jpeg" width="250" height="250" />
+      
+      <div class="ex">The picture above is 250px wide.
+      The total width of this element is also 250px.</div>
+      <p class="none">No border.</p>
+      <p class="dotted">A dotted border.</p>
+      <p class="dashed">A dashed border.</p>
+      <p class="solid">A solid border.</p>
+      <p class="double">A double border.</p>
+      <p class="groove">A groove border.</p>
+      <p class="ridge">A ridge border.</p>
+      <p class="inset">An inset border.</p>
+      <p class="outset">An outset border.</p>
+      <p class="hidden">A hidden border.</p>
+
+      <p>This paragraph has blue text, and is center aligned.</p>
+      <div class="marked">
+      <p>This paragraph has not blue text.</p>
+      </div>
+      
+<p>Display this link list as a horizontal menu:</p>
+
+<ul>
+<li><a href="/html/" target="_blank">HTML</a></li>
+<li><a href="/css/" target="_blank">CSS</a></li>
+<li><a href="/js/" target="_blank">JavaScript</a></li>
+<li><a href="/xml/" target="_blank">XML</a></li>
+</ul>
+
+<h2>Nirvana</h2>
+<span>Record: MTV Unplugged in New York</span>
+<span>Year: 1993</span>
+<h2>Radiohead</h2>
+<span>Record: OK Computer</span>
+<span>Year: 1997</span>
+
+<p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p>
+
+<a class="red" href="css-syntax.html">CSS Syntax</a>
+
+
+<div>
+  <p>段落 1。 在 div 中。</p>
+  <p>段落 2。 在 div 中。</p>
+  </div>
+  
+  <p>段落 3。不在 div 中。</p>
+  <p>段落 4。不在 div 中。</p>
+
+
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#about">About</a></li>
+    </ul>
+
+    <div class="dropdown">
+      <button class="dropbtn">下拉菜单</button>
+      <div class="dropdown-content">
+        <a href="http://www.w3cschool.cn">W3Cschool教程 1</a>
+        <a href="http://www.w3cschool.cn">W3Cschool教程 2</a>
+        <a href="http://www.w3cschool.cn">W3Cschool教程 3</a>
+      </div>
+    </div>    
+
+    <h1 title="Hello world">Hello world</h1>
+    <a title="w3cschool" href="http://w3cschool.cn">w3cschool</a>
+    <img title="w3cschool" src="/statics/images/w3c/logo.png" width="247 height="48" />
+
+    <h1 title="hello world">Hello world</h1>
+    <p title="student hello">Hello CSS students!</p>
+
+      
+</body>
+</html>

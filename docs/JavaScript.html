@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JavaScript.htm</title>
+</head>
+<body>
+<p id="demo">段落</p>
+<p id="demop">我的第一个段落</p>
+<button onclick="myFunction()">点我</button>
+<button id="myBtn" onclick="myFunction2(this)">点我2</button>
+<button onclick='this.innerHTML=Date()'>现在的时间是?</button>∫∫
+<button onclick="getElementById('demop').innerHTML=Date()">现在的时间是?</button>
+<div id="div1"></div>
+<p id="p1"></p>
+<script>
+document.write("<h1>这是一个标题</h1>");
+//此处可使用 window.carName
+//全局变量是 window 对象: 所有数据变量都属于 window 对象。
+common()
+function common(){
+  myboolean = false //将声明一个全局变量，即使它在函数内执行。
+  console.log(myboolean)
+  var mychar = 'x';
+  console.log(mychar);
+  console.log(mychar.charCodeAt(0));
+  console.log(String.fromCharCode(98));
+  let mystring = "bx23,4fgbt52dvg,e3"; ////用 let 来代替 var 来声明变量，就可以把变量限制在当前代码块中
+  console.log(mystring.charAt(1),mystring[0],mystring.length);
+  console.log(mystring.charCodeAt(1));
+  console.log(+mystring.replace(/[^0-9]/ig,""));
+  var intstring = "23";
+  console.log(JSON.parse(intstring),parseInt(intstring));//parseInt(mystring.toString())
+
+  var str = '123sdfsdf456sdffs789'
+  var numArr = str.match(/\d+/g)
+  // numArr = str.match(/\d+(\.\d+)*/g) //兼容
+  console.log(numArr)  // => ["123", "456", "789"]
+  // console.log(+numArr.join('')) // => 123456789 // 也可以把拼接起来
+
+  var str = '123.456sdfsdf456.789'
+  // var y = new String("He is called \"Johnny\"");//不要创建 String 对象。它会拖慢执行速度，并可能产生其他副作用：
+  var numArr = str.match(/\d+\.\d+/g)
+  console.log(numArr)  //=> ["123.456", "456.789"]// 这个就没法拼接了
+
+  my = 5; int = 6; myint = my + int;
+  console.log(myint);
+  varAll64=(5 + 6) * 10
+  console.log(varAll64);
+  console.log("Number.MAX_VALUE "+Number.MAX_VALUE);
+
+  double=3.14
+  doublee=123e-5
+  console.log(double,doublee);
+  console.log(parseInt(5/2)) //丢弃小数部分,保留整数部分
+  console.log(Math.round(5/2),Math.round(-5/2),0.0-Math.round(Math.abs(-5/2))) //四舍1234五入56789
+  console.log(Math.ceil(5/2)) //向上取整,有小数就整数部分加1
+  console.log(Math.floor(5/2)) //向下取整
+
+
+//length
+  myarray = [40, 100, 1, 5, 25, 10]
+  console.log(myarray.length);
+  mystringfromarray = myarray.join("-");
+  myarrayfromString = mystring.split(",");
+  var newLength = myarray.push('Orange');
+  console.log(newLength);
+  var last = myarray.pop();
+  console.log(last);
+  newLength = myarray.unshift('Banana') // add to the front
+  myarray.forEach(function (item, index, array) {
+    console.log(index,item);
+  });
+  var pos = myarray.indexOf('Banana');
+  var myarraycopy = myarray.slice();
+  var removedItem = myarray.splice(pos, 2); // this is how to remove 2* item
+  console.log(myarray,removedItem);
+  console.log(myarraycopy);
+
+
+  array = new Array(0, 1, 2, 3, 4);
+  array.sort(
+    function (v1, v2) {
+      return v1 - v2;
+    }
+  );
+  var cars = new Array;
+  var cars = new Object;
+  var cars = new Array();
+  cars[0] = "Saab";
+  cars[1] = "Volvo";
+  cars[2] = "BMW";
+  for (x in cars) {
+    document.write(cars[x] + "<br />")
+  }
+  
+  var mymap = {
+    1 : "test",
+    "2" : myarray,
+    'x' : "delete"
+  }
+  console.log(mymap[1]);
+  delete mymap['x'];
+  // console.log(mymap['x']);
+  if(!mymap['x']) mymap['x'] = "add";
+  console.log(mymap['x']);
+  for(var key in mymap){
+    console.log(key+":"+mymap[key]);
+  }
+
+//size
+  var m = new Map();
+  m.set(1, "black");
+  m.set(2, "red");
+  m.set("colors", 2);
+  m.forEach(function (item) {
+    console.log(item.toString());
+  });
+  for (var [key, value] of m) {
+    console.log(key + ' = ' + value);
+  }
+  console.log(m.get("colors"))
+  m.delete("colors")
+  console.log(m.size)
+
+  const set = new Set([1, 2, 3, 44, 5]);
+  set.add(7);
+  console.log(set.has(Math.sqrt(25)));
+  set.delete(44);
+  set.forEach(function (currentValue, key, array) {
+    console.log(currentValue+" "+array.size);
+  });
+  console.log(set.size);
+
+
+
+  var json = '{"employees":[' +
+    '{"firstName":"John","lastName":"Doe" },' +
+    '{"firstName":"Anna","lastName":"Smith" },' +
+    '{"firstName":"Peter","lastName":"Jones" }]}';
+  obj = JSON.parse(json);
+  document.getElementById("demo").innerHTML =
+    obj.employees[1].firstName + " " + obj.employees[1].lastName;
+}
+
+
+// function myFunction()
+// {
+//     carName = "Volvo";
+//     document.write(Date());
+// }
+function myFunction2(call)
+{
+  if(call.innerHTML == "this"){
+    call.innerHTML="点我2";
+  }else{
+    call.innerHTML="this";
+  }
+}
+//window.alert(5 + 6);
+document.getElementById("demop").innerHTML = "段落已修改。";
+
+
+// delete a[2];
+//stack queue
+//a.push(4) a.unshift
+///a.pop(a) a.shift
+//a.splice(绝对索引值3,删除该索引次数 0即为插入f否则为替换,array...)
+
+var person={
+firstname : "John",
+lastname  : "Doe",
+id        :  5566
+};//Object
+name=person.lastname;
+name=person["lastname"];
+
+
+
+var x, y, z;
+x = 5
+y = 6;
+z = (x + y) * 10;
+var carname="Volvo";
+var carname;//变量 carname 的值依然是 "Volvo"
+var carname=null;
+
+// 我不会执行
+document.write("你好 \
+ W3Cschool!");//折行
+	var x=5;
+	document.getElementById("demo").innerHTML=x===5;//true绝对等于
+//==和!=操作符会进行类型强制转换
+	var x=5;
+	document.getElementById("demo").innerHTML=x!=="5";//true不绝对等于
+  //JavaScript逻辑运算符的优先级是：！、&& 、||。
+  typeof NaN                    // 返回 number
+  "John".constructor                 // 返回函数 String()  { [native code] }
+  myarray.constructor.toString().indexOf("Array") > -1;//判断是否数组
+  // String(x)         // 将变量 x 转换为字符串并返回
+  (123).toString();false.toString()
+  Number("3.14")    // 返回 3.14
+  var y = "5";      // y 是一个字符串
+  var x = + y;      // x 是一个数字
+  str = "this is w3cschool"
+  var n = str.search("w3cschool");
+  var res = str.replace(/microsoft/i, "w3cschool");//正则表达式
+  var patt = /e/;
+  var patt1=new RegExp("e");
+  patt.test("The best things in life are free!");//true 字符串中含有 "e"
+  /e/.exec("The best things in life are free!");
+  patt1.compile("d");//二次检索
+
+
+  var x = function (a, b) {return a * b};
+  var z = x(4, 3);
+
+  (function () {
+    return arguments.length; //调用自己,返回参数个数arguments[0] [1]...
+})();
+function myFunction(x, y) {
+    // if (y === undefined) {
+    //       y = 0;
+    // }
+    y = y || 0;//undefined 为false
+    return x * y;
+}
+var myObject;
+myFunction.call(myObject, 10, 2);      // 返回 20
+myArray = [10,2];
+myFunction.apply(myObject, myArray);   // 返回 20
+var add = (function () {
+    var counter = 0;
+    return function () {return counter += 1;}
+})();//闭包
+
+var x=document.getElementById("demo");
+var y=x.getElementsByTagName("p");
+var z=document.getElementsByClassName("intro");
+
+document.getElementById("demo").style.color="blue";
+document.getElementById("myBtn").onclick=function(){displayDate()};
+
+
+document.getElementById("myBtn").addEventListener("click", function(){
+    alert("Hello World!");
+});//注意不是onclick
+
+  document.getElementById("myBtn").removeEventListener("mousemove", myFunctionmove);
+
+window.addEventListener("resize", function(){
+    document.getElementById("demo").innerHTML = Math.random();
+});
+
+document.getElementById("myBtn").addEventListener("click", function() {
+    myFunction(p1, p2);
+});
+// function myFunction(a, b) {
+//     var result = a * b;
+//     document.getElementById("demo").innerHTML = result;
+// }
+////
+var para=document.createElement("p");
+var node=document.createTextNode("This is new.");
+para.appendChild(node);
+
+var element=document.getElementById("div1");
+element.appendChild(para);
+
+////
+var child=document.getElementById("p1");
+// var parent=document.getElementById("div1");
+// parent.removeChild(child);
+child.parentNode.removeChild(child);
+
+////
+var myNumber=128;
+myNumber.toString(16);   // returns 80 //16进制
+myNumber.toString(8);    // returns 200
+myNumber.toString(2);    // returns 10000000
+
+isNaN("apple"); // returns true Not_a_Number
+
+var x = 123;
+var y = new Number(123);
+(x === y) // is false because x is a number and y is an object.
+
+
+  Array.prototype.ucase=function()
+{
+  for (i=0;i<this.length;i++)
+  {this[i]=this[i].toUpperCase();}
+}
+// debugger;
+// document.execCommand(sCommand[,交互方式, 动态参数])
+// javascript:alert(navigator.userAgent) //or appVersion
+
+function myFunctionmove(){
+	var x;
+	var r=confirm("按下按钮!");//window.
+	if (r==true){
+		x="你按下了\"确定\"按钮!";
+	}
+	else{
+		x="你按下了\"取消\"按钮!";
+	}
+	document.getElementById("demo").innerHTML=x;
+}
+function myFunctionread(){
+	var x;
+	var person=prompt("请输入\n你的名字","Harry Potter");
+	if (person!=null && person!=""){
+	    x="你好 " + person + "！今天感觉如何？";
+	    document.getElementById("demo").innerHTML=x;
+	}
+}
+
+
+var myVar=setInterval(function(){myTimer()},1000);
+function myTimer(){
+	var d=new Date();
+	var t=d.toLocaleTimeString();
+	document.getElementById("demo").innerHTML=t;
+}
+function myStopFunction(){
+	clearInterval(myVar);
+}//间隔指定的毫秒数不停地执行指定的代码。
+
+//JS的几种跳转方式：
+//window.open(”url“)
+function openWin(tag,obj)
+{
+obj.target="_blank";
+obj.href = "Web/Substation/Substation.aspx?stationno="+tag;
+obj.click();
+}
+//window.location.href='';
+
+
+//setTimeout('startTime()',500)
+	// t=setTimeout(function(){startTime()},500);//暂停指定的毫秒数后执行指定的代码
+  // document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
+  function owlRedirector(url) {
+    // if(url.indexOf("http%3A%2F%2F") == -1 && url.indexOf("https%3A%2F%2F") == -1) return url;
+    if (url.indexOf("https%3A%2F%2F") != -1){
+      index = url.indexOf("%3A%2F%2F");
+      return decodeURIComponent("https"+url.substr(index));
+    }else if (url.indexOf("http%3A%2F%2F") != -1) {
+      index = url.indexOf("%3A%2F%2F");
+      return decodeURIComponent("http" + url.substr(index));
+    }
+    return url;
+  }
+  function owlRedirector2(url) {
+    if (url.indexOf("http%3A") != -1 || url.indexOf("https%3A") != -1) {
+      url = decodeURIComponent(url);
+      url = url.replace(/.*url=/, "")
+    }
+    return url;
+  }
+  // encodeURI
+  // encodeURIComponent
+  // decodeURI
+
+</script>
+<a href="javascript:void(alert('Warning!!!'))">点我!</a>
+<a href="#" onclick="subgo()">点我</a><!--刷新到顶部-->
+<a href="####" >test</a> <!--不让刷新方法1-->
+<a href="javascript:;" onclick="doSomething()">test</a>
+<a href="#" onclick="doSomething();return false;">什么问题都解决了,包括浏览器不兼容问题</a> //或者直接使用href=""
+<a href="#" onclick="alert();event.returnValue=false;">test</a>
+<a href="javascript:void(0)" title="关闭" onclick="delbook();return false;">关闭</a>
+<a href="javascript:void(0)" target="_self" title="关闭" onclick="delbook();">关闭</a>
+
+
+
+<a href="javascript:void(0)" onclick="subgo()">点我</a>
+<!-- #包含了一个位置信息，默认的锚是#top 也就是网页的上端。
+而javascript:void(0), 仅仅表示一个死链接。
+-->
+<p>
+您只能在 HTML 输出流中使用 <strong>document.write</strong>。
+如果您在文档已加载后使用它（比如在函数中），会覆盖整个文档。
+</p>
+<!-- <script src="myscript.js"> -->
+</body>
+<script>
+
+  console.log(owlRedirectorFilter("http%3A%2F%2Fwww.google.com/search%3Fq%3Dcache:%27%2Bescape(document.location.href)%20%7D)()%3B"))
+  console.log(owlRedirectorFilter("https://link.zhihu.com/?target=https%3A//link.jianshu.com/%3Ft%3Dhttps%3A//twitter.com/timberners_lee"))
+  console.log(owlRedirectorFilter("https://mijisou.com/url_proxy?proxyurl=http%3A//www.so.com/link%3Furl%3Dhttp%253A%252F%252Fwww.360kuai.com%252Fpc%252F989bbf71b2a9abcb8%253Fcota%253D3%2526kuai_so%253D1%2526sign%253D360_7bc3b157%2526refer_scene%253Dso_55%26q%3D%25E6%2596%25B0%25E9%2597%25BB%26ts%3D1569510529%26t%3D53fdd6417c9d84a4c745a17b8841fb9&token=27af8d927f81aeba45c0ebfba4174e638cb622d7151fc29974b1a8d346a86e34"))
+  console.log(owlRedirectorFilter("https://www.jianshu.com/go-wild?ac=2&url=http%3A%2F%2Fmaven.apache.org%2Fref%2F3.2.2%2Fmaven-repository-metadata%2Frepository-metadata.html"))
+  // http://maven.apache.org/ref/3.2.2/maven-repository-metadata/repository-metadata.html
+  // /^https?:\/\/www\.jianshu\.com\/.*https?%3A%2F%2F/
+  //https://link.zhihu.com/?target=https%3A//link.jianshu.com/%3Ft%3Dhttps%3A//twitter.com/timberners_lee
+  // /^https?:\/\/.*https?%3A%2F%2F/
+
+
+
+  ///^http.*\.(htm|html|jsp|asp|aspx|[^\.]{8,})$/
+  ///^http.*\.(htm|html|jsp|asp|aspx|.*\/[^\.]*)$/
+  ///^http.*(.[^(htm|html|jsp|asp|aspx)]|\.[a-z]*(htm|html|jsp|asp|aspx))$/
+  ///^http.*([^\.\w]|\.[a-z]*(htm|html|jsp|asp|aspx))$/
+  //copy start-----------------------------------------------------------------------------------------------
+  //copy start-----------------------------------------------------------------------------------------------
+  function owlRedirectorFilter(url) {
+    var addUrlWhitelist = [
+      "https://jsonlog.github.io/myspringblog",
+      "chrome://newtab",
+      "",//block
+    ];
+    if (url == addUrlWhitelist[0]) return;
+    // 1. 返回 undefined，不跳转:
+    // return
+
+    // 2. 返回字符串，跳转到字符串所指的URL:
+    // return 'http://b.example.com/' 
+
+    // 3. 返回''或者false，请求被阻止:
+    // return ''
+    // return false
+    var addDomainBlacklist = [
+      "https://www.wanqu5.com/?cc",
+      //test
+
+      //0-9
+      "https://www.360kuai.com/pc/989bbf71b2a9abcb8?cota=3&kuai_so=1&sign=360_7bc3b157&refer_scene=so_55&q=%E6%96%B0%E9%97%BB&ts=1569510529&t=53fdd6417c9d84a4c745a17b8841fb9&token=27af8d927f81aeba45c0ebfba4174e638cb622d7151fc29974b1a8d346a86e34",
+
+      //domain
+      "https://afu88.com",
+      "https://aiuxian.com",
+      "https://bbs.16ao.com",
+      "http://blog.didispace.com/spring-batch-2/",
+      "https://mbd.baidu.com/newspage/data/error",
+      "https://cam.ooxxnews.com",
+      "http://ent.zdface.com",
+      "https://ftp1.linuxidc.com",
+      "https://ju.taobao.com",
+      "https://lssrc.com",
+      "https://money.gucheng.com",
+      "https://news.htcyzx.com",
+      "https://one.zzccaa.biz",
+      "https://oned.gq",
+      "http://prog3.com",
+      "https://s.click.taobao.com",
+      "https://sh.qihoo.com",
+      "https://sh.360kuai.com",
+
+      //www
+      "http://w.cnzz.com",
+      "http://www.guyasos.com",
+      "https://www.haote.com",
+      "http://www.hzmedia.com.cn",
+      "http://www.hztraining.com",
+      "https://www.linuxprobe.com",
+      "http://www.uzzf.com",
+
+      //xyz
+      "https://wenku.baidu.com",
+      "https://yisharepdf.site",
+    ];
+    var addUrlBlacklist = [
+      "https://blog.csdn.net/weixin_34125592/article/details/90787885"];
+
+    var addUrlvideolist = [
+      //http://app.baiyug.cn:2019/vip/?url=">百域学院</a>
+      //http://qqe2.com/Video/default.html
+      "https://www.administratorw.com/admin.php?url=",
+      "https://www.sounm.com/?url=",//https://www.sounm.com/
+      "https://www.administratorw.com/video.php?url=",
+      "http://api.baiyug.vip/index.php?url=",//ad
+      "https://jx.618g.com/?url=",//ad
+      "http://www.zhmdy.top/index.php?zhm_jx=",
+      "https://jiexi.071811.cc/jx.php?url=",
+      "https://660e.com/?url=",
+
+      // https://www.socarchina.com/vip.htm
+    ];
+    var addUrlvoicelist = [
+      "https://www.socarchina.com/vipmusic/?url=",
+      "https://user.qzone.qq.com/NaN"
+    ]
+    var _3A2F2F = [
+      "mijisou.com",//"https://mijisou.com/url_proxy?proxyurl=http",
+      "zhihu.com",//"https://link.zhihu.com/?target=http",
+      "jianshu.com"//"https://www.jianshu.com/go-wild?ac=2&url="
+    ]
+    //.replace("https://http//", "http://").replace("https//", "").replace("https://chrome//", "chrome://")
+    url = url.replace('https://mijisou.com/url_proxy?proxyurl=http', 'http').replace('https://link.zhihu.com/?target=http', 'http')
+    if(url.indexOf("https%3A") != -1){
+      _3A2F2F.forEach(function (item, index, array) {
+        if(url.indexOf(item) != -1) {
+          var pos = url.indexOf("https%3A");
+          url = url.substr(pos);
+        }
+      });
+    }
+    if (url.indexOf("http%3A") != -1) {
+      _3A2F2F.forEach(function (item, index, array) {
+        if (url.indexOf(item) != -1) {
+          var pos = url.indexOf("http%3A");
+          url = url.substr(pos);
+        }
+      });
+    }
+    if (url.indexOf("//v.youku.com") != -1 || url.indexOf("//v.qq.com") != -1 || url.indexOf("iqiyi.com") != -1) {
+      if (url.indexOf(addUrlvideolist[0]) != -1) return url;
+      return addUrlvideolist[0] + url;
+    } else if (url.indexOf("//www.1ting.com") != -1 || url.indexOf("//music.migu.c") != -1 || url.indexOf("//y.qq.com") != -1 || url.indexOf("//www.qingting.fm") != -1) {
+      if (url.indexOf(addUrlvoicelist[0]) != -1) return url;
+      return addUrlvoicelist[0] + encodeURIComponent(url);
+      // || url.indexOf("http://www.kugou.com") != -1 || url.indexOf("http://www.kuwo.c") != -1 || url.indexOf("http://www.xiami.com") != -1 || url.indexOf("http://music.baidu.com") != -1 || url.indexOf("http://www.lizhi.fm") != -1 || url.indexOf("http://www.ximalaya.com") != -1 || url.indexOf("kg.qq.com") != -1 || url.indexOf("http://5sing.kugou.com") != -1
+      /*
+      一听：http://www.1ting.com/player/b6/player_357838.html
+
+      咪咕：http://music.migu.cn/v2/music/song/477803
+
+      ＱＱ：https://y.qq.com/n/yqq/song/002B2EAA3brD5b.html
+
+      蜻蜓：http://www.qingting.fm/channels/158696/programs/5266259
+
+      网易：http://music.163.com/#/song?id=25906124
+
+      酷狗：http://www.kugou.com/song/#hash=08228af3cb404e8a4e7e9871bf543ff6
+
+      酷我：http://www.kuwo.cn/yinyue/382425/
+
+      虾米：http://www.xiami.com/song/2113248
+
+      百度：http://music.baidu.com/song/266069
+
+      荔枝：http://www.lizhi.fm/1947925/2498707770886461446
+
+      喜马拉雅：http://www.ximalaya.com/51701370/sound/24755731
+
+      全民K歌（shareuid）：http://kg.qq.com/node/personal?uid=619a958c25283e88
+
+      全民K歌（shareid）：https://kg.qq.com/node/play?s=FA3h1gFhd6Vk7Ft4
+
+      5sing原创：http://5sing.kugou.com/yc/3082899.html
+
+      5sing翻唱：http://5sing.kugou.com/fc/14369766.html
+      */
+    } else if (url.indexOf("https%3A%2F%2F") == 0) {
+      index = url.indexOf("%3A%2F%2F");
+      return decodeURIComponent("https" + url.substr(index));
+    } else if (url.indexOf("http%3A%2F%2F") == 0) {
+      index = url.indexOf("%3A%2F%2F");
+      return decodeURIComponent("http" + url.substr(index));
+    } else if (url.indexOf("https%3A") == 0) {
+      index = url.indexOf("https%3A");
+      return decodeURIComponent(url.substr(index));
+    } else if (url.indexOf("http%3A") == 0) {
+      index = url.indexOf("http%3A");
+      return decodeURIComponent(url.substr(index));
+    }
+
+    addDomainBlacklist.forEach(function (value, index, array) {
+      var urldomain = url;
+      try {
+        urlobj = new URL(url);
+        urldomain = urlobj.host;
+      } catch (e) {
+      }
+
+      var valuedomain = value;
+      try {
+        valueobj = new URL(value);
+        valuedomain = valueobj.host;
+      } catch (e) {
+      }
+
+      if (urldomain == valuedomain) {
+        url = addUrlWhitelist[0];
+        return;
+      }
+    });
+    addUrlBlacklist.forEach(function (value, index, array) {
+      if (url.indexOf(value) != -1) {
+        url = addUrlWhitelist[0];
+        return;
+      }
+    });
+    console.log(url)
+    return url;
+  }
+
+
+
+
+
+
+
+</script>
+</html>

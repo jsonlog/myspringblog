@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<!--jQuery Prototype MooTools -->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>W3Cschool教程(w3cschool.cn)</title>
+  <script type="text/javascript"
+    src="https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/jquery/jquery-1.10.2.min_65682a2.js">
+    </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        // $("p").hide();
+        $("p").css("background-color", "red");
+        $("#test").hide();
+      });
+    });
+    $(document).ready(function () {
+      $("input").focus(function () {
+        $(this).css("background-color", "#cccccc");
+      });
+      $("input").blur(function () {
+        $(this).css("background-color", "#ffffff");
+      });
+    });
+  </script>
+  <script>
+    function myFunction() {
+      $("#h01").attr("style", "color:red").html("Hello jQuery")
+    }
+    $(document).ready(myFunction);
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $("p").click(function () {
+        $(this).hide();
+      });
+      $("p").dblclick(function () {
+        $(this).hide();
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#p1").mouseenter(function () {
+        // alert("您的鼠标移到了 id=p1 的元素上!");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#p1").mouseleave(function () {
+        // alert("再见，您的鼠标离开了该段落。");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#p1").mousedown(function () {
+        alert("鼠标在该段落上按下！");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#p1").mouseup(function () {
+        alert("鼠标在段落上松开。");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#p1").hover(function () {
+        // alert("你进入了 p1!");
+      },
+        function () {
+          // alert("拜拜! 现在你离开了 p1!");
+        });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $(".hide").click(function () {
+        $("p").hide();
+      });
+      $(".show").click(function () {
+        $("p").show();
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("p").hide(1000);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("p").toggle("slow");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("#div1").fadeIn();
+        $("#div2").fadeIn("slow");
+        $("#div3").fadeIn(3000);
+        $("#div1").fadeOut();
+        $("#div2").fadeOut("slow");
+        $("#div3").fadeOut(3000);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#buttonfadeToggle").click(function () {
+        $("#div1").fadeToggle();
+        $("#div2").fadeToggle("slow");
+        $("#div3").fadeToggle(3000);
+        $("#div1").fadeTo("slow", 0.15);
+        $("#div2").fadeTo("slow", 0.4);
+        $("#div3").fadeTo("slow", 0.7);
+      });
+    });
+  </script>
+
+
+  <script>
+    $(document).ready(function () {
+      $("#flip").click(function () {
+        $("#panel").slideDown(5000);
+      });
+      $("#stop").click(function () {
+        $("#panel").stop();
+      });
+    });
+  </script>
+
+  <style type="text/css">
+    #panel,
+    #flip {
+      padding: 5px;
+      text-align: center;
+      background-color: #e5eecc;
+      border: solid 1px #c3c3c3;
+    }
+
+    #panel {
+      padding: 50px;
+      display: none;
+    }
+  </style>
+  <script>
+    $(document).ready(function () {
+      $("#flip").click(function () {
+        $("#panel").slideUp("slow");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#flip").click(function () {
+        $("#panel").slideToggle("slow");//自动切换
+      });
+    });
+  </script>
+
+
+
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("div").animate({ left: '250px' });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("div").animate({//当使用 animate() 时，必须使用 Camel 标记法书写所有的属性名，比如，必须使用 paddingLeft 而不是 padding-left，使用 marginRight 而不是 margin-right，等等。
+          left: '250px',
+          opacity: '0.5',
+          height: '150px',
+          width: '150px'
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("div").animate({
+          left: '250px',
+          height: '+=150px',
+          width: '+=150px'
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("div").animate({
+          height: 'toggle'
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        var div = $("div");
+        div.animate({ height: '300px', opacity: '0.4' });
+        div.animate({ width: '300px', opacity: '0.8' });
+        div.animate({ height: '100px', opacity: '0.4' });
+        div.animate({ width: '100px', opacity: '0.8' });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        var div = $("div");
+        div.animate({ left: '100px' }, "slow");
+        div.animate({ fontSize: '3em' }, "slow");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("p").hide("slow", function () {//callback
+          // alert("段落现在被隐藏了");
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("#p1").css("color", "red")
+          .slideUp(2000)
+          .slideDown(2000);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn1").click(function () {
+        alert("Text: " + $("#test").text());
+      });
+      $("#btn2").click(function () {
+        alert("HTML: " + $("#test").html());
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#buttonzhi").click(function () {
+        alert("值为: " + $("#testzhi").val());
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        alert($("#runoob").attr("href"));
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn1").click(function () {
+        $("#test1").text("Hello world!");
+      });
+      $("#btn2").click(function () {
+        $("#test2").html("<b>Hello world!</b>");
+      });
+      $("#btn3").click(function () {
+        $("#test3").val("W3Cschool");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn1").click(function () {
+        $("#test1").text(function (i, origText) {
+          return "旧文本: " + origText + " 新文本: Hello world! (index: " + i + ")";
+        });
+      });
+
+      $("#btn2").click(function () {
+        $("#test2").html(function (i, origText) {
+          return "旧 html: " + origText + " 新 html: Hello <b>world!</b> (index: " + i + ")";
+        });
+      });
+
+    });
+  </script>
+
+  <!-- $("button").click(function(){ 
+  $("#w3s").attr({ 
+    "href" : "//www.w3cschool.cn/jquery", 
+    "title" : "jQuery 教程" 
+  }); 
+}); -->
+
+
+  <!-- $("button").click(function(){ 
+  $("#w3cschool").attr("href", function(i,origValue){ 
+    return origValue + "/jquery"; 
+  }); 
+}); -->
+  <script>
+    $(document).ready(function () {
+      $("#btn1").click(function () {
+        $("p").append(" <b>追加文本</b>。");
+      });
+
+      $("#btn2").click(function () {
+        $("ol").append("<li>追加列表项</li>");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn1").click(function () {
+        $("p").prepend("<b>在开头追加文本</b>。 ");
+      });
+      $("#btn2").click(function () {
+        $("ol").prepend("<li>在开头添加列表项</li>");
+      });
+    });
+  </script>
+  <script>
+    function appendText() {
+      var txt1 = "<p>文本。</p>";              // 使用 HTML 标签创建文本
+      var txt2 = $("<p></p>").text("文本。");  // 使用 jQuery 创建文本
+      var txt3 = document.createElement("p");
+      txt3.innerHTML = "文本。";               // 使用 DOM 创建文本 text with DOM
+      $("body").append(txt1, txt2, txt3);        // 追加新元素
+    }
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn1").click(function () {
+        $("img").before("<b>之前</b>");
+      });
+
+      $("#btn2").click(function () {
+        $("img").after("<i>之后</i>");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("#divremove").remove();
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("#divempty").empty();
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("p").remove(".italic");
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        $("h1,h2,p").addClass("blue");
+        $("#div1").addClass("important blue");
+        // $("h1,h2,p").removeClass("blue");
+        // $("h1,h2,p").toggleClass("blue");
+      });
+    });
+  </script>
+  <style type="text/css">
+    .important {
+      font-weight: bold;
+      font-size: xx-large;
+    }
+
+    .blue {
+      color: blue;
+    }
+  </style>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        // alert("背景颜色 = " + $("p").css("background-color"));
+        // $("p").css("background-color","yellow");
+        // $("p").css({"background-color":"yellow","font-size":"200%"});
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        var txt = "";
+        txt += "Width of div: " + $("#div1").width() + "</br>";
+        txt += "Height of div: " + $("#div1").height();
+        txt += "Inner width: " + $("#div1").innerWidth() + "</br>";
+        txt += "Inner height: " + $("#div1").innerHeight();
+        txt += "Outer width: " + $("#div1").outerWidth() + "</br>";
+        txt += "Outer height: " + $("#div1").outerHeight();
+        // $("#div1").html(txt);
+      });
+    });
+  </script>
+  <style>
+    .ancestors * {
+      display: block;
+      border: 2px solid lightgrey;
+      color: lightgrey;
+      padding: 5px;
+      margin: 15px;
+    }
+  </style>
+  <script src="//libs.baidu.com/jquery/1.10.2/jquery.min.js">
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("span").parent().css({ "color": "red", "border": "2px solid red" });
+      //$("span").parents("ul");
+      //$("span").parentsUntil("div");//介于两个给定元素之间的所有祖先元素。
+
+      // $("div").children(); ==  $("div").find("*");
+      //  $("div").children("p.1");
+      // $("div").find("span");
+      //  $("h2").siblings(); //同胞
+      //$("h2").siblings("p");
+      //  $("h2").next();
+      //$("h2").nextAll();
+      //  $("h2").nextUntil("h6");
+      //  $("div p").first();
+      //  $("div p").last();
+      //  $("p").eq(1); //索引
+      //  $("p").filter(".intro"); //find
+      //$("p").not(".intro"); //notfilter
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("button").click(function () {
+        // $("#div1").load("/statics/demosource/demo_test.txt"); //ajax
+        //$("#div1").load("demo_test.txt #p1");
+      });
+      $("#div1").load("demo_test.txt", function (responseTxt, statusTxt, xhr) {
+        if (statusTxt == "success")
+          alert("External content loaded successfully!");
+        if (statusTxt == "error")
+          alert("Error: " + xhr.status + ": " + xhr.statusText);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#buttonget").click(function () {
+        $.get("demo_test.php", function (data, status) {
+          alert("数据: " + data + "\n状态: " + status);
+        });
+      });
+      $.post("demo_test_post.html",
+        {
+          name: "Donald Duck",
+          city: "Duckburg"
+        },
+        function (data, status) {
+          alert("Data: " + data + "nStatus: " + status);
+        });
+    }
+  </script>
+//   <script>
+// $.noConflict();
+//     jQuery(document).ready(function () {
+//       jQuery("button").click(function () {
+//         jQuery("p").text("jQuery 仍然在工作!");
+//       });
+//     });
+//   </script>
+//   <script>
+//     var jq = $.noConflict();
+//     jq(document).ready(function () {
+//       jq("button").click(function () {
+//         jq("p").text("jQuery 仍然在工作!");
+//       });
+//     });
+//   </script>
+//   <script>
+//     $.noConflict();
+//     jQuery(document).ready(function ($) {
+//       $("button").click(function () {
+//         $("p").text("jQuery 仍然在工作!");
+//       });
+//     });
+//   </script>
+</head>
+
+<body>
+  <img src="../../assets/jsMargin.png">
+  <h2>这是一个标题</h2>
+  <p>这是一个段落。</p>
+  <p id="test">这是另外一个段落</p>
+  <button>点我</button>
+  Name: <input type="text" name="fullname"><br>
+  Email: <input type="text" name="email">
+
+  <p>如果你点我，我就会消失。</p>
+  <p>点我消失!</p>
+  <p>点我也消失!</p>
+  <p id="p1">鼠标指针进入此处，会看到弹窗。</p>
+
+
+  <input type="text" id="text"><br>
+  <p>如果你点击“隐藏” 按钮，我将会消失。</p>
+  <button class="hide">隐藏</button>
+  <button class="show">显示</button>
+
+  <button>隐藏/显示</button>
+  <button>点击淡入 div 元素。</button>
+  <div id="div1" style="width:80px;height:80px;display:none;background-color:red;"></div><br>
+  <div id="div2" style="width:80px;height:80px;display:none;background-color:green;"></div><br>
+  <div id="div3" style="width:80px;height:80px;display:none;background-color:blue;"></div>
+
+  <button id=="buttonfadeToggle">点击淡入/淡出</button>
+  <br><br>
+
+  <div id="div1" style="width:80px;height:80px;background-color:red;"></div>
+  <br>
+  <div id="div2" style="width:80px;height:80px;background-color:green;"></div>
+  <br>
+  <div id="div3" style="width:80px;height:80px;background-color:blue;"></div>
+
+
+
+  <button id="stop">停止滑动</button>
+  <div id="flip">点我向下滑动面板</div>
+  <div id="panel">Hello world!</div>
+
+
+  <button>开始动画</button>
+  <p>默认情况下，所有的 HTML 元素有一个静态的位置，且是不可移动的。
+    如果需要改变为，我们需要将元素的 position 属性设置为 relative, fixed, 或 absolute!</p>
+  <div style="background:#98bf21;height:100px;width:100px;position:absolute;">
+  </div>
+
+
+
+  <p id="test1">这是一个有 <b>粗体</b> 字的段落。</p>
+  <p id="test2">这是另外一个有 <b>粗体</b> 字的段落。</p>
+  <button id="btn1">显示 新/旧 文本</button>
+  <button id="btn2">显示 新/旧 HTML</button>
+
+
+  <p>名称: <input type="text" id="testzhi" value="W3Cschool教程"></p>
+  <button id="buttonzhi">显示值</button>
+
+  <p><a href="http://www.w3cschool.cn" id="runoob">W3Cschool教程</a></p>
+  <button>显示 href 属性的值</button>
+
+  <p>输入框: <input type="text" id="test3" value="W3Cschool教程"></p>
+  <button id="btn1">设置文本</button>
+  <button id="btn2">设置 HTML</button>
+  <button id="btn3">设置值</button>
+
+
+
+  <button onclick="appendText()">追加文本</button>
+  <img src="/statics/images/logo.png">
+  <br><br>
+  <button id="btn1">之前插入</button>
+  <button id="btn2">之后插入</button>
+  <div class="ancestors">
+    <div style="width:500px;">div (曾祖父元素)
+      <ul>ul (祖父元素)
+        <li>li (父元素)
+          <span>span</span>
+        </li>
+      </ul>
+    </div>
+
+    <div style="width:500px;">div (祖父元素)
+      <p>p (父元素)
+        <span>span</span>
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,319 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js"></script><style type="text/css">
+        /* body {
+            background-color: wheat
+        }
+    
+        h1 {
+            color: red;
+        }
+    
+        p {
+            color: greenviolet
+        } */
+    </style>
+</head>
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <th>八进制
+                    <!-- 0 -->
+                </th>
+                <th>二进制</th>
+                <th>根</th>
+                <!-- <th>Unicode</th> -->
+                <th>十进制</th>
+                <th>十六进制
+                    <!-- 0x -->
+                </th>
+                <th>
+                    Unicode
+                    <!-- (ASCII) -->
+                </th>
+                <th>负原码</th>
+                <th>负反码</th>
+                <th>负补码</th>
+                <th>颜色</th>
+                <th>decodeURIComponent</th>
+                <th>encodeURIComponent</th>
+                <th>decodeURI</th>
+                <th>encodeURI</th>
+            </tr>
+            <tr>
+                <!-- <td><input type="text" id="urlstr" style="width:1000px;" οnkeypress="getKey();" /></td> -->
+                <td><input type="text" id="octal" onkeydown="getKey()" /></td>
+                <td><input type="text" id="binary" onkeydown="getKey()" /></td>
+                <td><input type="text" id="sqrt" onkeydown="getKey()" /></td>
+                <td><input type="text" id="decimal" onkeydown="getKey()" /></td>
+                <td><input type="text" id="sexadecimal" onkeydown="getKey()" /></td>
+                <td><input type="text" id="unicode" onkeydown="getKey()" /></td>
+                <td><input type="text" id="complement" onkeydown="getKey()" /></td>
+                <td><input type="text" id="negative" onkeydown="getKey()" /></td>
+                <td><input type="text" id="positive" onkeydown="getKey()" /></td>
+                <td><input type="text" id="rgbcolor" onkeydown="getKey()" /></td>
+                <td><input type="text" id="decodeURIComponent" onkeydown="getKey()" /></td>
+                <td><input type="text" id="encodeURIComponent" onkeydown="getKey()" /></td>
+                <!-- <td><input type="text" id="decodeURI" onkeydown="getKey()" /></td>
+                <td><input type="text" id="encodeURI" onkeydown="getKey()" /></td> -->
+            </tr>
+        </tbody>
+    </table>
+<script>
+    function getKey() {
+        // console.log(event);
+        var input = event.target;
+        if (event.keyCode == 13) {
+            var value = input.value;//$('input[name="mobile"]').val();
+            allInput(input);
+        }
+    }
+    function allInput(myinput){
+        emptyInput(myinput);
+        var id = myinput.id;
+        if(id == "decodeURIComponent"){
+            var toencodeURIComponent = document.getElementById("encodeURIComponent");
+            toencodeURIComponent.value = encodeURIComponent(myinput.value);
+            return;
+        }
+        if (id == "encodeURIComponent") {
+            var todecodeURIComponent = document.getElementById("decodeURIComponent");
+            todecodeURIComponent.value = decodeURIComponent(myinput.value);
+            return;
+        }
+        // if (id == "decodeURI") {
+        //     var toencodeURI = document.getElementById("encodeURI");
+        //     toencodeURI.value = encodeURI(myinput.value);
+        //     return;
+        // }
+        // if (id == "encodeURI") {
+        //     var todecodeURI = document.getElementById("decodeURI");
+        //     todecodeURI.value = decodeURI(myinput.value);
+        //     return;
+        // }
+        var values = myinput.value.split(" ");
+        if(id == "unicode") values = myinput.value.split("");
+        var input = document.getElementsByTagName("input");
+        for(k in values){
+            var value = values[k];
+            if(value == '' || value == ' ') continue;
+            if(id == "octal") var decimal = BinaryToDecimal(value, 8);
+            if(id == "binary") var decimal = BinaryToDecimal(value, 2);
+            if (id == "sqrt") var decimal = 2^value;
+            if (id == "decimal") var decimal = value;
+            if (id == "sexadecimal") var decimal = BinaryToDecimal(value,16);
+            if (id == "unicode") var decimal = UnicodeToDecimal(value);
+            decimal = parseInt(decimal);
+            console.log(decimal);
+            for(var i in input){
+                switch(input[i].id){
+                    case id: break;
+                    case "octal": input[i].value += decimal? ' '+DecimalToBinary(decimal,8):'';break;
+                    case "binary": input[i].value += decimal ? ' ' +DecimalToBinary(decimal, 2) : ''; break;
+                    case "sqrt": input[i].value += decimal ? ' ' +DecimalToSqrt(decimal) : ''; break;
+                    case "decimal": input[i].value += decimal ? ' ' +decimal : ''; break;
+                    case "sexadecimal": input[i].value += decimal ? ' ' +DecimalToBinary(decimal, 16) : ''; break;
+                    case "unicode": input[i].value += decimal ? ' ' +DecimalToUnicode(decimal, 8) : ''; break;
+                    default:input[i].value = '';
+                }
+            }
+        }
+    }
+    function emptyInput(myinput){
+        var input = document.getElementsByTagName("input");
+        for(i in input){
+            if(input[i].id != myinput.id) input[i].value = '';
+        }
+    }
+
+    var table = document.getElementsByTagName("table");
+    for(var i = 0; i<= 256;i++){
+        var tr = document.createElement("tr");
+        table[0].appendChild(tr);
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        td.innerText = DecimalToBinary(i, 8);
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        td.innerText = DecimalToBinary(i, 2);
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        td.innerText = DecimalToSqrt(i);
+        // var pow = i;
+        // var sqrt = 0;
+        // while (!(pow % 2)) {
+        //     if(pow < 2) break;
+        //     pow = parseInt(pow / 2);
+        //     sqrt += 1;
+        // }     
+        // if (pow == 1) td.innerText = sqrt;
+        // while(pow > 2){
+        //     if(pow%2) {
+        //         td.innerText = '';
+        //         break;
+        //     }else {
+        //         sqrt += 1;
+        //         td.innerText = sqrt;//Math.pow(i,1/2);//sqrt
+        //         pow = parseInt(pow / 2);
+        //     }
+        // }   
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        td.innerText = i;
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        var number16 = DecimalToBinary(i, 16);
+        td.innerText = number16;
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        // if(i <= 256)
+        td.innerText = String.fromCharCode(i).replace(" ", "space");
+        //string.fromCharCode(unicode,16))；
+        // if(i == 32) td.innerText = 'space'
+
+        // td = document.createElement("td")
+        // tr.appendChild(td);
+        // td.innerText = SexadecimalToUnicode(number16)
+//
+        td = document.createElement("td")
+        tr.appendChild(td);
+        if(i <= 128)
+        td.innerText = DecimalToPositive(i,8);
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        if (i <= 128)
+        td.innerText = DecimalToNegative(i,8);
+
+        td = document.createElement("td")
+        tr.appendChild(td);
+        if (i <= 128)
+        td.innerText = DecimalToComplement(i,8);
+
+        // //2^4 6 rgb(255,255,255)
+        // var red = parseInt(i/256);
+        // var green = parseInt(i/16)%16;
+        // var blue = i%16;
+        // var red1 = DecimalToBinary(4*parseInt(red / 4),16);
+        // var red2 = DecimalToBinary(4 *(red%4), 16);
+        // var green1 = DecimalToBinary(4 *parseInt(green / 4), 16);
+        // var green2 = DecimalToBinary(4 *(green % 4), 16);
+        // var blue1 = DecimalToBinary(4 *parseInt(blue / 4), 16);
+        // var blue2 = DecimalToBinary(4 *(blue % 4), 16);
+
+        // // var number2444 = red * 256 * 256 * 16 + green * 256 *16 + blue * 16;
+        // // if(i > 16 ) number2444 = i * 256 ;
+        // // if(i > 256 ) number2444 = i * 256 *16; 
+        // number2444 = red1+red2+green1+green2+blue1+blue2;//DecimalToBinary(number2444, 16);
+        // tr.innerHTML += '<td align="center" style="color:#ffffff" bgcolor="#'+ number2444+'">'+ red1 +'-' + red1 + '-'+green1+'-' + green2 + '-'+blue1+'-' + blue2 + '-'+number2444+'</td>';
+    }
+
+    // alert(SexadecimalToUnicode(4190))
+    
+    // console.log(binaryFloatToDecimal(1111011.111))  // 123.875
+    // console.log(binaryFloatToDecimal(1111011))  // 123
+    // console.log(binaryFloatToDecimal(0.111))  // 0.875  
+
+    // console.log(DecimalToBinary(10,2))  
+    // console.log(DecimalToBinary(10, 8))  
+    // console.log(DecimalToBinary(10, 16)) 
+
+    // console.log(BinaryToDecimal(10101,2))  
+    // console.log(BinaryToDecimal(126, 8))  
+    // console.log(BinaryToDecimal('c',16))
+    // console.log(0xffffff.toString())//16777215
+
+    function DecimalToUnicode(number) {
+        return SexadecimalToUnicode(DecimalToBinary(number,16));
+    }
+
+    function SexadecimalToUnicode(number){
+        number = '0000'+number;
+        number = "\\u" + number.substr(number.length - 4);
+        return unescape(number.replace(/\\/g, '%'));
+        //escape(str).replace(/%/g,'\\');
+    }
+
+    function UnicodeToDecimal(str){
+        return str.charCodeAt();//i
+    }
+
+    function DecimalToBinary(number,radix) {
+        return number.toString(radix);
+    }    
+
+    function DecimalToSqrt(number){
+        var sqrt = 0;
+        while (!(number % 2)) {
+            if (number < 2) break;
+            number = parseInt(number / 2);
+            sqrt += 1;
+        }
+        if(number == 1) return sqrt;
+        else return '';
+    }
+
+    function BinaryToDecimal(number,radix){
+        if (16 == radix) return parseInt('0x'+number/*,10*/) //0xa.toString(/*10*/)
+        return parseInt(number,radix)
+        // if(!radix) return ('0x'+number).toString();
+        // return number.toString(radix);
+    }
+    /**
+    * 将二进制小数（包含整数部分和小数部分）转换为十进制数
+    * @param binaryNum 二进制数（可能是整数，也可能是小数）
+    */
+    function binaryFloatToDecimal(binaryNum) {
+        // 如果该二进制只有整数部分则直接用 parseInt(string, radix) 处理
+        if (Number.isInteger(binaryNum)) {
+            return parseInt(binaryNum, 2)
+        } else {
+            const binaryFloatNumArr = binaryNum.toString().split(".")
+
+            // 将二进制整数转换为十进制数
+            const binaryIntParStr = binaryFloatNumArr[0]
+            const decimalIntPartNum = parseInt(binaryIntParStr, 2)
+
+            // 将二进制小数部分转换为十进制数
+            const binaryFloatPartArr = binaryFloatNumArr[1].split("")
+            const eachDecimalFloatPartNum = eachBinaryFloatPartToDecimal(binaryFloatPartArr)
+            const deciamlFloatPartNum = eachDecimalFloatPartNum.reduce((accumulator, currentValue) => { return accumulator + currentValue })
+            return decimalIntPartNum + deciamlFloatPartNum
+        }
+    }
+    /**
+    * 将二进制小数部分转换为十进制数
+    * @param binaryFloatPartArr 二进制小数部分中由小数各位组成的数组
+    */
+    function eachBinaryFloatPartToDecimal(binaryFloatPartArr) {
+        return binaryFloatPartArr.map((currentValue, index) => {
+            return Number(currentValue) * Math.pow(2, (-(index + 1)))
+        })
+    }
+
+    function DecimalToPositive(number, byte) {//正数原反补码 (Array(8).join("0")+i.toString(2)).slice(-8)
+        return '1' + (Array(byte).join("0") + (-number).toString(2)).slice(-byte + 1).replace('-', 0)
+    }
+
+    function DecimalToNegative(number, byte) {
+        return '1' + (Array(byte).join("0") + (-number).toString(2)).slice(-byte + 1).replace('-', 0).split('').map(bit => bit == '0' ? '1' : '0').join('')
+    }
+
+    function DecimalToComplement(number, byte) {//slice(start) start负数表示从后面取7个
+        if(number == 0) return Array(byte+1).join("0");
+        var fsfm_plus1 = parseInt((Array(byte).join("0") + (-number).toString(2)).slice(-byte + 1).replace('-', 0).split('').map(bit => bit == '0' ? '1' : '0').join(''), 2) + 1;
+        return '1' + (Array(byte).join("0") + fsfm_plus1.toString(2)).slice(-byte + 1).replace('-', 0)
+    }
+</script>
+</body>
+</html>
