@@ -53,10 +53,10 @@
                 <td><input type="text" id="unicode" onkeydown="getKey()" /></td>
                 <!-- <td><input type="text" id="iso" onkeydown="getKey()" /></td> -->
                 <td></td>
-                <td><input type="text" id="complement" onkeydown="getKey()" /></td>
-                <td><input type="text" id="negative" onkeydown="getKey()" /></td>
-                <td><input type="text" id="positive" onkeydown="getKey()" /></td>
-                <td id="rgbcolor" align="center" style="color:#ffffff" bgcolor="#0000ff00"></td>
+                <td><!--<input type="text" id="complement" onkeydown="getKey()" />--></td>
+                <td><!--<input type="text" id="negative" onkeydown="getKey()" />--></td>
+                <td><!--<input type="text" id="positive" onkeydown="getKey()" />--></td>
+                <td id="rgbcolor" align="center" style="color:#ffffff;" bgcolor="#00ff00"></td>
                 <td><input type="text" id="decodeURIComponent" onkeydown="getKey()" /></td>
                 <td><input type="text" id="encodeURIComponent" onkeydown="getKey()" /></td>
                 <!-- <td><input type="text" id="decodeURI" onkeydown="getKey()" /></td>
@@ -350,25 +350,14 @@
         var input = document.getElementsByTagName("input");
         var color = document.getElementById("rgbcolor");
         if(id == "decimal"){
-            var rgbcolor = '';
-            var val = DecimalToBinary(values[0], 16, 2);
-            // if(val.length < 2) val = '0' + val;
-            rgbcolor += val;
-            val = DecimalToBinary(values[1], 16, 2);
-            // if(val.length < 2) val = '0' + val;
-            rgbcolor += val;
-            val = DecimalToBinary(values[2], 16, 2);
-            // if (val.length < 2) val = '0' + val;
-            rgbcolor += val;
+            var rgbcolor = values[0]+","+values[1]+","+values[2];
             if(values.length > 3){
-                val = DecimalToBinary(values[3], 16, 2);
-                // if (val.length < 2) val = '0' + val;
-                rgbcolor += val;
+                rgbcolor += ","+values[3];
             }
-            color.outerHTML = '<td id="rgbcolor" align="center" style="color:#ffffff" bgcolor="#' + rgbcolor + '">';
+            color.outerHTML = '<td id="rgbcolor" align="center" style="color:#ffffff;background-color:rgb(' + rgbcolor + ')">';
         }
         if(id == "sexadecimal"){
-            color.outerHTML = '<td id="rgbcolor" align="center" style="color:#ffffff" bgcolor="#' + myinput.value.replace(new RegExp(' ', "g"),"") + '">';
+            color.outerHTML = '<td id="rgbcolor" align="center" style="color:#ffffff;background-color:#' + myinput.value.replace(new RegExp(' ', "g"),"") + '">';
         }
         for(k in values){
             var value = values[k];
@@ -421,24 +410,6 @@
         td = document.createElement("td")
         tr.appendChild(td);
         td.innerText = DecimalToSqrt(i);
-        // var pow = i;
-        // var sqrt = 0;
-        // while (!(pow % 2)) {
-        //     if(pow < 2) break;
-        //     pow = parseInt(pow / 2);
-        //     sqrt += 1;
-        // }     
-        // if (pow == 1) td.innerText = sqrt;
-        // while(pow > 2){
-        //     if(pow%2) {
-        //         td.innerText = '';
-        //         break;
-        //     }else {
-        //         sqrt += 1;
-        //         td.innerText = sqrt;//Math.pow(i,1/2);//sqrt
-        //         pow = parseInt(pow / 2);
-        //     }
-        // }   
 
         td = document.createElement("td")
         tr.appendChild(td);
@@ -448,15 +419,11 @@
         tr.appendChild(td);
         var number16 = DecimalToBinary(i, 16);
         td.innerText = number16;
-//
-        // td = document.createElement("td")
-        // tr.appendChild(td);
+
         // td.innerText = String.fromCharCode(i).replace(" ", "space");//string.fromCharCode(unicode,16))；
-//
-        // td = document.createElement("td")
-        // tr.appendChild(td);
+
         // td.innerText = SexadecimalToUnicode(number16)
-//
+
         tr.innerHTML += '<td>&#' + i + ';</td>'
 
         td = document.createElement("td")
@@ -511,7 +478,6 @@
     // console.log(BinaryToDecimal(10101,2))  
     // console.log(BinaryToDecimal(126, 8))  
     // console.log(BinaryToDecimal('c',16))
-    // console.log(0xffffff.toString())//16777215
 
     function DecimalToUnicode(number) {
         return SexadecimalToUnicode(DecimalToBinary(number,16));
