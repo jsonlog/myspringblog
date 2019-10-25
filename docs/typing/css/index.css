@@ -1,0 +1,141 @@
+
+html,body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: url("../images/5.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.container{
+    width: 100%;
+    height: 100vh;
+}
+.sence{
+    width:80%;
+    height: 100vh;
+    position: relative;
+    float: left;
+    background-repeat: no-repeat;
+}
+.kongzhi{
+    width: 19%;
+    height: 100%;
+    float: left;
+    padding-left:10px;
+    font-size: 18px;
+    color: #fff;
+    padding-top: 20px;
+}
+.letter{
+    width: 100px;
+    height: 100px;
+    background: pink;
+    border-radius: 50px 50px 20px 50px;
+    box-shadow:-8px -8px 80px -8px hotpink inset,-17px 11px 14px rgba(220,150,150,0.3);
+    transform:rotate(45deg);
+    position: absolute;
+    background-size: 80px 80px ;
+    background-repeat: no-repeat;
+    background-position: center;
+
+
+}
+.num,.pass,.lifenum{
+    margin:0 auto;
+    width: 150px;
+    height: 30px;
+    background: #fff;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 30px;
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.star{
+    display: block;
+    margin: 200px auto 0;
+    width: 100px;
+    height: 50px;
+    background: url("../images/start.png");
+    background-repeat: no-repeat;
+    border: none;
+    background-size: contain;
+    outline: none;
+}
+
+.life,.code,.guanqia{
+    margin: 10px auto 30px;
+    width: 150px;
+    height: 30px;
+    background: url("../images/life.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    font-size: 14px;background-size: contain;
+    line-height: 36px;
+    text-align:center;
+    color: red;
+    font-weight: bold;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+.code{
+    width: 100px;
+    height: 30px;
+    background: url("../images/scor.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.stop,.over{
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    height: 50px;
+    border: none;
+    background: url("../images/easy.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    outline: none;
+}
+.over{
+    background: url("../images/choose.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+@font-face {
+    font-family: 'iconfont';  /* project id 456434 */
+    src: url('//at.alicdn.com/t/font_456434_3yeexwiajumfs9k9.eot');
+    src: url('//at.alicdn.com/t/font_456434_3yeexwiajumfs9k9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_456434_3yeexwiajumfs9k9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_456434_3yeexwiajumfs9k9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_456434_3yeexwiajumfs9k9.svg#iconfont') format('svg');
+}
+.music{
+    border: 1px solid yellow;
+    font-family: "iconfont";
+    color: #cc1da0;
+    font-size: 36px;
+    position: absolute;
+    top: 40px;
+    left: 50px;
+    animation: music 1.5s linear infinite;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+@keyframes music {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
