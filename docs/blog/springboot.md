@@ -845,6 +845,9 @@ GroovyTemplateAutoConfiguration
      0 11 11 11 11 ? 每年的11月11号 11点11分触发
      参考网址：http://blog.csdn.net/irencewh/article/details/45332295（出处没找到）
      -->
+- preHandle方法在Controller之前执行，若返回false，则终止执行后续的请求。
+- postHandle方法在Controller之后、模板之前执行。
+- afterCompletion方法在模板之后执行。
 
 # gradle 
 - apply plugin: 'java'

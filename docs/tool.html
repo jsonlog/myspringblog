@@ -34,10 +34,10 @@
                 <!-- </th> -->
                 <th>\uISO&amp;#10;</th>
                 <th>8859-1</th>
-                <th>负原码</th>
-                <th>负反码</th>
-                <th>负补码</th>
-                <th>颜色</th>
+                <th>原码</th>
+                <th>反码</th>
+                <th>补码</th>
+                <th>#颜色rgb(10,10,10)</th>
                 <th>decodeURIComponent</th>
                 <th>encodeURICp%16</th>
                 <!-- <th>decodeURI</th> -->
@@ -52,11 +52,11 @@
                 <td><input type="text" id="sexadecimal" onkeydown="getKey()" /></td>
                 <td><input type="text" id="unicode" onkeydown="getKey()" /></td>
                 <!-- <td><input type="text" id="iso" onkeydown="getKey()" /></td> -->
-                <td></td>
-                <td><!--<input type="text" id="complement" onkeydown="getKey()" />--></td>
-                <td><!--<input type="text" id="negative" onkeydown="getKey()" />--></td>
-                <td><!--<input type="text" id="positive" onkeydown="getKey()" />--></td>
-                <td id="rgbcolor" align="center" style="color:#ffffff;" bgcolor="#00ff00"></td>
+                <td align="center">别名</td>
+                <td>符号位1<!--<input type="text" id="complement" onkeydown="getKey()" />--></td>
+                <td>数字取反<!--<input type="text" id="negative" onkeydown="getKey()" />--></td>
+                <td>反码加1<!--<input type="text" id="positive" onkeydown="getKey()" />--></td>
+                <td id="rgbcolor" align="center" style="color:#00ffffff;" bgcolor="#00ff00"></td>
                 <td><input type="text" id="decodeURIComponent" onkeydown="getKey()" /></td>
                 <td><input type="text" id="encodeURIComponent" onkeydown="getKey()" /></td>
                 <!-- <td><input type="text" id="decodeURI" onkeydown="getKey()" /></td>
@@ -351,9 +351,9 @@
         var color = document.getElementById("rgbcolor");
         if(id == "decimal"){
             var rgbcolor = values[0]+","+values[1]+","+values[2];
-            if(values.length > 3){
-                rgbcolor += ","+values[3];
-            }
+            // if(values.length > 3){
+            //     rgbcolor += ","+values[3];
+            // }
             color.outerHTML = '<td id="rgbcolor" align="center" style="color:#ffffff;background-color:rgb(' + rgbcolor + ')">';
         }
         if(id == "sexadecimal"){
