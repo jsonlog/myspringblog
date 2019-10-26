@@ -4,32 +4,6 @@
     "timer" : "2019-07-23", 
     "tagslist" : "spring,framework,source"
 }-->
-
-- 面向过程编程(Procedure Oriented Programming，POP)
-- 面向对象编程(Object Oriented Programming，OOP)
-- 面向bean编程(Bean Oriented Programming, BOP)
-
-框架原理介绍框架环境搭建快速入门创建Bean的方式及实现原理Bean种类Bean生命周期Bean的作用域Bean的注值方式SpEL整合Junit测试Web项目集成Spring注解装配BeanAOP思想、原理解剖传统方式实现AOP开发AspectJ介绍及实现AOP开发
-
-Core Container 由Spring-core, spring-beans, spring-context, spring-context-support和spring-expression几大部分组成
-
-# ioc
-控制反转 (Inversion of Control，IoC)，这是spring的核心；
-IoC的一个重点是在系统运行中，动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）来实现的。对象的创建不再通过new，而是交给spring配置创建类对象
-ioc底层原理使用的技术
-xml配置文件
-dom4j解析xml
-工厂设计模式
-反射
-
-# aop
-面向切面编程 (Aspect Oriented Programming, AOP),通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术；扩展功能可以不修改源码.
-Spring的两种代理方式：JDK动态代理和CGLIB动态代理:
-JDK动态代理实现的AOP称为面向接口的动态增强;
-CGLIB实现的AOP称为面向子类的动态增强;
-
-# ejb
-
 # 1. The IoC Container
 ApplicationContext is a sub-interface of BeanFactory
 FileSystemXmlApplicationContext
