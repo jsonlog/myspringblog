@@ -1,6 +1,6 @@
 <!-- 个人博客模板《蓝色的畅想》个人博客模板《早安》-->
 # 博客文件系统
-- 搭建自用的支持markdown文件和html的[github pages](https://jsonlog.github.io/myspringblog)静态博客(包含生日&抢票[日历](#日历),天气,音乐)
+- 搭建自用的同时支持markdown文件和html和导入书签的[github pages](https://jsonlog.github.io/myspringblog)静态博客(包含生日&抢票[日历](#日历),天气,音乐)
 - [动态版](https://myspringblog.herokuapp.com/)(服务器版)支持springboot部署到服务器,同时日历部分整合了spring+ibatis;
 
 # 特点
@@ -14,6 +14,7 @@
 - [index](docs/index.html)里面这个[地址](https://api.github.com/repos/jsonlog/myspringblog/contents/docs/blog)替换你的Github id&你的repo
 - 新文章列表是从[github repo](https://github.com/jsonlog/myspringblog/tree/master/docs/blog)读取的哦,所以要push到github两三分钟后才能看到新文章,或者可以自己修改上一步涉及的函数进行**本地测试**
 - 请参照[gitment说明](https://github.com/imsun/gitment)把代码中client_secret等多个参数修改为自己的,gitment不能在**本地测试**哦,如果还是有问题,可以考虑用gitalk
+- 导出的chrome书签必须命名含有bookmark2019-11-03(日期可选),放在docs/blog下即可以列表形式展示所有收藏的书签
 - 静态版:需要的目录只有[docs](docs),然后设置[settings](https://github.com/jsonlog/myspringblog/settings) -> master banch /docs folder for Github pages
 - 动态版:修改自己的mysql数据库用户名密码,参考mybatis/import.sql生成你的数据库
 
