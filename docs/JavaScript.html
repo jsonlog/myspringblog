@@ -405,65 +405,6 @@ obj.click();
     //copy start-----------------------------------------------------------------------------------------------
     //copy start-----------------------------------------------------------------------------------------------
     function owlRedirectorFilter(url) {
-      var addDomainBlacklist = [
-        "https://www.liangzl.com/get-article-detail-7942.html",
-        "http://www.xz577.com/e/222.html#_labeldown",
-        "https://www.wanqu5.com/?cc",
-        //test
-
-        //0-9
-        "https://www.360kuai.com/pc/989bbf71b2a9abcb8?cota=3&kuai_so=1&sign=360_7bc3b157&refer_scene=so_55&q=%E6%96%B0%E9%97%BB&ts=1569510529&t=53fdd6417c9d84a4c745a17b8841fb9&token=27af8d927f81aeba45c0ebfba4174e638cb622d7151fc29974b1a8d346a86e34",
-
-        //domain
-        "https://afu88.com",
-        "https://aiuxian.com",
-        "https://bbs.16ao.com",
-        "https://bbs.kafan.cn/thread-1854630-1-1.html",
-        "http://blog.didispace.com/spring-batch-2/",
-        "https://mbd.baidu.com/newspage/data/error",
-        "https://cam.ooxxnews.com",
-        "http://ent.zdface.com",
-        "https://ftp1.linuxidc.com",
-        "http://www.javazx.com/forum.php?mod=viewthread&tid=4169",
-        "https://ju.taobao.com",
-        "https://lssrc.com",
-        "https://max.book118.com/html/2018/0803/8052116004001117.shtm",
-        "http://booksk.com/novel/161266",
-        "https://book.jd.com/?cu=true&utm_source=www.oy98.com&utm_medium=tuiguang&utm_campaign=t_332877154_&utm_term=6b45f5b421ec4f9c98b4a8188b0fc2ac",
-        "http://www.topbester.com/ebook/recommend/64973.html",
-        "https://money.gucheng.com",
-        "https://news.htcyzx.com",
-        "https://one.zzccaa.biz",
-        "https://oned.gq",
-        "http://prog3.com",
-        "https://s.click.taobao.com",
-        "https://sh.qihoo.com",
-        "https://sh.360kuai.com",
-
-        //www
-        "http://w.cnzz.com",
-        "http://www.guyasos.com",
-        "https://www.haote.com",
-        "http://www.hzmedia.com.cn",
-        "http://www.hztraining.com",
-        "https://www.linuxprobe.com",
-        "http://www.uzzf.com",
-
-        //xyz
-        //"https://wenku.baidu.com",
-        "https://yisharepdf.site",
-      ];
-      var addUrlBlacklist = [
-        "https://www.jianshu.com/u/f9679b482b1c",
-        "https://blog.csdn.net/weixin_34125592/article/details/90787885"
-      ];
-
-      var addUrlWhitelist = [
-        "https://jsonlog.github.io/myspringblog",
-        "chrome://newtab",
-        "",//block
-      ];
-      if (url == addUrlWhitelist[0]) return;
       // 1. 返回 undefined，不跳转:
       // return
 
@@ -511,8 +452,7 @@ obj.click();
             } else url = url.substr(pos);
           }
         });
-      }
-      if (url.indexOf("http%3A") != -1) {
+      }else if (url.indexOf("http%3A") != -1) {
         _3A2F2F.forEach(function (item, index, array) {
           if (url.indexOf(item) != -1) {
             var pos = url.indexOf("http%3A");
@@ -575,33 +515,6 @@ obj.click();
         index = url.indexOf("http%3A");
         return decodeURIComponent(url.substr(index));
       }
-
-      addDomainBlacklist.forEach(function (value, index, array) {
-        var urldomain = url;
-        try {
-          urlobj = new URL(url);
-          urldomain = urlobj.host;
-        } catch (e) {
-        }
-
-        var valuedomain = value;
-        try {
-          valueobj = new URL(value);
-          valuedomain = valueobj.host;
-        } catch (e) {
-        }
-
-        if (urldomain == valuedomain) {
-          url = addUrlWhitelist[0];
-          return;
-        }
-      });
-      addUrlBlacklist.forEach(function (value, index, array) {
-        if (url.indexOf(value) != -1) {
-          url = addUrlWhitelist[0];
-          return;
-        }
-      });
       console.log(url)
       return url;
     }
