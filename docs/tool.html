@@ -29,8 +29,9 @@
                 <th>十六进制0x
                 </th>
                 <!-- <th> -->
-                    <!-- Unicode\u16 -->
-                    <!-- (ASCII) -->
+                    <!-- Unicode&#16; -->
+                    <!-- (ASCII)\u16 -->
+                    <!-- UTF8 &#x16; -->
                 <!-- </th> -->
                 <th>\uISO&amp;#10;</th>
                 <th>8859-1</th>
@@ -364,7 +365,7 @@
             if(value == '' || value == ' ') continue;
             if(id == "octal") var decimal = BinaryToDecimal(value, 8);
             if(id == "binary") var decimal = BinaryToDecimal(value, 2);
-            if (id == "sqrt") var decimal = 2^value;
+            if (id == "sqrt") var decimal = Math.pow(2,value);
             if (id == "decimal") var decimal = value;
             if (id == "sexadecimal") var decimal = BinaryToDecimal(value,16);
             if (id == "unicode") var decimal = UnicodeToDecimal(value);
