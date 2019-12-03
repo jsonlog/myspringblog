@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--jQuery Prototype MooTools -->
+<!--jQuery Prototype MooTools-->
 <html>
 
 <head>
@@ -10,6 +10,31 @@
     </script>
   <script>
     $(document).ready(function () {
+      $('.p1')
+        .children()
+        .closest('div')
+        .filter(':selected')
+        .find('div')
+        .has('div')
+        .first()
+        .next('div')
+        .nextUntil('div')
+      // Extending selectors
+      $.expr[':'].inline = function (el) {
+        return $(el).css('display') === 'inline'
+      }
+      //Extend CSS properties
+      $.cssHooks.someCSSProp = {
+        get: function (elem, computed, extra) {
+        },
+        set: function (elem, value) {
+        }
+      }
+      $.cssNumber["someCSSProp"] = true // Disable "px"
+      // fn.animate() hooks
+      $.fn.step.someWhatever = function (fx) {
+        // ...
+      }
       $("button").click(function () {
         // $("p").hide();
         $("p").css("background-color", "red");
@@ -482,7 +507,7 @@
         function (data, status) {
           alert("Data: " + data + "nStatus: " + status);
         });
-    }
+    })
   </script>
 //   <script>
 // $.noConflict();
