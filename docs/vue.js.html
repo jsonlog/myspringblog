@@ -34,6 +34,7 @@
         {{ message.split('').reverse().join('') }}
         <input v-model="message"/>
         <button v-on:click="reverseMessage">反转字符串</button>
+        <button @click="reverseMessage">反转字符串</button>
         {{ message | capitalize }}
         <div v-bind:id="'list-' + id">菜鸟教程</div>
         <p v-if="seen">现在你看到我了</p>
@@ -43,6 +44,8 @@
         <p>哈哈哈，打字辛苦啊！！！</p>
         </template>
         <pre><a v-bind:href="url">菜鸟教程</a></pre>
+        <pre><a :href="url"></a></pre>
+        
     </div>
     <script type="text/javascript">
         var vm = new Vue({
