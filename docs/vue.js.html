@@ -38,6 +38,7 @@
         <p>学的不仅是技术，更是梦想！</p>
         <p>哈哈哈，打字辛苦啊！！！</p>
         </template>
+        <pre><a v-bind:href="url">菜鸟教程</a></pre>
     </div>
     <script type="text/javascript">
         var vm = new Vue({
@@ -84,7 +85,8 @@
                     ok: true,
                     seen: true,
                     messagejs: 'RUNOOB',
-                    id: 1
+                    id: 1,
+                    url: 'http://www.runoob.com'
                 }
             })
     </script>
