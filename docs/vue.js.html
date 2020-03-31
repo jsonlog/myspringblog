@@ -22,15 +22,16 @@
         <h1>Alexa : {{alexa}}</h1>
     </div>
     <div id="app">
-        <div v-html="message"></div>
+        <div v-html="messagehtml"></div>
         <label for="r1">修改颜色</label><input type="checkbox" v-model="use" id="r1">
+        <input v-model="message"/>
         <br><br>
         <div v-bind:class="{'class1': use}">
             v-bind:class 指令
         </div>
         {{5+5}}<br>
         {{ ok ? 'YES' : 'NO' }}<br>
-        {{ messagejs.split('').reverse().join('') }}
+        {{ message.split('').reverse().join('') }}
         <div v-bind:id="'list-' + id">菜鸟教程</div>
         <p v-if="seen">现在你看到我了</p>
         <template v-if="ok">
@@ -80,11 +81,11 @@
         new Vue({
                 el: '#app',
                 data: {
-                    message: '<h1>菜鸟教程</h1>',
+                    messagehtml: '<h1>菜鸟教程</h1>',
                     use:false,
                     ok: true,
                     seen: true,
-                    messagejs: 'RUNOOB',
+                    message: 'RUNOOB',
                     id: 1,
                     url: 'http://www.runoob.com'
                 }
