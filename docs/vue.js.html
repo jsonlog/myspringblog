@@ -34,6 +34,7 @@
         {{ message.split('').reverse().join('') }}
         <input v-model="message"/>
         <button v-on:click="reverseMessage">反转字符串</button>
+        {{ message | capitalize }}
         <div v-bind:id="'list-' + id">菜鸟教程</div>
         <p v-if="seen">现在你看到我了</p>
         <template v-if="ok">
@@ -87,12 +88,19 @@
                     use:false,
                     ok: true,
                     seen: true,
-                    message: 'RUNOOB',
+                    message: 'runoob',
                     id: 1,
                     url: 'http://www.runoob.com'
                 }, methods: {
                     reverseMessage: function () {
                         this.message = this.message.split('').reverse().join('')
+                    }
+                },
+                filters: {
+                    capitalize: function (value) {
+                        if (!value) return ''
+                        value = value.toString()
+                        return value.charAt(0).toUpperCase() + value.slice(1)
                     }
                 }
             })
