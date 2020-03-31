@@ -28,6 +28,10 @@
         <div v-bind:class="{'class1': use}">
             v-bind:class 指令
         </div>
+        {{5+5}}<br>
+        {{ ok ? 'YES' : 'NO' }}<br>
+        {{ messagejs.split('').reverse().join('') }}
+        <div v-bind:id="'list-' + id">菜鸟教程</div>
     </div>
     <script type="text/javascript">
         var vm = new Vue({
@@ -70,7 +74,10 @@
                 el: '#app',
                 data: {
                     message: '<h1>菜鸟教程</h1>',
-                    use:false
+                    use:false,
+                    ok: true,
+                    messagejs: 'RUNOOB',
+                    id: 1
                 }
             })
     </script>
