@@ -7,6 +7,12 @@
     <!-- <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script> <!-- /dist/vue.js -->
 </head>
+<style>
+.class1{
+  background: #444;
+  color: #eee;
+}
+</style>
 
 <body>
     <div id="vue_det">
@@ -17,6 +23,11 @@
     </div>
     <div id="app">
         <div v-html="message"></div>
+        <label for="r1">修改颜色</label><input type="checkbox" v-model="use" id="r1">
+        <br><br>
+        <div v-bind:class="{'class1': use}">
+            v-bind:class 指令
+        </div>
     </div>
     <script type="text/javascript">
         var vm = new Vue({
@@ -58,7 +69,8 @@
         new Vue({
                 el: '#app',
                 data: {
-                    message: '<h1>菜鸟教程</h1>'
+                    message: '<h1>菜鸟教程</h1>',
+                    use:false
                 }
             })
     </script>
