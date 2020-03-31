@@ -24,7 +24,7 @@
     <div id="app">
         <div v-html="messagehtml"></div>
         <label for="r1">修改颜色</label><input type="checkbox" v-model="use" id="r1">
-        <input v-model="message"/>
+
         <br><br>
         <div v-bind:class="{'class1': use}">
             v-bind:class 指令
@@ -32,6 +32,8 @@
         {{5+5}}<br>
         {{ ok ? 'YES' : 'NO' }}<br>
         {{ message.split('').reverse().join('') }}
+        <input v-model="message"/>
+        <button v-on:click="reverseMessage">反转字符串</button>
         <div v-bind:id="'list-' + id">菜鸟教程</div>
         <p v-if="seen">现在你看到我了</p>
         <template v-if="ok">
@@ -88,6 +90,10 @@
                     message: 'RUNOOB',
                     id: 1,
                     url: 'http://www.runoob.com'
+                }, methods: {
+                    reverseMessage: function () {
+                        this.message = this.message.split('').reverse().join('')
+                    }
                 }
             })
     </script>
