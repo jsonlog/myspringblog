@@ -66,7 +66,33 @@
 
         <pre><a v-bind:href="url">菜鸟教程</a></pre>
         <pre><a :href="url"></a></pre>
-        
+
+        <ol>
+            <li v-for="site in sites">
+                {{ site.name }}
+            </li>
+        </ol>
+        <template v-for="site in sites">
+            <li>{{ site.name }}</li>
+            <li>--------------</li>
+        </template>
+        <ul>
+            <li v-for="value in object">
+            {{ value }}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(value, key, index) in object">
+                {{ index }}. {{ key }} : {{ value }}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="n in 10">
+                {{ n }}
+            </li>
+        </ul>
+
+
     </div>
     <script type="text/javascript">
         var vm = new Vue({
@@ -115,7 +141,17 @@
                     message: 'runoob',
                     id: 1,
                     url: 'http://www.runoob.com',
-                    type: 'C'
+                    type: 'C',
+                    sites: [
+                        { name: 'Runoob' },
+                        { name: 'Google' },
+                        { name: 'Taobao' }
+                    ],
+                    object: {
+                        name: '菜鸟教程',
+                        url: 'http://www.runoob.com',
+                        slogan: '学的不仅是技术，更是梦想！'
+                    }
                 }, methods: {
                     reverseMessage: function () {
                         this.message = this.message.split('').reverse().join('')
