@@ -91,51 +91,17 @@
                 {{ n }}
             </li>
         </ul>
-
+        {{ message.split('').reverse().join('') }}
+        <p>原始字符串: {{ message }}</p>
+        <p>计算后反转字符串: {{ reversedMessage }}</p>
 
     </div>
     <script type="text/javascript">
-        var vm = new Vue({
-            el: '#vue_det',
-            data: {
-                site: "菜鸟教程",
-                url: "www.runoob.com",
-                alexa: "10000"
-            },
-            methods: {
-                details: function () {
-                    return this.site + " - 学的不仅是技术，更是梦想";
-                }
-            }
-        })
-
-        // 我们的数据对象
-        var data = { site: "菜鸟教程0", url: "www.runoob.com0", alexa: 100000 }
-        var vm = new Vue({
-            el: '#vue_det',
-            data: data
-        })
-        // 它们引用相同的对象！
-        document.write(vm.site === data.site) // true
-        document.write("<br>")
-        // 设置属性也会影响到原始数据
-        vm.site = "Runoob"
-        document.write(data.site + "<br>") // Runoob
-
-        // ……反之亦然
-        data.alexa = 1234
-        document.write(vm.alexa) // 1234
-
-        document.write("<br>")
-        document.write(vm.$data === data) // true
-        document.write("<br>")
-        document.write(vm.$el === document.getElementById('vue_det')) // true
-
         new Vue({
                 el: '#app',
                 data: {
                     messagehtml: '<h1>菜鸟教程</h1>',
-                    use:false,
+                    use: false,
                     ok: true,
                     seen: true,
                     message: 'runoob',
@@ -163,8 +129,75 @@
                         value = value.toString()
                         return value.charAt(0).toUpperCase() + value.slice(1)
                     }
+                },
+                computed: {
+                    // 计算属性的 getter
+                    reversedMessage: function () {
+                        // `this` 指向 vm 实例
+                        return this.message.split('').reverse().join('-')
+                    }
                 }
             })
+
+        // 我们的数据对象
+        var data = { site: "菜鸟教程0", url: "www.runoob.com0", alexa: 100000 }
+        var vm = new Vue({
+            el: '#vue_det',
+            data: data
+        })
+        // 它们引用相同的对象！
+        document.write(vm.site === data.site) // true
+        document.write("<br>")
+        // 设置属性也会影响到原始数据
+        vm.site = "Runoob"
+        document.write(data.site + "<br>") // Runoob
+
+        // ……反之亦然
+        data.alexa = 1234
+        document.write(vm.alexa) // 1234
+
+        document.write("<br>")
+        document.write(vm.$data === data) // true
+        document.write("<br>")
+        document.write(vm.$el === document.getElementById('vue_det')) // true
+        document.write('<br>');
+
+
+    var vmc = new Vue({
+        el: '#vue_det',
+        data: {
+            // site: "菜鸟教程",
+            // alexa: "10000",
+            name: 'Google',
+            url: 'http://www.google.com'
+        },
+        methods: {
+            details: function () {
+                return this.site + " - 学的不仅是技术，更是梦想";
+            }
+        },
+        computed: {
+            site: {
+                // getter
+                get: function () {
+                    return this.name + ' ' + this.url
+                },
+                // setter
+                set: function (newValue) {
+                    var names = newValue.split(' ')
+                    this.name = names[0]
+                    this.url = names[names.length - 1]
+                }
+            }
+        }
+    })
+
+    // 调用 setter， vmc.name 和 vmc.url 也会被对应更新
+    vmc.site = '菜鸟教程 http://www.runoob.com';
+    document.write('name: ' + vmc.name);
+    document.write('<br>');
+    document.write('url: ' + vmc.url);
+    document.write('<br>');
     </script>
 </body>
 
