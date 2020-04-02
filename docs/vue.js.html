@@ -95,9 +95,17 @@
         <p>原始字符串: {{ message }}</p>
         <p>计算后反转字符串: {{ reversedMessage }}</p>
 
+        <p style="font-size:25px;">计数器: {{ counter }}</p>
+        <button @click="counter++" style="font-size:25px;">点我</button>
     </div>
+    <div id="computed_props">
+        千米 : <input type="text" v-model="kilometers">
+        米 : <input type="text" v-model="meters">
+    </div>
+    <p id="info"></p>
+
     <script type="text/javascript">
-        new Vue({
+        var vm = new Vue({
                 el: '#app',
                 data: {
                     messagehtml: '<h1>菜鸟教程</h1>',
@@ -117,7 +125,8 @@
                         name: '菜鸟教程',
                         url: 'http://www.runoob.com',
                         slogan: '学的不仅是技术，更是梦想！'
-                    }
+                    },
+                    counter: 1
                 }, methods: {
                     reverseMessage: function () {
                         this.message = this.message.split('').reverse().join('')
@@ -133,33 +142,36 @@
                 computed: {
                     // 计算属性的 getter
                     reversedMessage: function () {
-                        // `this` 指向 vm 实例
+                        // `this` 指向 vmd 实例
                         return this.message.split('').reverse().join('-')
                     }
                 }
             })
-
+        
+        vm.$watch('counter', function (nval, oval) {
+                alert('计数器值的变化 :' + oval + ' 变为 ' + nval + '!');
+            });
         // 我们的数据对象
         var data = { site: "菜鸟教程0", url: "www.runoob.com0", alexa: 100000 }
-        var vm = new Vue({
+        var vmd = new Vue({
             el: '#vue_det',
             data: data
         })
         // 它们引用相同的对象！
-        document.write(vm.site === data.site) // true
+        document.write(vmd.site === data.site) // true
         document.write("<br>")
         // 设置属性也会影响到原始数据
-        vm.site = "Runoob"
+        vmd.site = "Runoob"
         document.write(data.site + "<br>") // Runoob
 
         // ……反之亦然
         data.alexa = 1234
-        document.write(vm.alexa) // 1234
+        document.write(vmd.alexa) // 1234
 
         document.write("<br>")
-        document.write(vm.$data === data) // true
+        document.write(vmd.$data === data) // true
         document.write("<br>")
-        document.write(vm.$el === document.getElementById('vue_det')) // true
+        document.write(vmd.$el === document.getElementById('vue_det')) // true
         document.write('<br>');
 
 
@@ -198,6 +210,29 @@
     document.write('<br>');
     document.write('url: ' + vmc.url);
     document.write('<br>');
+
+    var vmw = new Vue({
+            el: '#computed_props',
+            data: {
+                kilometers: 0,
+                meters: 0
+            },
+            watch: {
+                kilometers: function (val) {
+                    this.kilometers = val;
+                    this.meters = this.kilometers * 1000
+                },
+                meters: function (val) {
+                    this.kilometers = val / 1000;
+                    this.meters = val;
+                }
+            }
+        });
+        // $watch 是一个实例方法
+        vmw.$watch('kilometers', function (newValue, oldValue) {
+            // 这个回调将在 vm.kilometers 改变后调用
+            document.getElementById("info").innerHTML = "修改前值为: " + oldValue + "，修改后值为: " + newValue;
+        })
     </script>
 </body>
 
