@@ -118,24 +118,36 @@
         <a v-on:click.once="doThis"></a>
 
         <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
-        <input v-on:keyup.13="submit">
+        <input v-on:keyup.13="submit" />
         <!-- 
-全部的按键别名：
+        全部的按键别名：
 
-    .enter
-    .tab
-    .delete (捕获 "删除" 和 "退格" 键)
-    .esc
-    .space
-    .up
-    .down
-    .left
-    .right
-    .ctrl
-    .alt
-    .shift
-    .meta
+            .enter
+            .tab
+            .delete (捕获 "删除" 和 "退格" 键)
+            .esc
+            .space
+            .up
+            .down
+            .left
+            .right
+            .ctrl
+            .alt
+            .shift
+            .meta
          -->
+        <!-- 在 "change" 而不是 "input" 事件中更新 -->
+        <!-- <input v-model.lazy="msg" > -->
+
+        <!-- 自动将用户的输入值转为 Number 类型（如果原值的转换结果为 NaN 则返回原值） -->
+        <!-- <input v-model.number="age" type="number"> -->
+
+        <!-- 自动过滤用户输入的首尾空格 -->
+        <!-- <input v-model.trim="msg"> -->
+        <runoob></runoob>
+        <p>页面载入时，input 元素自动获取焦点：</p>
+        <input v-focus>
+
 
     </div>
     <div id="computed_props">
@@ -145,6 +157,18 @@
     <p id="info"></p>
 
     <script type="text/javascript">
+        // 注册
+        Vue.component('runoob', {
+          template: '<h1>自定义组件!</h1>'
+        })
+        // 注册一个全局自定义指令 v-focus
+        Vue.directive('focus', {
+            // 当绑定元素插入到 DOM 中。
+            inserted: function (el) {
+                // 聚焦元素
+                el.focus()
+            }
+        })
         var vm = new Vue({
                 el: '#app',
                 data: {
