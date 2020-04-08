@@ -147,7 +147,15 @@
         <runoob></runoob>
         <p>页面载入时，input 元素自动获取焦点：</p>
         <input v-focus>
-
+        <br><br>
+        <button v-on:click = "show = !show">点我</button>
+        <transition name = "fade">
+            <p v-show = "show" v-bind:style = "styleobj">动画实例</p>
+        </transition>
+        <transition name="slide-fade">
+            <p v-if="show">菜鸟教程</p>
+        </transition>
+        
 
     </div>
     <div id="computed_props">
@@ -191,7 +199,12 @@
                         slogan: '学的不仅是技术，更是梦想！'
                     },
                     counter: 1,
-                    name: 'Vue.js'
+                    name: 'Vue.js',
+                    show:true,
+                    styleobj :{
+                        fontSize:'30px',
+                        color:'red'
+                    }
                 }, methods: {
                     reverseMessage: function () {
                         this.message = this.message.split('').reverse().join('')
