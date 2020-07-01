@@ -399,7 +399,8 @@ obj.click();
 
 
 
-  ///^http.*\.(htm|html|jsp|asp|aspx|[^\.]{8,})$/
+    ///^http.*\.(htm|html|jsp|asp|aspx|.*(http)+.*\..*)$/
+    ///^http.*\.(htm|html|jsp|asp|aspx|[^\.]{8,})$/
     ///^http.*\.(htm|html|jsp|asp|aspx|.*\/[^\.]*)$/
     ///^http.*(.[^(htm|html|jsp|asp|aspx)]|\.[a-z]*(htm|html|jsp|asp|aspx))$/
     ///^http.*([^\.\w]|\.[a-z]*(htm|html|jsp|asp|aspx))$/

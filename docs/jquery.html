@@ -5,11 +5,27 @@
 <head>
   <meta charset="utf-8">
   <title>W3Cschool教程(w3cschool.cn)</title>
-  <script type="text/javascript"
-    src="https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/jquery/jquery-1.10.2.min_65682a2.js">
-    </script>
+  <!-- <script type="text/javascript" -->
+  <!-- src="https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/jquery/jquery-1.10.2.min_65682a2.js"> -->
+  <!-- </script> -->
+  <!-- <script src="//libs.baidu.com/jquery/1.10.2/jquery.min.js"></script> -->
+  <script src="./cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <script>
     $(document).ready(function () {
+        for (var i = 1; i < 23; i++) {
+          var button = document.createElement("button")
+          button.innerHTML = "click" + i;
+          button.id = "button" + i;
+          // button.value = i;
+          // document.body.appendChild(button)
+          //     console.log(i)
+          //     document.write('<input type="button" id=' + i + ' value=' + i + ' />')
+          //   //   button.style.display="inline";
+          //   //   button.width = "100";
+          //   //   button.height = "100"
+          var div = document.getElementById("button")
+          div.appendChild(button)
+        }
       $('.p1')
         .children()
         .closest('div')
@@ -35,7 +51,7 @@
       $.fn.step.someWhatever = function (fx) {
         // ...
       }
-      $("button").click(function () {
+      $("#button1").click(function () {
         // $("p").hide();
         $("p").css("background-color", "red");
         $("#test").hide();
@@ -117,21 +133,21 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button2").click(function () {
         $("p").hide(1000);
       });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button3").click(function () {
         $("p").toggle("slow");
       });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button4").click(function () {
         $("#div1").fadeIn();
         $("#div2").fadeIn("slow");
         $("#div3").fadeIn(3000);
@@ -199,14 +215,14 @@
 
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button5").click(function () {
         $("div").animate({ left: '250px' });
       });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button6").click(function () {
         $("div").animate({//当使用 animate() 时，必须使用 Camel 标记法书写所有的属性名，比如，必须使用 paddingLeft 而不是 padding-left，使用 marginRight 而不是 margin-right，等等。
           left: '250px',
           opacity: '0.5',
@@ -218,7 +234,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button7").click(function () {
         $("div").animate({
           left: '250px',
           height: '+=150px',
@@ -229,7 +245,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button8").click(function () {
         $("div").animate({
           height: 'toggle'
         });
@@ -238,7 +254,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button9").click(function () {
         var div = $("div");
         div.animate({ height: '300px', opacity: '0.4' });
         div.animate({ width: '300px', opacity: '0.8' });
@@ -249,7 +265,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button10").click(function () {
         var div = $("div");
         div.animate({ left: '100px' }, "slow");
         div.animate({ fontSize: '3em' }, "slow");
@@ -258,7 +274,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button11").click(function () {
         $("p").hide("slow", function () {//callback
           // alert("段落现在被隐藏了");
         });
@@ -267,7 +283,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button12").click(function () {
         $("#p1").css("color", "red")
           .slideUp(2000)
           .slideDown(2000);
@@ -293,8 +309,8 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
-        alert($("#runoob").attr("href"));
+      $("#button13").click(function () {
+        // alert($("#runoob").attr("href"));
       });
     });
   </script>
@@ -328,19 +344,21 @@
     });
   </script>
 
-  <!-- $("button").click(function(){ 
-  $("#w3s").attr({ 
-    "href" : "//www.w3cschool.cn/jquery", 
-    "title" : "jQuery 教程" 
-  }); 
-}); -->
+  <script>
+    $("#button14").click(function(){ 
+      $("#w3s").attr({ 
+        "href" : "//www.w3cschool.cn/jquery", 
+        "title" : "jQuery 教程" 
+      }); 
+    });
 
 
-  <!-- $("button").click(function(){ 
-  $("#w3cschool").attr("href", function(i,origValue){ 
-    return origValue + "/jquery"; 
-  }); 
-}); -->
+    $("#button15").click(function(){ 
+      $("#w3cschool").attr("href", function(i,origValue){ 
+        return origValue + "/jquery"; 
+      }); 
+    });
+  </script>
   <script>
     $(document).ready(function () {
       $("#btn1").click(function () {
@@ -384,28 +402,28 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button16").click(function () {
         $("#divremove").remove();
       });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button17").click(function () {
         $("#divempty").empty();
       });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button18").click(function () {
         $("p").remove(".italic");
       });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button19").click(function () {
         $("h1,h2,p").addClass("blue");
         $("#div1").addClass("important blue");
         // $("h1,h2,p").removeClass("blue");
@@ -425,7 +443,7 @@
   </style>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button20").click(function () {
         // alert("背景颜色 = " + $("p").css("background-color"));
         // $("p").css("background-color","yellow");
         // $("p").css({"background-color":"yellow","font-size":"200%"});
@@ -434,7 +452,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button21").click(function () {
         var txt = "";
         txt += "Width of div: " + $("#div1").width() + "</br>";
         txt += "Height of div: " + $("#div1").height();
@@ -455,8 +473,6 @@
       margin: 15px;
     }
   </style>
-  <script src="//libs.baidu.com/jquery/1.10.2/jquery.min.js">
-  </script>
   <script>
     $(document).ready(function () {
       $("span").parent().css({ "color": "red", "border": "2px solid red" });
@@ -480,36 +496,38 @@
   </script>
   <script>
     $(document).ready(function () {
-      $("button").click(function () {
+      $("#button22").click(function () {
         // $("#div1").load("/statics/demosource/demo_test.txt"); //ajax
         //$("#div1").load("demo_test.txt #p1");
       });
-      $("#div1").load("demo_test.txt", function (responseTxt, statusTxt, xhr) {
-        if (statusTxt == "success")
-          alert("External content loaded successfully!");
-        if (statusTxt == "error")
-          alert("Error: " + xhr.status + ": " + xhr.statusText);
-      });
+      // $("#div1").load("demo_test.txt", function (responseTxt, statusTxt, xhr) {
+      //   if (statusTxt == "success")
+      //     alert("External content loaded successfully!");
+      //   if (statusTxt == "error")
+      //     alert("Error: " + xhr.status + ": " + xhr.statusText);
+      // });
     });
   </script>
   <script>
     $(document).ready(function () {
-      $("#buttonget").click(function () {
-        $.get("demo_test.php", function (data, status) {
-          alert("数据: " + data + "\n状态: " + status);
-        });
-      });
-      $.post("demo_test_post.html",
-        {
-          name: "Donald Duck",
-          city: "Duckburg"
-        },
-        function (data, status) {
-          alert("Data: " + data + "nStatus: " + status);
-        });
+      // $("#buttonget").click(function () {
+      //   $.get("demo_test.php", function (data, status) {
+      //     alert("数据: " + data + "\n状态: " + status);
+      //   });
+      // });
+      // $.post("demo_test_post.html",
+      //   {
+      //     name: "Donald Duck",
+      //     city: "Duckburg"
+      //   },
+      //   function (data, status) {
+      //     alert("Data: " + data + "nStatus: " + status);
+      //   }
+      // );
     })
   </script>
-//   <script>
+  //
+  <script>
 // $.noConflict();
 //     jQuery(document).ready(function () {
 //       jQuery("button").click(function () {
@@ -517,7 +535,8 @@
 //       });
 //     });
 //   </script>
-//   <script>
+  //
+  <script>
 //     var jq = $.noConflict();
 //     jq(document).ready(function () {
 //       jq("button").click(function () {
@@ -525,10 +544,11 @@
 //       });
 //     });
 //   </script>
-//   <script>
+  //
+  <script>
 //     $.noConflict();
 //     jQuery(document).ready(function ($) {
-//       $("button").click(function () {
+//       $("#button").click(function () {
 //         $("p").text("jQuery 仍然在工作!");
 //       });
 //     });
@@ -536,7 +556,8 @@
 </head>
 
 <body>
-  <img src="../../assets/jsMargin.png">
+  <div id="button">button</div>
+  <!-- <img src="../../assets/jsMargin.png"> -->
   <h2>这是一个标题</h2>
   <p>这是一个段落。</p>
   <p id="test">这是另外一个段落</p>
@@ -605,7 +626,7 @@
 
 
   <button onclick="appendText()">追加文本</button>
-  <img src="/statics/images/logo.png">
+  <!-- <img src="/statics/images/logo.png"> -->
   <br><br>
   <button id="btn1">之前插入</button>
   <button id="btn2">之后插入</button>
