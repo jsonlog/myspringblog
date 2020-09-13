@@ -11,6 +11,12 @@
   <!-- <script src="//libs.baidu.com/jquery/1.10.2/jquery.min.js"></script> -->
   <script src="./cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <script>
+    // $.get：$.get(地址, [参数对象, 回调, 期望返回类型]);
+    // $.post：$.post(地址, [参数对象, 回调, 期望返回类型]);
+    // $.ajax：$.ajax(obj); 参数只有一个，就是参数的对象
+    // $.getJSON：$.getJSON(址, [参数对象, 回调]); 该方法一般用于解决跨域请求
+
+    // $(function(){}); ~~= windows.onload = function(){}
     $(document).ready(function () {
         for (var i = 1; i < 23; i++) {
           var button = document.createElement("button")
